@@ -1,3 +1,48 @@
+team_manager_action:
+    resource: "@TeamManagerActionBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+team_manager_result:
+    resource: "@TeamManagerResultBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+team_manager_event:
+    resource: "@TeamManagerEventBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+team_manager_player:
+    resource: "@TeamManagerPlayerBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+team_manager_team:
+    resource: "@TeamManagerTeamBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+tm_result:
+    resource: "@TMResultBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+tm_player:
+    resource: "@TMPlayerBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+tm_team:
+    resource: "@TMTeamBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+tm_event:
+    resource: "@TMEventBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 app:
     resource: @AppBundle/Controller/
     type:     annotation
