@@ -1,3 +1,8 @@
+team_manager_security:
+    resource: "@TeamManagerSecurityBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 team_manager_action:
     resource: "@TeamManagerActionBundle/Controller/"
     type:     annotation

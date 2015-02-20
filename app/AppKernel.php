@@ -23,6 +23,7 @@ class AppKernel extends Kernel
             new TeamManager\EventBundle\TeamManagerEventBundle(),
             new TeamManager\ResultBundle\TeamManagerResultBundle(),
             new TeamManager\ActionBundle\TeamManagerActionBundle(),
+            new TeamManager\SecurityBundle\TeamManagerSecurityBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
