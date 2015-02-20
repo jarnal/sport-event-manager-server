@@ -39,7 +39,8 @@ class Injury
      * Player who is injured.
      *
      * @var Player
-     * @ORM\ManyToOne(targetEntity="\TeamManager\PlayerBundle\Entity\Player")
+     * @ORM\ManyToOne(targetEntity="\TeamManager\PlayerBundle\Entity\Player", inversedBy="injuries")
+     * @ORM\JoinColumn(name="player_id", referencedColumnName="id")
      */
     private $player;
 

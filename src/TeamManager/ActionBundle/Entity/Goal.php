@@ -49,7 +49,8 @@ class Goal
      * Player who scored the goal.
      *
      * @var Player
-     * @ORM\ManyToOne(targetEntity="\TeamManager\PlayerBundle\Entity\Player")
+     * @ORM\ManyToOne(targetEntity="\TeamManager\PlayerBundle\Entity\Player", inversedBy="goals")
+     * @ORM\JoinColumn(name="player_id", referencedColumnName="id")
      */
     private $player;
 

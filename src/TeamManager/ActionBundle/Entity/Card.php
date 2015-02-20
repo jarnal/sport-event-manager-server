@@ -45,7 +45,8 @@ class Card
      * Player who received the card.
      *
      * @var Player
-     * @ORM\ManyToOne(targetEntity="\TeamManager\PlayerBundle\Entity\Player")
+     * @ORM\ManyToOne(targetEntity="\TeamManager\PlayerBundle\Entity\Player", inversedBy="cards")
+     * @ORM\JoinColumn(name="player_id", referencedColumnName="id")
      */
     private $player;
 

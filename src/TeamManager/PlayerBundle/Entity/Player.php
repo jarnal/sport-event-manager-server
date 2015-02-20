@@ -4,6 +4,12 @@ namespace TeamManager\PlayerBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use TeamManager\ActionBundle\Entity\Card;
+use TeamManager\ActionBundle\Entity\Goal;
+use TeamManager\ActionBundle\Entity\Injury;
+use TeamManager\ResultBundle\Entity\Comment;
+use TeamManager\ResultBundle\Entity\PlayerResult;
 use TeamManager\SecurityBundle\Entity\Role;
 use TeamManager\TeamBundle\Entity\Team;
 
@@ -99,7 +105,7 @@ class Player implements UserInterface, \Serializable
     private $registered;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var ArrayCollection
      * @ORM\ManyToMany(targetEntity="TeamManager\SecurityBundle\Entity\Role", cascade="persist")
      * @ORM\JoinTable(name="tm_player_rel_role",
      *      joinColumns={@ORM\JoinColumn(name="player_id", referencedColumnName="id", onDelete="CASCADE")},
@@ -109,29 +115,64 @@ class Player implements UserInterface, \Serializable
     private $roles;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var ArrayCollection
+     * @ORM\ManyToMany(targetEntity="TeamManager\TeamBundle\Entity\Team", cascade="persist")
+     * @ORM\JoinTable(name="tm_player_rel_team",
+     *      joinColumns={@ORM\JoinColumn(name="player_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="team_id", referencedColumnName="id")}
+     *      )
      */
     private $teams;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="TeamManager\ActionBundle\Entity\Goal", cascade="persist", mappedBy="player")
      */
     private $goals;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="TeamManager\ActionBundle\Entity\Card", cascade="persist", mappedBy="player")
      */
     private $cards;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="TeamManager\ResultBundle\Entity\Comment", cascade="persist", mappedBy="player_receiver")
      */
-    private $comments;
+    private $comments_received;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="TeamManager\ResultBundle\Entity\Comment", cascade="persist", mappedBy="player_sender")
+     */
+    private $comments_left;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="TeamManager\ActionBundle\Entity\Injury", cascade="persist", mappedBy="player")
+     */
+    private $injuries;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="TeamManager\ResultBundle\Entity\PlayerResult", cascade="persist", mappedBy="player")
      */
     private $results;
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $this->roles = new ArrayCollection();
+        $this->teams = new ArrayCollection();
+        $this->goals = new ArrayCollection();
+        $this->cards = new ArrayCollection();
+        $this->comments_received = new ArrayCollection();
+        $this->injuries = new ArrayCollection();
+        $this->results = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -342,6 +383,14 @@ class Player implements UserInterface, \Serializable
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getRoles()
+    {
+        return $this->roles->toArray();
+    }
+
+    /**
      * Add a role.
      *
      * @param Role $pRole
@@ -366,19 +415,9 @@ class Player implements UserInterface, \Serializable
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getRoles()
-    {
-        return $this->roles->toArray();
-    }
-
-    //------------------------------------------------------------------------------------------------------
-
-    /**
      * Get player team list.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
     public function getTeams()
     {
@@ -410,7 +449,7 @@ class Player implements UserInterface, \Serializable
     }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
     public function getGoals()
     {
@@ -418,7 +457,31 @@ class Player implements UserInterface, \Serializable
     }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection
+     * Add a goal.
+     *
+     * @param Goal $pGoal
+     * @return Player
+     */
+    public function addGoal(Goal $pGoal)
+    {
+        $this->goals[] = $pGoal;
+        return $this;
+    }
+
+    /**
+     * Remove a goal.
+     *
+     * @param Goal $pGoal
+     * @return Player
+     */
+    public function removeGoal(Goal $pGoal)
+    {
+        $this->goals->removeElement($pGoal);
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
      */
     public function getCards()
     {
@@ -426,24 +489,156 @@ class Player implements UserInterface, \Serializable
     }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection
+     * Add a card.
+     *
+     * @param Card $pCard
+     * @return Player
      */
-    public function getComments()
+    public function addCard(Card $pCard)
     {
-        return $this->comments;
+        $this->cards[] = $pCard;
+        return $this;
     }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection
+     * Remove a card.
+     *
+     * @param Card $pCard
+     * @return Player
+     */
+    public function removeCard(Card $pCard)
+    {
+        $this->cards->removeElement($pCard);
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCommentsReceived()
+    {
+        return $this->comments_received;
+    }
+
+    /**
+     * Add a comment.
+     *
+     * @param Comment $pComment
+     * @return Player
+     */
+    public function addCommentReceived(Comment $pComment)
+    {
+        $this->comments_received[] = $pComment;
+        return $this;
+    }
+
+    /**
+     * Remove a comment.
+     *
+     * @param Comment $pComment
+     * @return Player
+     */
+    public function removeCommentReceived(Comment $pComment)
+    {
+        $this->comments_received->removeElement($pComment);
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCommentsLeft()
+    {
+        return $this->comments_left;
+    }
+
+    /**
+     * Add a comment.
+     *
+     * @param Comment $pComment
+     * @return Player
+     */
+    public function addCommentLeft(Comment $pComment)
+    {
+        $this->comments_left[] = $pComment;
+        return $this;
+    }
+
+    /**
+     * Remove a comment.
+     *
+     * @param Comment $pComment
+     * @return Player
+     */
+    public function removeCommentLeft(Comment $pComment)
+    {
+        $this->comments_left->removeElement($pComment);
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getInjuries()
+    {
+        return $this->injuries;
+    }
+
+    /**
+     * Add a comment.
+     *
+     * @param Injury $pInjury
+     * @return Player
+     */
+    public function addInjuries(Injury $pInjury)
+    {
+        $this->injuries[] = $pInjury;
+        return $this;
+    }
+
+    /**
+     * Remove a comment.
+     *
+     * @param Injury $pInjury
+     * @return Player
+     */
+    public function removeInjuries(Injury $pInjury)
+    {
+        $this->injuries->removeElement($pInjury);
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
      */
     public function getResults()
     {
         return $this->results;
     }
 
-    
+    /**
+     * Add a result.
+     *
+     * @param PlayerResult $pResult
+     * @return Player
+     */
+    public function addResult(PlayerResult $pResult)
+    {
+        $this->results[] = $pResult;
+        return $this;
+    }
 
-    //------------------------------------------------------------------------------------------------------
+    /**
+     * Remove a result.
+     *
+     * @param PlayerResult $pResult
+     * @return Player
+     */
+    public function removeResult(PlayerResult $pResult)
+    {
+        $this->results->removeElement($pResult);
+        return $this;
+    }
 
     /**
      * {@inheritdoc}
