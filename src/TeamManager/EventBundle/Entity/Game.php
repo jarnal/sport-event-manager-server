@@ -2,7 +2,9 @@
 
 namespace TeamManager\EventBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use TeamManager\ResultBundle\Entity\GameResult;
 
 /**
  * Game
@@ -10,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="TeamManager\EventBundle\Repository\GameRepository")
  */
-class Game
+class Game extends Event
 {
     /**
      * @var integer
@@ -20,6 +22,11 @@ class Game
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @var GameResult
+     */
+    private $result;
 
 
     /**

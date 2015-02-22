@@ -3,6 +3,7 @@
 namespace TeamManager\EventBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use TeamManager\TeamBundle\Entity\Team;
 
 /**
  * Training
@@ -20,6 +21,13 @@ class Training
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @var Team
+     * @ORM\ManyToOne(targetEntity="\TeamManager\TeamBundle\Entity\Team", inversedBy="trainings")
+     * @ORM\JoinColumn(name="team_id", referencedColumnName="id")
+     */
+    private $team;
 
 
     /**

@@ -116,13 +116,19 @@ class Player implements UserInterface, \Serializable
 
     /**
      * @var ArrayCollection
-     * @ORM\ManyToMany(targetEntity="TeamManager\TeamBundle\Entity\Team", cascade="persist")
+     * @ORM\ManyToMany(targetEntity="TeamManager\TeamBundle\Entity\Team", cascade="persist", inversedBy="players")
      * @ORM\JoinTable(name="tm_player_rel_team",
      *      joinColumns={@ORM\JoinColumn(name="player_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="team_id", referencedColumnName="id")}
      *      )
      */
     private $teams;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="TeamManager\TeamBundle\Entity\Team", cascade="persist", mappedBy="player")
+     */
+    private $managed_teams;
 
     /**
      * @var ArrayCollection
@@ -167,9 +173,11 @@ class Player implements UserInterface, \Serializable
     {
         $this->roles = new ArrayCollection();
         $this->teams = new ArrayCollection();
+        $this->managed_teams = new ArrayCollection();
         $this->goals = new ArrayCollection();
         $this->cards = new ArrayCollection();
         $this->comments_received = new ArrayCollection();
+        $this->comments_left = new ArrayCollection();
         $this->injuries = new ArrayCollection();
         $this->results = new ArrayCollection();
     }
@@ -445,6 +453,40 @@ class Player implements UserInterface, \Serializable
     public function removeTeam( Team $pTeam )
     {
         $this->teams->removeElement($pTeam);
+        return $this;
+    }
+
+    /**
+     * Get player managed team list.
+     *
+     * @return ArrayCollection
+     */
+    public function getManagedTeams()
+    {
+        return $this->managed_teams;
+    }
+
+    /**
+     * Add a managed team.
+     *
+     * @param Team $pTeam
+     * @return Player
+     */
+    public function addManagedTeam( Team $pTeam )
+    {
+        $this->managed_teams[] = $pTeam;
+        return $this;
+    }
+
+    /**
+     * Remove a managed team.
+     *
+     * @param Team $pTeam
+     * @return Player
+     */
+    public function removeManagedTeam( Team $pTeam )
+    {
+        $this->managed_teams->removeElement($pTeam);
         return $this;
     }
 
