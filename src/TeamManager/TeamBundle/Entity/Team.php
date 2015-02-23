@@ -4,12 +4,12 @@ namespace TeamManager\TeamBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use TeamManager\ActionBundle\Entity\Goal;
 use TeamManager\EventBundle\Entity\Game;
 use TeamManager\EventBundle\Entity\GameFriendly;
 use TeamManager\EventBundle\Entity\Training;
 use TeamManager\EventBundle\Entity\Location;
 use TeamManager\PlayerBundle\Entity\Player;
-use TeamManager\ResultBundle\Entity\TeamResult;
 
 /**
  * Team
@@ -103,12 +103,10 @@ class Team
     private $games_friendly;
 
     /**
-     * Results of the team for all games.
-     *
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="\TeamManager\ResultBundle\Entity\TeamResult", mappedBy="team")
+     * @ORM\OneToMany(targetEntity="TeamManager\ActionBundle\Entity\Goal", cascade="persist", mappedBy="team")
      */
-    private $results;
+    private $goals;
 
     /**
      *
@@ -119,7 +117,7 @@ class Team
         $this->trainings = new ArrayCollection();
         $this->games = new ArrayCollection();
         $this->games_friendly = new ArrayCollection();
-        $this->results = new ArrayCollection();
+        $this->$goals = new ArrayCollection();
     }
 
     /**
@@ -332,28 +330,32 @@ class Team
     /**
      * @return ArrayCollection
      */
-    public function getResults()
+    public function getGoals()
     {
-        return $this->results;
+        return $this->goals;
     }
 
     /**
-     * @param TeamResult $pResult
-     * @return $this
+     * Add a goal.
+     *
+     * @param Goal $pGoal
+     * @return Player
      */
-    public function addResult(TeamResult $pResult)
+    public function addGoal(Goal $pGoal)
     {
-        $this->results[] = $pResult;
+        $this->goals[] = $pGoal;
         return $this;
     }
 
     /**
-     * @param TeamResult $pResult
-     * @return $this
+     * Remove a goal.
+     *
+     * @param Goal $pGoal
+     * @return Player
      */
-    public function removeResult(TeamResult $pResult)
+    public function removeGoal(Goal $pGoal)
     {
-        $this->results->removeElement($pResult);
+        $this->goals->removeElement($pGoal);
         return $this;
     }
 

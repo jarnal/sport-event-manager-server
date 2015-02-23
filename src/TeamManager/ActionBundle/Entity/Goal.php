@@ -5,6 +5,7 @@ namespace TeamManager\ActionBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use TeamManager\EventBundle\Entity\Game;
 use TeamManager\PlayerBundle\Entity\Player;
+use TeamManager\TeamBundle\Entity\Team;
 
 /**
  * Goal
@@ -58,10 +59,19 @@ class Goal
      * Game in which the goal has been scored.
      *
      * @var Game
-     * @ORM\ManyToOne(targetEntity="\TeamManager\EventBundle\Entity\Game")
+     * @ORM\ManyToOne(targetEntity="\TeamManager\EventBundle\Entity\Game", inversedBy="goals")
+     * @ORM\JoinColumn(name="game_id", referencedColumnName="id")
      */
     private $game;
 
+    /**
+     * Team in which the player was playing when goal has been scored.
+     *
+     * @var Team
+     * @ORM\ManyToOne(targetEntity="TeamManager\TeamBundle\Entity\Team", inversedBy="goals")
+     * @ORM\JoinColumn(name="team_id", referencedColumnName="id")
+     */
+    private $team;
 
     /**
      * Get id
@@ -77,9 +87,9 @@ class Goal
      * Set goal type.
      *
      * @param string $pTime
-     * @return Card
+     * @return Goal
      */
-    public function getType($pType)
+    public function setType($pType)
     {
         $this->type = $pType;
         return $this;
@@ -90,7 +100,7 @@ class Goal
      *
      * @return string
      */
-    public function setType()
+    public function getType()
     {
         return $this->type;
     }
@@ -99,7 +109,7 @@ class Goal
      * Get goal time.
      *
      * @param \DateTime $pTime
-     * @return Card
+     * @return Goal
      */
     public function setTime(\DateTime $pTime)
     {
@@ -121,7 +131,7 @@ class Goal
      * Set goal related player.
      *
      * @param Player $pPlayer
-     * @return Card
+     * @return Goal
      */
     public function setPlayer(Player $pPlayer)
     {
@@ -143,7 +153,7 @@ class Goal
      * Get goal related game.
      *
      * @param Game $pGame
-     * @return Card
+     * @return Goal
      */
     public function setGame(Game $pGame)
     {
@@ -159,5 +169,23 @@ class Goal
     public function getGame()
     {
         return $this->game;
+    }
+
+    /**
+     * @param Team $pTeam
+     * @return Goal
+     */
+    public function setTeam(Team $pTeam)
+    {
+        $this->team = $pTeam;
+        return $this;
+    }
+
+    /**
+     * @return Team
+     */
+    public function getTeam()
+    {
+        return $this->team;
     }
 }

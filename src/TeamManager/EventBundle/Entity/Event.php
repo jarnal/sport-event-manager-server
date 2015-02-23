@@ -5,7 +5,8 @@ namespace TeamManager\EventBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use TeamManager\PlayerBundle\Entity\Player;
-use TeamManager\ResultBundle\Entity\GameResult;
+use TeamManager\ResultBundle\Entity\Comment;
+use TeamManager\ResultBundle\Entity\Note;
 use TeamManager\TeamBundle\Entity\Team;
 
 /**
@@ -88,13 +89,20 @@ abstract class Event
     private $location;
 
     /**
-     * Result of the event.
+     * Comments sent by users concerning the event.
      *
-     * @var GameResult
-     * @ORM\ManyToOne(targetEntity="\TeamManager\ResultBundle\Entity\GameResult")
-     * @ORM\JoinColumn(name="result_id", referencedColumnName="id")
+     * @var Comment
+     * @ORM\OneToMany(targetEntity="\TeamManager\ResultBundle\Entity\Comment", mappedBy="team")
      */
-    private $result;
+    private $comments;
+
+    /**
+     * Notes sent by users concerning the event.
+     *
+     * @var Comment
+     * @ORM\OneToMany(targetEntity="\TeamManager\ResultBundle\Entity\Note", mappedBy="team")
+     */
+    private $notes;
 
     /**
      * Players expected to play during this event.
@@ -131,6 +139,17 @@ abstract class Event
      *      )
      */
     private $present_players;
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $this->comments = new ArrayCollection();
+        $this->expected_players = new ArrayCollection();
+        $this->$missing_players = new ArrayCollection();
+        $this->$present_players = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -269,20 +288,58 @@ abstract class Event
     }
 
     /**
-     * @return GameResult
+     * @return ArrayCollection
      */
-    public function getResult()
+    public function getComments()
     {
-        return $this->result;
+        return $this->comments;
     }
 
     /**
-     * @param GameResult $pResult
-     * @return Game
+     * @param Comment $pComment
+     * @return $this
      */
-    public function setResult(GameResult $pResult)
+    public function addComment(Comment $pComment)
     {
-        $this->result = $pResult;
+        $this->comments[] = $pComment;
+        return $this;
+    }
+
+    /**
+     * @param Comment $pComment
+     * @return $this
+     */
+    public function removeComment(Comment $pComment)
+    {
+        $this->comments->removeElement($pComment);
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getNotes()
+    {
+        return $this->notes;
+    }
+
+    /**
+     * @param Note $pNote
+     * @return $this
+     */
+    public function addNote(Note $pNote)
+    {
+        $this->notes[] = $pNote;
+        return $this;
+    }
+
+    /**
+     * @param Note $pNote
+     * @return $this
+     */
+    public function removeNote(Note $pNote)
+    {
+        $this->notes->removeElement($pNote);
         return $this;
     }
 

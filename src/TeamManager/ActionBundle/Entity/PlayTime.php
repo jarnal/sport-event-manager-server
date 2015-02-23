@@ -8,17 +8,13 @@ use TeamManager\PlayerBundle\Entity\Player;
 use TeamManager\TeamBundle\Entity\Team;
 
 /**
- * Injury
+ * PlayTime
  *
- * @ORM\Table(name="tm_injury")
- * @ORM\Entity(repositoryClass="TeamManager\ActionBundle\Repository\InjuryRepository")
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="TeamManager\ActionBundle\Repository\PlayTimeRepository")
  */
-class Injury
+class PlayTime
 {
-    const LIGHT = "Injury.LIGHT";
-    const NORMAL = "Injury.NORMAL";
-    const SERIOUS = "Injury.SERIOUS";
-
     /**
      * @var integer
      *
@@ -29,32 +25,32 @@ class Injury
     private $id;
 
     /**
-     * Injury type. Can be : LIGHT, NORMAL, SERIOUS.
+     * Duration in minutes the player played during the game.
      *
-     * @var string
-     * @ORM\Column(name="type", type="string")
+     * @var integer
+     * @ORM\Column(name="duration", type="integer")
      */
-    private $type;
+    private $duration;
 
     /**
-     * Player who is injured.
+     * Player related to the play time.
      *
      * @var Player
-     * @ORM\ManyToOne(targetEntity="\TeamManager\PlayerBundle\Entity\Player", inversedBy="injuries")
+     * @ORM\ManyToOne(targetEntity="\TeamManager\PlayerBundle\Entity\Player", inversedBy="play_times")
      * @ORM\JoinColumn(name="player_id", referencedColumnName="id")
      */
     private $player;
 
     /**
-     * Game in which the player has been injured.
+     * Game related to the play time.
      *
      * @var Game
-     * @ORM\ManyToOne(targetEntity="\TeamManager\EventBundle\Entity\Game", inversedBy="injuries")
+     * @ORM\ManyToOne(targetEntity="\TeamManager\EventBundle\Entity\Game")
      */
     private $game;
 
     /**
-     * Team in which the player was playing when injured.
+     * Team in which the player was playing when playing.
      *
      * @var Team
      * @ORM\ManyToOne(targetEntity="TeamManager\TeamBundle\Entity\Team")
@@ -62,11 +58,10 @@ class Injury
      */
     private $team;
 
-
     /**
      * Get id
      *
-     * @return integer
+     * @return integer 
      */
     public function getId()
     {
@@ -74,32 +69,32 @@ class Injury
     }
 
     /**
-     * Set goal type.
+     * Set play time duration.
      *
-     * @param string $pTime
-     * @return Injury
+     * @param integer $pDuration
+     * @return PlayTime
      */
-    public function setType($pType)
+    public function setDuration($pDuration)
     {
-        $this->type = $pType;
+        $this->duration = $pDuration;
         return $this;
     }
 
     /**
-     * Get goal type.
+     * Get play time duration.
      *
-     * @return string
+     * @return Player
      */
-    public function getType()
+    public function getDuration()
     {
-        return $this->type;
+        return $this->duration;
     }
 
     /**
-     * Set goal related player.
+     * Set play time related player.
      *
      * @param Player $pPlayer
-     * @return Injury
+     * @return PlayTime
      */
     public function setPlayer(Player $pPlayer)
     {
@@ -108,7 +103,7 @@ class Injury
     }
 
     /**
-     * Get goal related player.
+     * Get play time related player.
      *
      * @return Player
      */
@@ -118,10 +113,10 @@ class Injury
     }
 
     /**
-     * Get goal related game.
+     * Get play time related game.
      *
      * @param Game $pGame
-     * @return Injury
+     * @return PlayTime
      */
     public function setGame(Game $pGame)
     {
@@ -130,7 +125,7 @@ class Injury
     }
 
     /**
-     * Get goal related game.
+     * Get play time related game.
      *
      * @return Game
      */
@@ -141,7 +136,7 @@ class Injury
 
     /**
      * @param Team $pTeam
-     * @return Injury
+     * @return PlayTime
      */
     public function setTeam(Team $pTeam)
     {

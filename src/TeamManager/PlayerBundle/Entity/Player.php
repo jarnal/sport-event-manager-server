@@ -8,7 +8,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use TeamManager\ActionBundle\Entity\Card;
 use TeamManager\ActionBundle\Entity\Goal;
 use TeamManager\ActionBundle\Entity\Injury;
+use TeamManager\ActionBundle\Entity\PlayTime;
 use TeamManager\ResultBundle\Entity\Comment;
+use TeamManager\ResultBundle\Entity\Note;
 use TeamManager\ResultBundle\Entity\PlayerResult;
 use TeamManager\SecurityBundle\Entity\Role;
 use TeamManager\TeamBundle\Entity\Team;
@@ -152,7 +154,19 @@ class Player implements UserInterface, \Serializable
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="TeamManager\ResultBundle\Entity\Comment", cascade="persist", mappedBy="player_sender")
      */
-    private $comments_left;
+    private $comments_sent;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="TeamManager\ResultBundle\Entity\Note", cascade="persist", mappedBy="player_receiver")
+     */
+    private $notes_received;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="TeamManager\ResultBundle\Entity\Note", cascade="persist", mappedBy="player_sender")
+     */
+    private $notes_sent;
 
     /**
      * @var ArrayCollection
@@ -162,9 +176,9 @@ class Player implements UserInterface, \Serializable
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="TeamManager\ResultBundle\Entity\PlayerResult", cascade="persist", mappedBy="player")
+     * @ORM\OneToMany(targetEntity="TeamManager\ActionBundle\Entity\PlayTime", cascade="persist", mappedBy="player")
      */
-    private $results;
+    private $play_times;
 
     /**
      *
@@ -177,9 +191,11 @@ class Player implements UserInterface, \Serializable
         $this->goals = new ArrayCollection();
         $this->cards = new ArrayCollection();
         $this->comments_received = new ArrayCollection();
-        $this->comments_left = new ArrayCollection();
+        $this->comments_sent = new ArrayCollection();
+        $this->notes_received = new ArrayCollection();
+        $this->notes_sent = new ArrayCollection();
         $this->injuries = new ArrayCollection();
-        $this->results = new ArrayCollection();
+        $this->play_times = new ArrayCollection();
     }
 
     /**
@@ -373,7 +389,7 @@ class Player implements UserInterface, \Serializable
      *
      * @return boolean
      */
-    public function isRegistered()
+    public function getRegistered()
     {
         return $this->registered;
     }
@@ -589,9 +605,9 @@ class Player implements UserInterface, \Serializable
     /**
      * @return ArrayCollection
      */
-    public function getCommentsLeft()
+    public function getCommentsSent()
     {
-        return $this->comments_left;
+        return $this->comments_sent;
     }
 
     /**
@@ -600,9 +616,9 @@ class Player implements UserInterface, \Serializable
      * @param Comment $pComment
      * @return Player
      */
-    public function addCommentLeft(Comment $pComment)
+    public function addCommentSent(Comment $pComment)
     {
-        $this->comments_left[] = $pComment;
+        $this->comments_sent[] = $pComment;
         return $this;
     }
 
@@ -612,9 +628,73 @@ class Player implements UserInterface, \Serializable
      * @param Comment $pComment
      * @return Player
      */
-    public function removeCommentLeft(Comment $pComment)
+    public function removeCommentSent(Comment $pComment)
     {
-        $this->comments_left->removeElement($pComment);
+        $this->comments_sent->removeElement($pComment);
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getNotesReceived()
+    {
+        return $this->notes_received;
+    }
+
+    /**
+     * Add a received note.
+     *
+     * @param Note $pNote
+     * @return Player
+     */
+    public function addNoteReceived(Note $pNote)
+    {
+        $this->notes_received[] = $pNote;
+        return $this;
+    }
+
+    /**
+     * Remove a received note.
+     *
+     * @param Note $pNote
+     * @return Player
+     */
+    public function removeNoteReceived(Note $pNote)
+    {
+        $this->notes_received->removeElement($pNote);
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getNotesSent()
+    {
+        return $this->notes_sent;
+    }
+
+    /**
+     * Add a comment.
+     *
+     * @param Note $pNote
+     * @return Player
+     */
+    public function addNoteSent(Note $pNote)
+    {
+        $this->notes_sent[] = $pNote;
+        return $this;
+    }
+
+    /**
+     * Remove a comment.
+     *
+     * @param Note $pNote
+     * @return Player
+     */
+    public function removeNoteSent(Note $pNote)
+    {
+        $this->notes_sent->removeElement($pNote);
         return $this;
     }
 
@@ -653,32 +733,32 @@ class Player implements UserInterface, \Serializable
     /**
      * @return ArrayCollection
      */
-    public function getResults()
+    public function getPlayTimes()
     {
-        return $this->results;
+        return $this->play_times;
     }
 
     /**
      * Add a result.
      *
-     * @param PlayerResult $pResult
+     * @param PlayTime $pResult
      * @return Player
      */
-    public function addResult(PlayerResult $pResult)
+    public function addPlayTime(PlayTime $pResult)
     {
-        $this->results[] = $pResult;
+        $this->play_times[] = $pResult;
         return $this;
     }
 
     /**
      * Remove a result.
      *
-     * @param PlayerResult $pResult
+     * @param PlayTime $pResult
      * @return Player
      */
-    public function removeResult(PlayerResult $pResult)
+    public function removePlayTime(PlayTime $pResult)
     {
-        $this->results->removeElement($pResult);
+        $this->play_times->removeElement($pResult);
         return $this;
     }
 

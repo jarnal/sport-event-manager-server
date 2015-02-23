@@ -5,6 +5,7 @@ namespace TeamManager\ActionBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use TeamManager\EventBundle\Entity\Game;
 use TeamManager\PlayerBundle\Entity\Player;
+use TeamManager\TeamBundle\Entity\Team;
 
 /**
  * Card
@@ -54,9 +55,19 @@ class Card
      * Game in which the card has been received.
      *
      * @var Game
-     * @ORM\ManyToOne(targetEntity="\TeamManager\EventBundle\Entity\Game")
+     * @ORM\ManyToOne(targetEntity="\TeamManager\EventBundle\Entity\Game", inversedBy="cards")
+     * @ORM\JoinColumn(name="game_id", referencedColumnName="id")
      */
     private $game;
+
+    /**
+     * Team in which the player was playing when card has been received.
+     *
+     * @var Team
+     * @ORM\ManyToOne(targetEntity="TeamManager\TeamBundle\Entity\Team")
+     * @ORM\JoinColumn(name="team_id", referencedColumnName="id")
+     */
+    private $team;
 
     /**
      * Get id
@@ -74,7 +85,7 @@ class Card
      * @param string $pTime
      * @return Card
      */
-    public function getType($pType)
+    public function setType($pType)
     {
         $this->type = $pType;
         return $this;
@@ -85,7 +96,7 @@ class Card
      *
      * @return string
      */
-    public function setType()
+    public function getType()
     {
         return $this->type;
     }
@@ -154,6 +165,24 @@ class Card
     public function getGame()
     {
         return $this->game;
+    }
+
+    /**
+     * @return Team
+     */
+    public function getTeam()
+    {
+        return $this->team;
+    }
+
+    /**
+     * @param Team $pTeam
+     * @return Game
+     */
+    public function setTeam(Team $pTeam)
+    {
+        $this->team = $pTeam;
+        return $this;
     }
 
 }
