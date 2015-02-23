@@ -2,40 +2,42 @@
 
 namespace TeamManager\EventBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use TeamManager\ResultBundle\Entity\GameResult;
+use TeamManager\TeamBundle\Entity\Team;
 
 /**
  * Game
  *
- * @ORM\Table()
- * @ORM\Entity(repositoryClass="TeamManager\EventBundle\Repository\GameRepository")
+ * @ORM\Entity
  */
 class Game extends Event
 {
+
     /**
-     * @var integer
+     * Team participating to the game.
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @var Team
+     * @ORM\ManyToOne(targetEntity="TeamManager\TeamBundle\Entity\Team", inversedBy="games")
+     * @ORM\JoinColumn(name="team_id", referencedColumnName="id")
      */
-    private $id;
+    private $team;
 
     /**
-     * @var GameResult
+     * @return Team
      */
-    private $result;
-
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
+    public function getTeam()
     {
-        return $this->id;
+        return $this->team;
     }
+
+    /**
+     * @param Team $pTeam
+     * @return Game
+     */
+    public function setTeam(Team $pTeam)
+    {
+        $this->team = $pTeam;
+        return $this;
+    }
+
 }

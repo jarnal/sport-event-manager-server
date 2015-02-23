@@ -1,14 +1,14 @@
 <?php
 
-namespace TeamManager\EventBundle\Repository;
+namespace TeamManager\EventBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Location
  *
- * @ORM\Table(name⁼"tm_event_location")
- * @ORM\Entity(repositoryClass="TeamManager\EventBundle\Entity\LocationRepository")
+ * @ORM\Table(name="tm_event_location")
+ * @ORM\Entity(repositoryClass="TeamManager\EventBundle\Repository\LocationRepository")
  */
 class Location
 {

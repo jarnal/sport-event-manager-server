@@ -53,4 +53,56 @@ class TeamResult
     {
         return $this->id;
     }
+
+    /**
+     * @return Team
+     */
+    public function getTeam()
+    {
+        return $this->team;
+    }
+
+    /**
+     * @param Team $pTeam
+     */
+    public function setTeam(Team $pTeam)
+    {
+        $this->team = $pTeam;
+        return $this;
+    }
+
+    /**
+     * @return Game
+     */
+    public function getGame()
+    {
+        return $this->game;
+    }
+
+    /**
+     * @param Game $pGame
+     */
+    public function setGame(Game $pGame)
+    {
+        $this->game = $pGame;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isWon()
+    {
+        return $this->won;
+    }
+
+    /**
+     * @param boolean $won
+     */
+    public function setWon($won)
+    {
+        $this->won = $won;
+        return $this;
+    }
+
 }

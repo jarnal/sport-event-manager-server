@@ -5,15 +5,16 @@ namespace TeamManager\TeamBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use TeamManager\EventBundle\Entity\Game;
+use TeamManager\EventBundle\Entity\GameFriendly;
 use TeamManager\EventBundle\Entity\Training;
-use TeamManager\EventBundle\Repository\Location;
+use TeamManager\EventBundle\Entity\Location;
 use TeamManager\PlayerBundle\Entity\Player;
 use TeamManager\ResultBundle\Entity\TeamResult;
 
 /**
  * Team
  *
- * @ORM\Table()
+ * @ORM\Table(name="tm_team")
  * @ORM\Entity(repositoryClass="TeamManager\TeamBundle\Repository\TeamRepository")
  */
 class Team
@@ -73,7 +74,7 @@ class Team
      * List of team players.
      *
      * @var ArrayCollection
-     * @ORM\ManyToMany(targetEntity="TeamManager\TeamBundle\Entity\Team", cascade="persist", mappedBy="teams")
+     * @ORM\ManyToMany(targetEntity="\TeamManager\TeamBundle\Entity\Team", cascade="persist", mappedBy="teams")
      */
     private $players;
 
@@ -89,9 +90,17 @@ class Team
      * Games of the team.
      *
      * @var ArrayCollection
-     * @ORM\ManyToMany(targetEntity="TeamManager\EventBundle\Entity\Game", cascade="persist", mappedBy="teams")
+     * @ORM\OneToMany(targetEntity="\TeamManager\EventBundle\Entity\Game", mappedBy="team")
      */
     private $games;
+
+    /**
+     * Friendly games of the team.
+     *
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="\TeamManager\EventBundle\Entity\GameFriendly", mappedBy="team")
+     */
+    private $games_friendly;
 
     /**
      * Results of the team for all games.
@@ -109,6 +118,7 @@ class Team
         $this->players = new ArrayCollection();
         $this->trainings = new ArrayCollection();
         $this->games = new ArrayCollection();
+        $this->games_friendly = new ArrayCollection();
         $this->results = new ArrayCollection();
     }
 
@@ -288,6 +298,34 @@ class Team
     public function removeGame(Game $pGame)
     {
         $this->games->removeElement($pGame);
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getGamesFriendly()
+    {
+        return $this->games_friendly;
+    }
+
+    /**
+     * @param GameFriendly $pGame
+     * @return $this
+     */
+    public function addGamesFriendly(GameFriendly $pGame)
+    {
+        $this->games_friendly[] = $pGame;
+        return $this;
+    }
+
+    /**
+     * @param GameFriendly $pGame
+     * @return $this
+     */
+    public function removeGamesFriendly(GameFriendly $pGame)
+    {
+        $this->games_friendly->removeElement($pGame);
         return $this;
     }
 

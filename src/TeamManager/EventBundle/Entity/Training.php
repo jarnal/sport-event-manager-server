@@ -8,35 +8,36 @@ use TeamManager\TeamBundle\Entity\Team;
 /**
  * Training
  *
- * @ORM\Table()
- * @ORM\Entity(repositoryClass="TeamManager\EventBundle\Repository\TrainingRepository")
+ * @ORM\Entity
  */
-class Training
+class Training extends Event
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
 
     /**
+     * Team participating to the game.
+     *
      * @var Team
-     * @ORM\ManyToOne(targetEntity="\TeamManager\TeamBundle\Entity\Team", inversedBy="trainings")
+     * @ORM\ManyToOne(targetEntity="TeamManager\TeamBundle\Entity\Team", inversedBy="trainings")
      * @ORM\JoinColumn(name="team_id", referencedColumnName="id")
      */
     private $team;
 
+    /**
+     * @return Team
+     */
+    public function getTeam()
+    {
+        return $this->team;
+    }
 
     /**
-     * Get id
-     *
-     * @return integer 
+     * @param Team $pTeam
+     * @return Game
      */
-    public function getId()
+    public function setTeam(Team $pTeam)
     {
-        return $this->id;
+        $this->team = $pTeam;
+        return $this;
     }
+
 }

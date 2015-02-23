@@ -4,17 +4,22 @@ namespace TeamManager\EventBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use TeamManager\EventBundle\Repository\Location;
+use TeamManager\PlayerBundle\Entity\Player;
 use TeamManager\ResultBundle\Entity\GameResult;
+use TeamManager\TeamBundle\Entity\Team;
 
 /**
  * Event
  *
- * @ORM\Table(name="lms_event")
- * @ORM\Entity(repositoryClass="TeamManager\EventBundle\Repository\EventRepository")
+ * @ORM\Entity
+ * @ORM\Table(name="tm_event")
+ * @ORM\InheritanceType("JOINED")
+ * @ORM\DiscriminatorColumn(name="event_type", type="string")
+ * @ORM\DiscriminatorMap( {"training"="Training", "game"="Game", "game_friendly"="GameFriendly"} )
  */
-class Event
+abstract class Event
 {
+
     /**
      * @var integer
      *
@@ -25,82 +30,344 @@ class Event
     private $id;
 
     /**
+     * Name of the event.
+     *
      * @var string
      * @ORM\Column(name="name", type="string")
      */
     private $name;
 
     /**
+     * Description of the event.
+     *
      * @var string
      * @ORM\Column(name="description", type="string")
      */
     private $description;
 
     /**
+     * Date of the event.
+     *
      * @var \DateTime
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
 
     /**
-     * @var string
-     * @ORM\Column(name="event_type", type="string")
-     */
-    private $event_type;
-
-    /**
+     * Type of subscription of the event.
+     * Implementation of this feature will come in next version with mixed team.
+     *
      * @var string
      * @ORM\Column(name="subscription_type", type="string")
      */
     private $subscription_type;
 
     /**
+     * Limit of players that can be present in the event.
+     *
      * @var integer
      * @ORM\Column(name="limit", type="integer")
      */
     private $limit;
 
     /**
-     * List of teams composing an event
-     * For a game there will be two teams when for a training the will be only one team.
+     * Name of the opponent.
      *
-     * @var ArrayCollection
-     * @ORM\ManyToMany(targetEntity="TeamManager\TeamBundle\Entity\Team", cascade="persist", inversedBy="games")
-     * @ORM\JoinTable(name="tm_game_rel_team",
-     *      joinColumns={@ORM\JoinColumn(name="game_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="team_id", referencedColumnName="id")}
-     *      )
+     * @var string
+     * @ORM\Column(name="opponent", type="integer")
      */
-    private $teams;
+    private $opponent;
 
     /**
+     * Location where the event takes place.
+     *
      * @var Location
+     * @ORM\ManyToOne(targetEntity="\TeamManager\EventBundle\Entity\Location")
+     * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
      */
     private $location;
 
     /**
-     * @var ArrayCollection
+     * Result of the event.
+     *
+     * @var GameResult
+     * @ORM\ManyToOne(targetEntity="\TeamManager\ResultBundle\Entity\GameResult")
+     * @ORM\JoinColumn(name="result_id", referencedColumnName="id")
      */
-    private $expectedPlayers;
+    private $result;
 
     /**
+     * Players expected to play during this event.
+     *
      * @var ArrayCollection
+     * @ORM\ManyToMany(targetEntity="\TeamManager\PlayerBundle\Entity\Player")
+     * @ORM\JoinTable(name="tm_event_expected_player",
+     *      joinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="player_id", referencedColumnName="id", onDelete="CASCADE")}
+     *      )
      */
-    private $missingPlayers;
+    private $expected_players;
 
     /**
+     * Players that will be missing for the event (among those expected).
+     *
      * @var ArrayCollection
+     * @ORM\ManyToMany(targetEntity="\TeamManager\PlayerBundle\Entity\Player")
+     * @ORM\JoinTable(name="tm_event_missing_player",
+     *      joinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="player_id", referencedColumnName="id", onDelete="CASCADE")}
+     *      )
      */
-    private $presentPlayers;
+    private $missing_players;
 
+    /**
+     * Players that will be present for the event (among those expected).
+     *
+     * @var ArrayCollection
+     * @ORM\ManyToMany(targetEntity="\TeamManager\PlayerBundle\Entity\Player")
+     * @ORM\JoinTable(name="tm_event_present_player",
+     *      joinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="player_id", referencedColumnName="id", onDelete="CASCADE")}
+     *      )
+     */
+    private $present_players;
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $pName
+     * @return Event
+     */
+    public function setName($pName)
+    {
+        $this->name = $pName;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $pDescription
+     * @return Event
+     */
+    public function setDescription($pDescription)
+    {
+        $this->description = $pDescription;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param \DateTime $pDate
+     * @return Event
+     */
+    public function setDate($pDate)
+    {
+        $this->date = $pDate;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSubscriptionType()
+    {
+        return $this->subscription_type;
+    }
+
+    /**
+     * @param string $pSubscriptionType
+     * @return Event
+     */
+    public function setSubscriptionType($pSubscriptionType)
+    {
+        $this->subscription_type = $pSubscriptionType;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLimit()
+    {
+        return $this->limit;
+    }
+
+    /**
+     * @param int $pLimit
+     * @return Event
+     */
+    public function setLimit($pLimit)
+    {
+        $this->limit = $pLimit;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOpponent()
+    {
+        return $this->opponent;
+    }
+
+    /**
+     * @param string $pOpponent
+     * @return Event
+     */
+    public function setOpponent($pOpponent)
+    {
+        $this->opponent = $pOpponent;
+        return $this;
+    }
+
+    /**
+     * @return Location
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    /**
+     * @param Location $pLocation
+     * @return Event
+     */
+    public function setLocation($pLocation)
+    {
+        $this->location = $pLocation;
+        return $this;
+    }
+
+    /**
+     * @return GameResult
+     */
+    public function getResult()
+    {
+        return $this->result;
+    }
+
+    /**
+     * @param GameResult $pResult
+     * @return Game
+     */
+    public function setResult(GameResult $pResult)
+    {
+        $this->result = $pResult;
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getExpectedPlayers()
+    {
+        return $this->expected_players;
+    }
+
+    /**
+     * @param Player $pPlayer
+     * @return $this
+     */
+    public function addExpectedPlayer(Player $pPlayer)
+    {
+        $this->expected_players[] = $pPlayer;
+        return $this;
+    }
+
+    /**
+     * @param Player $pPlayer
+     * @return $this
+     */
+    public function removeExpectedPlayer(Player $pPlayer)
+    {
+        $this->expected_players->removeElement($pPlayer);
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getMissingPlayers()
+    {
+        return $this->missing_players;
+    }
+
+    /**
+     * @param Player $pPlayer
+     * @return $this
+     */
+    public function addMissingPlayer(Player $pPlayer)
+    {
+        $this->missing_players[] = $pPlayer;
+        return $this;
+    }
+
+    /**
+     * @param Player $pPlayer
+     * @return $this
+     */
+    public function removeMissingPlayer(Player $pPlayer)
+    {
+        $this->missing_players->removeElement($pPlayer);
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getPresentPlayers()
+    {
+        return $this->present_players;
+    }
+
+    /**
+     * @param Player $pPlayer
+     * @return $this
+     */
+    public function addPresentPlayer(Player $pPlayer)
+    {
+        $this->present_players[] = $pPlayer;
+        return $this;
+    }
+
+    /**
+     * @param Player $pPlayer
+     * @return $this
+     */
+    public function removePresentPlayer(Player $pPlayer)
+    {
+        $this->present_players->removeElement($pPlayer);
+        return $this;
+    }
+
 }

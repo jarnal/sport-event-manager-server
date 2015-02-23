@@ -29,25 +29,21 @@ team_manager_team:
     prefix:   /
 
 tm_result:
-    resource: "@TMResultBundle/Controller/"
+    resource: "@TeamManagerResultBundle/Controller/"
     type:     annotation
     prefix:   /
 
 tm_player:
-    resource: "@TMPlayerBundle/Controller/"
+    resource: "@TeamManagerPlayerBundle/Controller/"
     type:     annotation
     prefix:   /
 
 tm_team:
-    resource: "@TMTeamBundle/Controller/"
+    resource: "@TeamManagerTeamBundle/Controller/"
     type:     annotation
     prefix:   /
 
 tm_event:
-    resource: "@TMEventBundle/Controller/"
+    resource: "@TeamManagerEventBundle/Controller/"
     type:     annotation
     prefix:   /
-
-app:
-    resource: @AppBundle/Controller/
-    type:     annotation

@@ -3,32 +3,42 @@
 namespace TeamManager\EventBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use TeamManager\TeamBundle\Entity\Team;
 
 /**
  * GameFriendly
  *
- * @ORM\Table()
- * @ORM\Entity(repositoryClass="TeamManager\EventBundle\Repository\GameFriendlyRepository")
+ * @ORM\Entity
  */
-class GameFriendly
+class GameFriendly extends Event
 {
+
     /**
-     * @var integer
+     * Team participating to the game.
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @var Team
+     * @ORM\ManyToOne(targetEntity="TeamManager\TeamBundle\Entity\Team", inversedBy="games_friendly")
+     * @ORM\JoinColumn(name="team_id", referencedColumnName="id")
      */
-    private $id;
+    private $team;
 
 
     /**
-     * Get id
-     *
-     * @return integer 
+     * @return Team
      */
-    public function getId()
+    public function getTeam()
     {
-        return $this->id;
+        return $this->team;
     }
+
+    /**
+     * @param Team $pTeam
+     * @return Game
+     */
+    public function setTeam(Team $pTeam)
+    {
+        $this->team = $pTeam;
+        return $this;
+    }
+
 }
