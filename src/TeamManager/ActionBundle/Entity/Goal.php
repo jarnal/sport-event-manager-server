@@ -51,7 +51,7 @@ class Goal
      *
      * @var Player
      * @ORM\ManyToOne(targetEntity="\TeamManager\PlayerBundle\Entity\Player", inversedBy="goals")
-     * @ORM\JoinColumn(name="player_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="player_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $player;
 
@@ -60,7 +60,7 @@ class Goal
      *
      * @var Game
      * @ORM\ManyToOne(targetEntity="\TeamManager\EventBundle\Entity\Game", inversedBy="goals")
-     * @ORM\JoinColumn(name="game_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="game_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $game;
 
@@ -69,7 +69,7 @@ class Goal
      *
      * @var Team
      * @ORM\ManyToOne(targetEntity="TeamManager\TeamBundle\Entity\Team", inversedBy="goals")
-     * @ORM\JoinColumn(name="team_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="team_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $team;
 

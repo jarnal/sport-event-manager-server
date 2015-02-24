@@ -42,7 +42,7 @@ abstract class Event
      * Description of the event.
      *
      * @var string
-     * @ORM\Column(name="description", type="string")
+     * @ORM\Column(name="description", type="string", nullable=true)
      */
     private $description;
 
@@ -59,7 +59,7 @@ abstract class Event
      * Implementation of this feature will come in next version with mixed team.
      *
      * @var string
-     * @ORM\Column(name="subscription_type", type="string")
+     * @ORM\Column(name="subscription_type", type="string", nullable=true)
      */
     private $subscription_type;
 
@@ -67,7 +67,7 @@ abstract class Event
      * Limit of players that can be present in the event.
      *
      * @var integer
-     * @ORM\Column(name="limit", type="integer")
+     * @ORM\Column(name="limit", type="integer", nullable=true)
      */
     private $limit;
 
@@ -146,6 +146,7 @@ abstract class Event
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->notes = new ArrayCollection();
         $this->expected_players = new ArrayCollection();
         $this->$missing_players = new ArrayCollection();
         $this->$present_players = new ArrayCollection();
@@ -162,6 +163,8 @@ abstract class Event
     }
 
     /**
+     * Get event name.
+     *
      * @return string
      */
     public function getName()
@@ -170,6 +173,8 @@ abstract class Event
     }
 
     /**
+     * Set event name.
+     *
      * @param string $pName
      * @return Event
      */
@@ -180,6 +185,8 @@ abstract class Event
     }
 
     /**
+     * Get event description.
+     *
      * @return string
      */
     public function getDescription()
@@ -188,6 +195,8 @@ abstract class Event
     }
 
     /**
+     * Set event description.
+     *
      * @param string $pDescription
      * @return Event
      */
@@ -198,6 +207,8 @@ abstract class Event
     }
 
     /**
+     * Get event date.
+     *
      * @return \DateTime
      */
     public function getDate()
@@ -206,6 +217,8 @@ abstract class Event
     }
 
     /**
+     * Set event date.
+     *
      * @param \DateTime $pDate
      * @return Event
      */
@@ -216,6 +229,8 @@ abstract class Event
     }
 
     /**
+     * Get subscription type of the event.
+     *
      * @return string
      */
     public function getSubscriptionType()
@@ -224,6 +239,8 @@ abstract class Event
     }
 
     /**
+     * Set subscription type of the event.
+     *
      * @param string $pSubscriptionType
      * @return Event
      */
@@ -234,6 +251,8 @@ abstract class Event
     }
 
     /**
+     * Get users limit for the event.
+     *
      * @return int
      */
     public function getLimit()
@@ -242,6 +261,8 @@ abstract class Event
     }
 
     /**
+     * Set users limit for the event.
+     *
      * @param int $pLimit
      * @return Event
      */
@@ -252,6 +273,9 @@ abstract class Event
     }
 
     /**
+     * Get opponent of the team for this event.
+     * Existing only for a game and and friendly game.
+     *
      * @return string
      */
     public function getOpponent()
@@ -260,6 +284,9 @@ abstract class Event
     }
 
     /**
+     * Set opponent of the team for this event.
+     * Existing only for a game and and friendly game.
+     *
      * @param string $pOpponent
      * @return Event
      */
@@ -270,6 +297,8 @@ abstract class Event
     }
 
     /**
+     * Get location of the event.
+     *
      * @return Location
      */
     public function getLocation()
@@ -278,6 +307,8 @@ abstract class Event
     }
 
     /**
+     * Set location of the event.
+     *
      * @param Location $pLocation
      * @return Event
      */
@@ -288,6 +319,8 @@ abstract class Event
     }
 
     /**
+     * Get comments set for this event.
+     *
      * @return ArrayCollection
      */
     public function getComments()
@@ -296,6 +329,8 @@ abstract class Event
     }
 
     /**
+     * Add comment to comments list.
+     *
      * @param Comment $pComment
      * @return $this
      */
@@ -306,6 +341,8 @@ abstract class Event
     }
 
     /**
+     * Removes comment to comments list.
+     *
      * @param Comment $pComment
      * @return $this
      */
@@ -316,6 +353,8 @@ abstract class Event
     }
 
     /**
+     * Get notes set for the event.
+     *
      * @return ArrayCollection
      */
     public function getNotes()
@@ -324,6 +363,8 @@ abstract class Event
     }
 
     /**
+     * Set note in notes list.
+     *
      * @param Note $pNote
      * @return $this
      */
@@ -334,6 +375,8 @@ abstract class Event
     }
 
     /**
+     * Set note in notes list.
+     *
      * @param Note $pNote
      * @return $this
      */
@@ -344,6 +387,8 @@ abstract class Event
     }
 
     /**
+     * Get expected event players list.
+     *
      * @return ArrayCollection
      */
     public function getExpectedPlayers()
@@ -352,6 +397,8 @@ abstract class Event
     }
 
     /**
+     * Add player in expected players list.
+     *
      * @param Player $pPlayer
      * @return $this
      */
@@ -362,6 +409,8 @@ abstract class Event
     }
 
     /**
+     * Remove player in expected players list.
+     *
      * @param Player $pPlayer
      * @return $this
      */
@@ -372,6 +421,8 @@ abstract class Event
     }
 
     /**
+     * Get missing event players list.
+     *
      * @return ArrayCollection
      */
     public function getMissingPlayers()
@@ -380,6 +431,8 @@ abstract class Event
     }
 
     /**
+     * Add player in missing players list.
+     *
      * @param Player $pPlayer
      * @return $this
      */
@@ -390,6 +443,8 @@ abstract class Event
     }
 
     /**
+     * Remove player in missing players list.
+     *
      * @param Player $pPlayer
      * @return $this
      */
@@ -400,6 +455,8 @@ abstract class Event
     }
 
     /**
+     * Get present event players list.
+     *
      * @return ArrayCollection
      */
     public function getPresentPlayers()
@@ -408,6 +465,8 @@ abstract class Event
     }
 
     /**
+     * Add player in present players list.
+     *
      * @param Player $pPlayer
      * @return $this
      */
@@ -418,6 +477,8 @@ abstract class Event
     }
 
     /**
+     * Remove player in present players list.
+     *
      * @param Player $pPlayer
      * @return $this
      */

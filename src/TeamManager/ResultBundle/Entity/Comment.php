@@ -36,7 +36,7 @@ class Comment
      *
      * @var Game
      * @ORM\ManyToOne(targetEntity="\TeamManager\EventBundle\Entity\Event", inversedBy="comments")
-     * @ORM\JoinColumn(name="event_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="event_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $game;
 
@@ -45,7 +45,7 @@ class Comment
      *
      * @var Player
      * @ORM\ManyToOne(targetEntity="\TeamManager\PlayerBundle\Entity\Player", inversedBy="comments_received")
-     * @ORM\JoinColumn(name="receiver_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="receiver_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $player_receiver;
 

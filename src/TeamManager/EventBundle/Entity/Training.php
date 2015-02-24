@@ -9,6 +9,7 @@ use TeamManager\TeamBundle\Entity\Team;
  * Training
  *
  * @ORM\Entity
+ * @ORM\Table(name="tm_training")
  */
 class Training extends Event
 {
@@ -23,6 +24,8 @@ class Training extends Event
     private $team;
 
     /**
+     * Get team participating to the training.
+     *
      * @return Team
      */
     public function getTeam()
@@ -31,6 +34,8 @@ class Training extends Event
     }
 
     /**
+     * Set team participating to the training.
+     *
      * @param Team $pTeam
      * @return Game
      */

@@ -10,7 +10,7 @@ use TeamManager\TeamBundle\Entity\Team;
 /**
  * PlayTime
  *
- * @ORM\Table()
+ * @ORM\Table(name="tm_play_time")
  * @ORM\Entity(repositoryClass="TeamManager\ActionBundle\Repository\PlayTimeRepository")
  */
 class PlayTime
@@ -37,7 +37,7 @@ class PlayTime
      *
      * @var Player
      * @ORM\ManyToOne(targetEntity="\TeamManager\PlayerBundle\Entity\Player", inversedBy="play_times")
-     * @ORM\JoinColumn(name="player_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="player_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $player;
 
@@ -46,6 +46,7 @@ class PlayTime
      *
      * @var Game
      * @ORM\ManyToOne(targetEntity="\TeamManager\EventBundle\Entity\Game")
+     * @ORM\JoinColumn(name="game_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $game;
 
@@ -54,7 +55,7 @@ class PlayTime
      *
      * @var Team
      * @ORM\ManyToOne(targetEntity="TeamManager\TeamBundle\Entity\Team")
-     * @ORM\JoinColumn(name="team_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="team_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $team;
 

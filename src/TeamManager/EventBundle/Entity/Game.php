@@ -14,6 +14,7 @@ use TeamManager\TeamBundle\Entity\Team;
  * Game
  *
  * @ORM\Entity
+ * @ORM\Table(name="tm_game")
  */
 class Game extends Event
 {
@@ -28,30 +29,32 @@ class Game extends Event
     private $team;
 
     /**
+     * Goals scored during the game.
+     *
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="TeamManager\ActionBundle\Entity\Goal", cascade="persist", mappedBy="game")
      */
     private $goals;
 
     /**
+     * Card set during the game.
+     *
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="TeamManager\ActionBundle\Entity\Card", cascade="persist", mappedBy="game")
      */
     private $cards;
 
     /**
-     * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="TeamManager\ResultBundle\Entity\Comment", cascade="persist", mappedBy="game")
-     */
-    private $comments;
-
-    /**
+     * Injuries occurred during the game.
+     *
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="TeamManager\ActionBundle\Entity\Injury", cascade="persist", mappedBy="game")
      */
     private $injuries;
 
     /**
+     * Get team participating to the game.
+     *
      * @return Team
      */
     public function getTeam()
@@ -60,6 +63,8 @@ class Game extends Event
     }
 
     /**
+     * Set the team participating to the game.
+     *
      * @param Team $pTeam
      * @return Game
      */
@@ -70,6 +75,8 @@ class Game extends Event
     }
 
     /**
+     * Get goal scored.
+     *
      * @return ArrayCollection
      */
     public function getGoals()
@@ -78,7 +85,7 @@ class Game extends Event
     }
 
     /**
-     * Add a goal.
+     * Add a goal to goals list.
      *
      * @param Goal $pGoal
      * @return Game
@@ -90,7 +97,7 @@ class Game extends Event
     }
 
     /**
-     * Remove a goal.
+     * Remove a goal from goals list.
      *
      * @param Goal $pGoal
      * @return Game
@@ -102,6 +109,8 @@ class Game extends Event
     }
 
     /**
+     * Get cards set during the game.
+     *
      * @return ArrayCollection
      */
     public function getCards()
@@ -110,7 +119,7 @@ class Game extends Event
     }
 
     /**
-     * Add a card.
+     * Add a card in cards list.
      *
      * @param Card $pCard
      * @return Game
@@ -122,7 +131,7 @@ class Game extends Event
     }
 
     /**
-     * Remove a card.
+     * Remove a card from cards list.
      *
      * @param Card $pCard
      * @return Game
@@ -134,38 +143,8 @@ class Game extends Event
     }
 
     /**
-     * @return ArrayCollection
-     */
-    public function getComments()
-    {
-        return $this->comments;
-    }
-
-    /**
-     * Add a comment.
+     * Get injuries occurred during the game.
      *
-     * @param \TeamManager\ResultBundle\Entity\Comment $pComment
-     * @return Game
-     */
-    public function addComment(Comment $pComment)
-    {
-        $this->comments[] = $pComment;
-        return $this;
-    }
-
-    /**
-     * Remove a comment.
-     *
-     * @param Comment $pComment
-     * @return Game
-     */
-    public function removeComment(Comment $pComment)
-    {
-        $this->comments->removeElement($pComment);
-        return $this;
-    }
-
-    /**
      * @return ArrayCollection
      */
     public function getInjuries()
@@ -174,7 +153,7 @@ class Game extends Event
     }
 
     /**
-     * Add a comment.
+     * Add an injury from injuries list.
      *
      * @param Injury $pInjury
      * @return Game
@@ -186,7 +165,7 @@ class Game extends Event
     }
 
     /**
-     * Remove a comment.
+     * Remove an injury from injuries list
      *
      * @param Injury $pInjury
      * @return Game

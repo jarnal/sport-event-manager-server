@@ -22,12 +22,20 @@ class Location
     private $id;
 
     /**
-     * Location name.
+     * Name of the location.
      *
      * @ORM\Column(name="name", type="string")
      * @var string
      */
     private $name;
+
+    /**
+     * Complete address of the location.
+     *
+     * @ORM\Column(name="address", type="string")
+     * @var string
+     */
+    private $address;
 
     /**
      * Latitude of the location.
@@ -45,7 +53,6 @@ class Location
      */
     private $longitude;
 
-
     /**
      * Get id
      *
@@ -55,4 +62,93 @@ class Location
     {
         return $this->id;
     }
+
+    /**
+     * Get location name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set location name.
+     *
+     * @param string $pName
+     * @return Location
+     */
+    public function setName($pName)
+    {
+        $this->name = $pName;
+        return $this;
+    }
+
+    /**
+     * Get location address.
+     *
+     * @return string
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * Set location address.
+     *
+     * @param string $pAddress
+     * @return Location
+     */
+    public function setAddress($pAddress)
+    {
+        $this->address = $pAddress;
+        return $this;
+    }
+
+    /**
+     * Get location latitude.
+     *
+     * @return int
+     */
+    public function getLatitude()
+    {
+        return $this->latitude;
+    }
+
+    /**
+     * Set location latitude.
+     *
+     * @param int $pLatitude
+     * @return Location
+     */
+    public function setLatitude($pLatitude)
+    {
+        $this->latitude = $pLatitude;
+        return $this;
+    }
+
+    /**
+     * Get location longitude.
+     *
+     * @return int
+     */
+    public function getLongitude()
+    {
+        return $this->longitude;
+    }
+
+    /**
+     * Set location longitude.
+     *
+     * @param int $pLongitude
+     * @return Location
+     */
+    public function setLongitude($pLongitude)
+    {
+        $this->longitude = $pLongitude;
+        return $this;
+    }
+
 }

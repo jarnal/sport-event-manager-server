@@ -40,7 +40,7 @@ class Team
      * Description of the team.
      *
      * @var string
-     * @ORM\Column(name="description", type="string")
+     * @ORM\Column(name="description", type="string", nullable=true)
      */
     private $description;
 
@@ -48,7 +48,7 @@ class Team
      * Path to the team image uploaded.
      *
      * @var string
-     * @ORM\Column(name="image_url", type="string")
+     * @ORM\Column(name="image_url", type="string", nullable=true)
      */
     private $image_url;
 
@@ -131,6 +131,8 @@ class Team
     }
 
     /**
+     * Get team name.
+     *
      * @return string
      */
     public function getName()
@@ -139,7 +141,10 @@ class Team
     }
 
     /**
+     * Set team name.
+     *
      * @param string $pName
+     * @return Team
      */
     public function setName($pName)
     {
@@ -148,6 +153,8 @@ class Team
     }
 
     /**
+     * Get team description.
+     *
      * @return string
      */
     public function getDescription()
@@ -156,7 +163,10 @@ class Team
     }
 
     /**
+     * Set team description.
+     *
      * @param string $pDescription
+     * @return Team
      */
     public function setDescription($pDescription)
     {
@@ -165,6 +175,8 @@ class Team
     }
 
     /**
+     * Get team image url.
+     *
      * @return string
      */
     public function getImageUrl()
@@ -173,7 +185,10 @@ class Team
     }
 
     /**
+     * Set team image url.
+     *
      * @param string $pImageUrl
+     * @return Team
      */
     public function setImageUrl($pImageUrl)
     {
@@ -182,6 +197,8 @@ class Team
     }
 
     /**
+     * Get team default location.
+     *
      * @return Location
      */
     public function getDefaultLocation()
@@ -190,7 +207,10 @@ class Team
     }
 
     /**
+     * Set team default location
+     *
      * @param Location $pDefaultLocation
+     * @return Team
      */
     public function setDefaultLocation($pDefaultLocation)
     {
@@ -199,6 +219,8 @@ class Team
     }
 
     /**
+     * Set team manager.
+     *
      * @return Player
      */
     public function getManager()
@@ -207,7 +229,10 @@ class Team
     }
 
     /**
+     * Get team manager.
+     *
      * @param Player $pManager
+     * @return Team
      */
     public function setManager($pManager)
     {
@@ -216,6 +241,8 @@ class Team
     }
 
     /**
+     * Get team players list.
+     *
      * @return ArrayCollection
      */
     public function getPlayers()
@@ -224,8 +251,10 @@ class Team
     }
 
     /**
+     * Add player in team players list.
+     *
      * @param Player $pPlayer
-     * @return $this
+     * @return Team
      */
     public function addPlayer(Player $pPlayer)
     {
@@ -234,8 +263,10 @@ class Team
     }
 
     /**
+     * Remove player from team players list.
+     *
      * @param Player $pPlayer
-     * @return $this
+     * @return Team
      */
     public function removePlayer(Player $pPlayer)
     {
@@ -244,6 +275,8 @@ class Team
     }
 
     /**
+     * Get team trainings list.
+     *
      * @return ArrayCollection
      */
     public function getTrainings()
@@ -252,8 +285,10 @@ class Team
     }
 
     /**
+     * Add training in team trainings list.
+     *
      * @param Training $pTraining
-     * @return $this
+     * @return Team
      */
     public function addTraining(Training $pTraining)
     {
@@ -262,8 +297,10 @@ class Team
     }
 
     /**
+     * Remove training from team trainings list.
+     *
      * @param Training $pTraining
-     * @return $this
+     * @return Team
      */
     public function removeTraining(Training $pTraining)
     {
@@ -272,6 +309,8 @@ class Team
     }
 
     /**
+     * Get team games list.
+     *
      * @return ArrayCollection
      */
     public function getGames()
@@ -280,8 +319,10 @@ class Team
     }
 
     /**
+     * Add game in team games list.
+     *
      * @param Game $pGame
-     * @return $this
+     * @return Team
      */
     public function addGame(Game $pGame)
     {
@@ -290,8 +331,10 @@ class Team
     }
 
     /**
+     * Remove game from team games list.
+     *
      * @param Game $pGame
-     * @return $this
+     * @return Team
      */
     public function removeGame(Game $pGame)
     {
@@ -300,6 +343,8 @@ class Team
     }
 
     /**
+     * Get team friendly games list.
+     *
      * @return ArrayCollection
      */
     public function getGamesFriendly()
@@ -308,8 +353,10 @@ class Team
     }
 
     /**
+     * Add friendly game in team friendly games list.
+     *
      * @param GameFriendly $pGame
-     * @return $this
+     * @return Team
      */
     public function addGamesFriendly(GameFriendly $pGame)
     {
@@ -318,8 +365,10 @@ class Team
     }
 
     /**
+     * Remove friendly game from team friendly games list.
+     *
      * @param GameFriendly $pGame
-     * @return $this
+     * @return Team
      */
     public function removeGamesFriendly(GameFriendly $pGame)
     {
@@ -328,6 +377,8 @@ class Team
     }
 
     /**
+     * Get team goals list.
+     *
      * @return ArrayCollection
      */
     public function getGoals()
@@ -336,10 +387,10 @@ class Team
     }
 
     /**
-     * Add a goal.
+     * Add goal in goals list.
      *
      * @param Goal $pGoal
-     * @return Player
+     * @return Team
      */
     public function addGoal(Goal $pGoal)
     {
@@ -348,10 +399,10 @@ class Team
     }
 
     /**
-     * Remove a goal.
+     * Remove goal from goals list.
      *
      * @param Goal $pGoal
-     * @return Player
+     * @return Team
      */
     public function removeGoal(Goal $pGoal)
     {

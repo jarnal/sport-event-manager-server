@@ -44,15 +44,15 @@ class Player implements UserInterface, \Serializable
      * Last name of the player.
      *
      * @var string
-     * @ORM\Column(name="lastname", type="string")
+     * @ORM\Column(name="lastname", type="string", nullable=true)
      */
     private $lastname;
 
     /**
-     * User name of the player. The one used to connect to the application..
+     * User name of the player. The one used to connect to the application.
      *
      * @var string
-     * @ORM\Column(name="username", type="string")
+     * @ORM\Column(name="username", type="string", nullable=true)
      */
     private $username;
 
@@ -60,7 +60,7 @@ class Player implements UserInterface, \Serializable
      * Password of the user to connect to the application.
      *
      * @var string
-     * @ORM\Column(name="password", type="string")
+     * @ORM\Column(name="password", type="string", nullable=true)
      */
     private $password;
 
@@ -76,7 +76,7 @@ class Player implements UserInterface, \Serializable
      * Path to the player image uploaded.
      *
      * @var string
-     * @ORM\Column(name="image_url", type="string")
+     * @ORM\Column(name="image_url", type="string", nullable=true)
      */
     private $image_url;
 
@@ -84,7 +84,7 @@ class Player implements UserInterface, \Serializable
      * Jersey number of the player.
      *
      * @var integer
-     * @ORM\Column(name="jersey_number", type="integer")
+     * @ORM\Column(name="jersey_number", type="integer", nullable=true)
      */
     private $jersey_number;
 
@@ -92,7 +92,7 @@ class Player implements UserInterface, \Serializable
      * Level of the player.
      *
      * @var integer
-     * @ORM\Column(name="level", type="integer")
+     * @ORM\Column(name="level", type="integer", nullable=true)
      */
     private $level;
 
@@ -120,15 +120,15 @@ class Player implements UserInterface, \Serializable
      * @var ArrayCollection
      * @ORM\ManyToMany(targetEntity="TeamManager\TeamBundle\Entity\Team", cascade="persist", inversedBy="players")
      * @ORM\JoinTable(name="tm_player_rel_team",
-     *      joinColumns={@ORM\JoinColumn(name="player_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="team_id", referencedColumnName="id")}
+     *      joinColumns={@ORM\JoinColumn(name="player_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="team_id", referencedColumnName="id", onDelete="CASCADE")}
      *      )
      */
     private $teams;
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="TeamManager\TeamBundle\Entity\Team", cascade="persist", mappedBy="player")
+     * @ORM\OneToMany(targetEntity="TeamManager\TeamBundle\Entity\Team", cascade="persist", mappedBy="manager")
      */
     private $managed_teams;
 

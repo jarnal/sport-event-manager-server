@@ -9,7 +9,7 @@ use TeamManager\PlayerBundle\Entity\Player;
 /**
  * Note
  *
- * @ORM\Table()
+ * @ORM\Table(name="tm_note")
  * @ORM\Entity(repositoryClass="TeamManager\ResultBundle\Repository\NoteRepository")
  */
 class Note
@@ -36,7 +36,7 @@ class Note
      *
      * @var Game
      * @ORM\ManyToOne(targetEntity="\TeamManager\EventBundle\Entity\Event", inversedBy="notes")
-     * @ORM\JoinColumn(name="event_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="event_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $game;
 
@@ -45,7 +45,7 @@ class Note
      *
      * @var Player
      * @ORM\ManyToOne(targetEntity="\TeamManager\PlayerBundle\Entity\Player", inversedBy="notes_received")
-     * @ORM\JoinColumn(name="receiver_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="receiver_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $player_receiver;
 

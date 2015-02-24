@@ -9,12 +9,13 @@ use TeamManager\TeamBundle\Entity\Team;
  * GameFriendly
  *
  * @ORM\Entity
+ * @ORM\Table(name="tm_game_friendly")
  */
-class GameFriendly extends Event
+class GameFriendly extends Game
 {
 
     /**
-     * Team participating to the game.
+     * Team participating to the friendly game.
      *
      * @var Team
      * @ORM\ManyToOne(targetEntity="TeamManager\TeamBundle\Entity\Team", inversedBy="games_friendly")
@@ -24,6 +25,8 @@ class GameFriendly extends Event
 
 
     /**
+     * Get team participating to the friendly game.
+     *
      * @return Team
      */
     public function getTeam()
@@ -32,6 +35,8 @@ class GameFriendly extends Event
     }
 
     /**
+     * Set team participating to the friendly game.
+     *
      * @param Team $pTeam
      * @return Game
      */
