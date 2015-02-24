@@ -1,0 +1,4 @@
+tm_team_team_rest:
+    type: rest
+    resource: "TeamManagerTeamBundle:TeamRest"
+    name_prefix: api_team

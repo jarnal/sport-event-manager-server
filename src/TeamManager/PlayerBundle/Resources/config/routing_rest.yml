@@ -1,0 +1,4 @@
+tm_player_player_rest:
+    type: rest
+    resource: "TeamManagerPlayerBundle:PlayerRest"
+    name_prefix: api_player

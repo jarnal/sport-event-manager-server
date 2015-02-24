@@ -1,0 +1,9 @@
+tm_result_comment_rest:
+    type: rest
+    resource: "TeamManagerResultBundle:CommentRest"
+    name_prefix: api_comment
+
+tm_result_note_rest:
+    type: rest
+    resource: "TeamManagerResultBundle:NoteRest"
+    name_prefix: api_note
