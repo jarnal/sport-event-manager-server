@@ -14,12 +14,19 @@ use TeamManager\ResultBundle\Entity\Note;
 use TeamManager\ResultBundle\Entity\PlayerResult;
 use TeamManager\SecurityBundle\Entity\Role;
 use TeamManager\TeamBundle\Entity\Team;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\VirtualProperty;
 
 /**
  * Player
  *
  * @ORM\Table(name="tm_player")
  * @ORM\Entity(repositoryClass="TeamManager\PlayerBundle\Repository\PlayerRepository")
+ *
+ * @ExclusionPolicy("all")
  */
 class Player implements UserInterface, \Serializable
 {
@@ -37,6 +44,9 @@ class Player implements UserInterface, \Serializable
      *
      * @var string
      * @ORM\Column(name="firstname", type="string")
+     *
+     * @Expose
+     * @Groups( {"Default"} )
      */
     private $firstname;
 
@@ -102,7 +112,7 @@ class Player implements UserInterface, \Serializable
      * After that he must pickup an username and a password to connect to the application.
      *
      * @var boolean
-     * @ORM\Column(name="type", type="boolean")
+     * @ORM\Column(name="registered", type="boolean")
      */
     private $registered;
 

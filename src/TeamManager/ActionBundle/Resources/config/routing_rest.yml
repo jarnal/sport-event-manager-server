@@ -1,19 +1,23 @@
 tm_action_card_rest:
     type: rest
     resource: "TeamManagerActionBundle:CardRest"
-    name_prefix: api_card
+    name_prefix: api_card_
+    prefix: cards
 
 tm_action_goal_rest:
     type: rest
     resource: "TeamManagerActionBundle:GoalRest"
-    name_prefix: api_goal
+    name_prefix: api_goal_
+    prefix: goals
 
 tm_action_injury_rest:
     type: rest
     resource: "TeamManagerActionBundle:InjuryRest"
-    name_prefix: api_injury
+    name_prefix: api_injury_
+    prefix: injuries
 
 tm_action_playtime_rest:
     type: rest
     resource: "TeamManagerActionBundle:PlayTimeRest"
-    name_prefix: api_playtime
+    name_prefix: api_playtime_
+    prefix: playtimes
