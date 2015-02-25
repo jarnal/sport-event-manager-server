@@ -23,10 +23,12 @@
         "jms/serializer-bundle": "0.13.*",
         "nelmio/api-doc-bundle": "~2.7",
         "nelmio/cors-bundle": "~1.4",
-        "friendsofsymfony/oauth-server-bundle": "dev-master"
+        "friendsofsymfony/oauth-server-bundle": "dev-master",
+        "doctrine/doctrine-fixtures-bundle": "2.2.*"
     },
     "require-dev": {
-        "sensio/generator-bundle": "~2.3"
+        "sensio/generator-bundle": "~2.3",
+        "liip/functional-test-bundle": "~1.0"
     },
     "scripts": {
         "post-root-package-install": [

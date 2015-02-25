@@ -4,6 +4,7 @@ namespace TeamManager\PlayerBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use TeamManager\ActionBundle\Entity\Card;
 use TeamManager\ActionBundle\Entity\Goal;
@@ -11,7 +12,6 @@ use TeamManager\ActionBundle\Entity\Injury;
 use TeamManager\ActionBundle\Entity\PlayTime;
 use TeamManager\ResultBundle\Entity\Comment;
 use TeamManager\ResultBundle\Entity\Note;
-use TeamManager\ResultBundle\Entity\PlayerResult;
 use TeamManager\SecurityBundle\Entity\Role;
 use TeamManager\TeamBundle\Entity\Team;
 use JMS\Serializer\Annotation\ExclusionPolicy;
@@ -44,9 +44,10 @@ class Player implements UserInterface, \Serializable
      *
      * @var string
      * @ORM\Column(name="firstname", type="string")
+     * @Assert\NotBlank( message="form.player.___.blank" )
+     * @Assert\NotNull( message="form.player.___.null" )
      *
      * @Expose
-     * @Groups( {"Default"} )
      */
     private $firstname;
 
@@ -63,6 +64,7 @@ class Player implements UserInterface, \Serializable
      *
      * @var string
      * @ORM\Column(name="username", type="string", nullable=true)
+     * @Assert\NotBlank( message="form.player.username.blank" )
      */
     private $username;
 
@@ -71,6 +73,7 @@ class Player implements UserInterface, \Serializable
      *
      * @var string
      * @ORM\Column(name="password", type="string", nullable=true)
+     * @Assert\NotBlank( message="form.player.password.blank" )
      */
     private $password;
 
@@ -79,6 +82,10 @@ class Player implements UserInterface, \Serializable
      *
      * @var string
      * @ORM\Column(name="email", type="string")
+     * @Assert\NotBlank( message="form.player.email.blank" )
+     * @Assert\Email( message="form.player.email.invalid" )
+     *
+     * @Expose
      */
     private $email;
 
@@ -105,16 +112,6 @@ class Player implements UserInterface, \Serializable
      * @ORM\Column(name="level", type="integer", nullable=true)
      */
     private $level;
-
-    /**
-     * Defines if the the player is registered or if registration is pending.
-     * By default the player can be added by a team manager.
-     * After that he must pickup an username and a password to connect to the application.
-     *
-     * @var boolean
-     * @ORM\Column(name="registered", type="boolean")
-     */
-    private $registered;
 
     /**
      * @var ArrayCollection
@@ -211,7 +208,7 @@ class Player implements UserInterface, \Serializable
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -391,28 +388,6 @@ class Player implements UserInterface, \Serializable
     public function setLevel($pLevel)
     {
         $this->level = $pLevel;
-        return $this;
-    }
-
-    /**
-     * Get player registration.
-     *
-     * @return boolean
-     */
-    public function getRegistered()
-    {
-        return $this->registered;
-    }
-
-    /**
-     * Set player registration.
-     *
-     * @param boolean $pRegistered
-     * @return Player
-     */
-    public function setRegistered($pRegistered)
-    {
-        $this->registered = $pRegistered;
         return $this;
     }
 
