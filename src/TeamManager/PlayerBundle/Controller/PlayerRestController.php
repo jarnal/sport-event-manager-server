@@ -14,27 +14,35 @@ use Symfony\Component\Security\Acl\Exception\Exception;
 use TeamManager\PlayerBundle\Entity\Player;
 use FOS\RestBundle\Controller\Annotations\View;
 use TeamManager\PlayerBundle\Form\PlayerType;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 class PlayerRestController extends FOSRestController
 {
 
     /**
-     * @Get("/all", name="get_all", options={ "method_prefix" = false })
-     * @return JsonResponse
+     * Returns all players.
      *
+     * @ApiDoc(
+     *  description="Returns all players.",
+     *  output={
+     *      "class"="TeamManager\PlayerBundle\Entity\Player",
+     *      "collection"=true,
+     *      "groups"={"Default"},
+     *      "parsers" = {
+     *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
+     *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
+     *      },
+     *      "collectionName" = "players"
+     *  }
+     * )
+     * @Get("/all", name="get_all", options={ "method_prefix" = false })
      * @View( serializerGroups={ "Default" } )
+     * @return JsonResponse
      */
     public function getAllAction()
     {
         $em = $this->getDoctrine()->getManager();
         $playerRepository = $em->getRepository("TeamManagerPlayerBundle:Player");
-
-        /*$player = new Player();
-        $player->setFirstname( "Test" );
-        $player->setEmail("test@test.fr");
-
-        $em->persist( $player );
-        $em->flush();*/
 
         $players = $playerRepository->findAll();
 
@@ -42,10 +50,29 @@ class PlayerRestController extends FOSRestController
     }
 
     /**
-     * @Get("/get/{playerID}", name="get", options={ "method_prefix" = false })
-     * @return JsonResponse
+     * Returns a player by id.
      *
+     * @ApiDoc(
+     *  description="Returns a player by id.",
+     *  requirements={
+     *      {
+     *          "name"="playerID",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="Player id"
+     *      }
+     *  },
+     *  output={
+     *      "class"="\TeamManager\PlayerBundle\Entity\Player",
+     *      "parsers" = {
+     *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser"
+     *      },
+     *      "groups"={"Default"}
+     *  }
+     * )
+     * @Get("/get/{playerID}", name="get", options={ "method_prefix" = false })
      * @View( serializerGroups={ "Default" } )
+     * @return Player
      */
     public function getAction($playerID)
     {
@@ -57,10 +84,29 @@ class PlayerRestController extends FOSRestController
     }
 
     /**
-     * @Post("/new" , name="new", options={ "method_prefix" = false })
+     * Adds a new player.
      *
+     * @ApiDoc(
+     *  description="Adds a new player.",
+     *  requirements={
+     *      {
+     *          "name"="playerID",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="Player id"
+     *      }
+     *  },
+     *  output={
+     *      "class"="\TeamManager\PlayerBundle\Entity\Player",
+     *      "parsers" = {
+     *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser"
+     *      },
+     *      "groups"={"Default"}
+     *  }
+     * )
+     * @Post("/new" , name="new", options={ "method_prefix" = false })
      */
-    public function newAction(Request $pRequest)
+    public function newAction()
     {
         return $this->processForm($pRequest, new Player());
     }

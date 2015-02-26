@@ -56,6 +56,8 @@ class Player implements UserInterface, \Serializable
      *
      * @var string
      * @ORM\Column(name="lastname", type="string", nullable=true)
+     *
+     * @Expose
      */
     private $lastname;
 
@@ -102,6 +104,8 @@ class Player implements UserInterface, \Serializable
      *
      * @var integer
      * @ORM\Column(name="jersey_number", type="integer", nullable=true)
+     *
+     * @Expose
      */
     private $jersey_number;
 
@@ -786,9 +790,9 @@ class Player implements UserInterface, \Serializable
     {
         return \serialize(array(
             $this->id,
-            $this->username,
+            //$this->username,
             $this->email,
-            $this->password,
+            //$this->password,
         ));
     }
 

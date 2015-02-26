@@ -21,7 +21,7 @@
         "incenteev/composer-parameter-handler": "~2.0",
         "friendsofsymfony/rest-bundle": "~1.5",
         "jms/serializer-bundle": "0.13.*",
-        "nelmio/api-doc-bundle": "~2.7",
+        "nelmio/api-doc-bundle": "dev-master",
         "nelmio/cors-bundle": "~1.4",
         "friendsofsymfony/oauth-server-bundle": "dev-master",
         "doctrine/doctrine-fixtures-bundle": "2.2.*"

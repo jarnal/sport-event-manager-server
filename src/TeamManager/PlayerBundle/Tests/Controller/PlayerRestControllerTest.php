@@ -1,6 +1,7 @@
 <?php
 namespace TeamManager\PlayerBundle\Tests\Controller;
 
+use Doctrine\Common\Cache\Cache;
 use Liip\FunctionalTestBundle\Test\WebTestCase;
 use TeamManager\PlayerBundle\DataFixtures\ORM\LoadPlayerData;
 
@@ -31,9 +32,10 @@ class MemberControllerTest extends WebTestCase {
     }
 
     /**
-     * Tests API method returning all database players.
+     * Tests api_player_get_all API method returning all players.
      */
-    public function testGetAllAction() {
+    public function testGetAllAction()
+    {
         $expected = '[{"firstname":"TheFirstName1","email":"email1@email.fr"},{"firstname":"TheFirstName2","email":"email2@email.fr"}]';
 
         $fixtures = array('TeamManager\PlayerBundle\DataFixtures\ORM\LoadPlayerData');
@@ -50,7 +52,7 @@ class MemberControllerTest extends WebTestCase {
     }
 
     /**
-     *
+     * Tests api_player_get API method returning a specific player.
      */
     public function testGetAction()
     {

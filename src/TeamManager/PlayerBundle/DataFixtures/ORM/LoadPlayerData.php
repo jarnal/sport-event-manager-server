@@ -15,6 +15,8 @@ class LoadPlayerData extends AbstractFixture implements OrderedFixtureInterface
      */
     public function load(ObjectManager $manager)
     {
+        $manager->clear();
+
         $player1 = new Player();
         $player1->setFirstName("TheFirstName1");
         $player1->setLastName("TheLastName1");
@@ -41,8 +43,7 @@ class LoadPlayerData extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('player-1', $player1);
         $this->addReference('player-2', $player2);
 
-        self::$players = array($player1, $player2);
-        $this::$players = array($player1, $player2);
+        static::$players = array($player1, $player2);
     }
 
     /**
