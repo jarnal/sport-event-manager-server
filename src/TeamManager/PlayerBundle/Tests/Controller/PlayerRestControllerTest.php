@@ -78,4 +78,12 @@ class MemberControllerTest extends WebTestCase {
         }
     }
 
+    /**
+     * Tests api_player_post API method adding a new player.
+     */
+    public function testPostAction()
+    {
+        //?
+    }
+
 }

@@ -3,6 +3,8 @@
 namespace TeamManager\PlayerBundle\Controller;
 
 use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Util\Codes;
+use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,6 +15,7 @@ use FOS\RestBundle\Controller\Annotations\Post;
 use Symfony\Component\Security\Acl\Exception\Exception;
 use TeamManager\PlayerBundle\Entity\Player;
 use FOS\RestBundle\Controller\Annotations\View;
+use TeamManager\PlayerBundle\Exception\InvalidUserFormException;
 use TeamManager\PlayerBundle\Form\PlayerType;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
@@ -23,6 +26,7 @@ class PlayerRestController extends FOSRestController
      * Returns all players.
      *
      * @ApiDoc(
+     *  resource=true,
      *  description="Returns all players.",
      *  output={
      *      "class"="TeamManager\PlayerBundle\Entity\Player",
@@ -41,19 +45,15 @@ class PlayerRestController extends FOSRestController
      */
     public function getAllAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $playerRepository = $em->getRepository("TeamManagerPlayerBundle:Player");
-
-        $players = $playerRepository->findAll();
-
-        return $players;
+        return $this->get("team_bundle.player.service")->getAll();
     }
 
     /**
      * Returns a player by id.
      *
      * @ApiDoc(
-     *  description="Returns a player by id.",
+     *  resource=true,
+     *  description="Returns a player for a given id.",
      *  requirements={
      *      {
      *          "name"="playerID",
@@ -68,86 +68,80 @@ class PlayerRestController extends FOSRestController
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser"
      *      },
      *      "groups"={"Default"}
-     *  }
+     *  },
+     *  statusCodes = {
+     *     200 = "Returned when player exists",
+     *     404 = "Returned when the player is not found"
+     *   }
      * )
      * @Get("/get/{playerID}", name="get", options={ "method_prefix" = false })
-     * @View( serializerGroups={ "Default" } )
+     * @View( serializerGroups={"Default"} )
      * @return Player
      */
     public function getAction($playerID)
     {
-        $em = $this->getDoctrine()->getManager();
-        $playerRepository = $em->getRepository("TeamManagerPlayerBundle:Player");
-        $player = $playerRepository->findOneById( $playerID );
-
-        return $player;
+        return $this->get("team_bundle.player.service")->get($playerID);
     }
 
     /**
      * Adds a new player.
      *
      * @ApiDoc(
-     *  description="Adds a new player.",
-     *  requirements={
-     *      {
-     *          "name"="playerID",
-     *          "dataType"="integer",
-     *          "requirement"="\d+",
-     *          "description"="Player id"
-     *      }
-     *  },
-     *  output={
-     *      "class"="\TeamManager\PlayerBundle\Entity\Player",
-     *      "parsers" = {
-     *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser"
-     *      },
-     *      "groups"={"Default"}
+     *  resource = true,
+     *  description="Creates a new player.",
+     *  input="TeamManager\PlayerBundle\Form\PlayerType",
+     *  statusCodes = {
+     *      200 = "Returned when the player has been created",
+     *      400 = "Returned when the player form has errors"
      *  }
      * )
-     * @Post("/new" , name="new", options={ "method_prefix" = false })
+     * @Post("/post" , name="post", options={ "method_prefix" = false })
+     * @View(
+     *  serializerGroups={"Default"},
+     *  template="TeamManagerPlayerBundle:Player:playerForm.html.twig",
+     *  statusCode= Codes::HTTP_BAD_REQUEST,
+     *  templateVar = "form"
+     * )
      */
-    public function newAction()
+    public function postAction(Request $request)
     {
-        return $this->processForm($pRequest, new Player());
+        try {
+            $form = new PlayerType();
+            $player = $this->container->get('team_bundle.player.service')->post(
+                $request->request->get($form->getName())
+            );
+
+            $routeOptions = array(
+                'playerID' => $player->getId(),
+                '_format' => $request->get('_format')
+            );
+
+            return $this->routeRedirectView('api_player_get', $routeOptions, Codes::HTTP_CREATED);
+        } catch (InvalidUserFormException $exception) {
+            return $exception->getForm();
+        }
     }
 
     /**
-     * @param Player $pPlayer
-     * @return Response
+     * Builds the form to use to create a new player.
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   statusCodes = {
+     *     200 = "Returned when successful"
+     *   }
+     * )
+     * @View(
+     *  template="TeamManagerPlayerBundle:Player:playerForm.html.twig",
+     * )
+     *
+     * @return FormTypeInterface
      */
-    private function processForm(Request $pRequest, Player $pPlayer)
+    public function newAction()
     {
-        $statusCode = is_null($pPlayer->getId()) ? 201 : 204;
-
-        $form = $this->createForm(new PlayerType(), $pPlayer);
-        $form->submit($pRequest);
-
-        if ($form->isValid()) {
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($pPlayer);
-            $em->flush($pPlayer);
-
-            $response = new Response();
-            $response->setStatusCode($statusCode);
-
-            // set the `Location` header only when creating new resources
-            if (201 === $statusCode) {
-                $response->headers->set('Location',
-                    $this->generateUrl(
-                        'api_player_get', array('playerID' => $pPlayer->getId()),
-                        true // absolute
-                    )
-                );
-            }
-
-            return $response;
-        }
-
-        $view = $this->view($form, 400);
-        return $this->handleView($view);
+        return $this->createForm(new PlayerType());
     }
 
-//curl -v -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{"player":{"username":"foo", "email": "foo@example.org", "password":"hahaha"}}' http://www.teammanager.com/web/app_dev.php/api/player/new
-
 }
+
+//curl -v -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{"player":{"firstname":"firstname", "username":"foo", "email": "foo@example.org", "password":"hahaha"}}' http://www.teammanager.com/web/app_dev.php/api/player/post

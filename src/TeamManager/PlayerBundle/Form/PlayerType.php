@@ -42,6 +42,6 @@ class PlayerType extends AbstractType
      */
     public function getName()
     {
-        return 'teammanager_playerbundle_player';
+        return 'player';
     }
 }

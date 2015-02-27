@@ -28,7 +28,7 @@ use JMS\Serializer\Annotation\VirtualProperty;
  *
  * @ExclusionPolicy("all")
  */
-class Player implements UserInterface, \Serializable
+class Player implements PlayerInterface, UserInterface, \Serializable
 {
     /**
      * @var integer
