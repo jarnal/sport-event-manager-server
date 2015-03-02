@@ -18,6 +18,8 @@ class PlayerService implements PlayerServiceInterface
     private $formFactory;
 
     /**
+     *
+     *
      * @param ObjectManager $pEntityManager
      * @param $pEntityClass
      */
@@ -29,6 +31,8 @@ class PlayerService implements PlayerServiceInterface
     }
 
     /**
+     *
+     *
      * @param $id
      * @return mixed
      */
@@ -38,6 +42,8 @@ class PlayerService implements PlayerServiceInterface
     }
 
     /**
+     *
+     *
      * @param $pUserID
      */
     public function get($pUserID)
@@ -46,11 +52,37 @@ class PlayerService implements PlayerServiceInterface
     }
 
     /**
+     *
+     *
      * @param array $pParameters
      */
     public function post(array $pParameters)
     {
         return $this->processForm(new Player(), $pParameters, 'POST');
+    }
+
+    /**
+     *
+     *
+     * @param PlayerInterface $player
+     * @param array $parameters
+     * @return mixed
+     */
+    public function put(PlayerInterface $player, array $parameters)
+    {
+        return $this->processForm($player, $parameters, 'PUT');
+    }
+
+    /**
+     *
+     *
+     * @param PlayerInterface $player
+     * @param array $parameters
+     * @return mixed
+     */
+    public function patch(PlayerInterface $player, array $parameters)
+    {
+        return $this->processForm($player, $parameters, 'PATCH');
     }
 
     /**

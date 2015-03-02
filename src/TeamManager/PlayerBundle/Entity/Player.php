@@ -36,6 +36,8 @@ class Player implements PlayerInterface, UserInterface, \Serializable
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Expose
      */
     private $id;
 
@@ -104,8 +106,6 @@ class Player implements PlayerInterface, UserInterface, \Serializable
      *
      * @var integer
      * @ORM\Column(name="jersey_number", type="integer", nullable=true)
-     *
-     * @Expose
      */
     private $jersey_number;
 
