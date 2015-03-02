@@ -86,6 +86,17 @@ class PlayerService implements PlayerServiceInterface
     }
 
     /**
+     *
+     *
+     * @param int $pUserID
+     * @return mixed
+     */
+    public function delete(PlayerInterface $player)
+    {
+        return $this->processDelete($player);
+    }
+
+    /**
      * @param PlayerInterface $pPlayer
      * @param array $pParameters
      * @param string $pMethod
@@ -109,5 +120,18 @@ class PlayerService implements PlayerServiceInterface
         throw new InvalidUserFormException( 'Invalid submitted data', $form );
     }
 
+    /**
+     *
+     *
+     * @param PlayerInterface $player
+     * @return PlayerInterface
+     */
+    private function processDelete(PlayerInterface $player)
+    {
+        $this->em->remove($player);
+        $this->em->flush($player);
+
+        return $player;
+    }
 
 }

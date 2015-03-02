@@ -13,6 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Put;
+use FOS\RestBundle\Controller\Annotations\Delete;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Acl\Exception\Exception;
 use TeamManager\PlayerBundle\Entity\Player;
@@ -217,6 +218,14 @@ class PlayerRestController extends FOSRestController
      *  resource = true,
      *  statusCodes = {
      *   200 = "Returned when successful"
+     *  },
+     *  requirements={
+     *  {
+     *    "name"="playerID",
+     *    "dataType"="integer",
+     *    "requirement"="\d+",
+     *    "description"="Player id"
+     *   }
      *  }
      * )
      *
@@ -240,12 +249,42 @@ class PlayerRestController extends FOSRestController
     }
 
     /**
-     * Fetch the Page or throw a 404 exception.
+     * Deletes a player depending on the passed id.
      *
-     * @param mixed $playerID
+     * @ApiDoc(
+     *  resource = true,
+     *  statusCodes = {
+     *   200 = "Returned when Player has been successfully deleted.",
+     *   404 = "Returned when user doesn't exist."
+     *  },
+     *  requirements={
+     *   {
+     *    "name"="playerID",
+     *    "dataType"="integer",
+     *    "requirement"="\d+",
+     *    "description"="Player id"
+     *   }
+     *  }
+     * )
      *
+     * @Delete("/delete/{playerID}", name="delete", options={ "method_prefix" = false })
+     *
+     * @param $playerID
+     */
+    public function deleteAction($playerID)
+    {
+        $player = $this->getOr404($playerID);
+        if ( isset($player) ) {
+            $service = $this->container->get('team_bundle.player.service');
+            return $service->delete( $player );
+        }
+    }
+
+    /**
+     * Fetchs the Player or throw a 404 exception.
+     *
+     * @param int $playerID
      * @return PlayerInterface
-     *
      * @throws NotFoundHttpException
      */
     protected function getOr404($playerID)

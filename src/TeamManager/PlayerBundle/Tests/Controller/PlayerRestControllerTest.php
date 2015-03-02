@@ -147,7 +147,7 @@ class MemberControllerTest extends WebTestCase {
     }
 
     /**
-     * Tests the api_player_put with a blank Player and complete Player data.
+     * Tests the api_player_put API method with a blank Player and complete Player data.
      */
     public function testJsonPutPageActionShouldCreate()
     {
@@ -173,6 +173,67 @@ class MemberControllerTest extends WebTestCase {
         );
 
         $this->assertJsonResponse($this->client->getResponse(), 201, false);
+    }
+
+    /**
+     * Tests the api_player_delete API method with an existing Player.
+     */
+    public function testDeletePageActionShouldDelete()
+    {
+        $fixtures = array('TeamManager\PlayerBundle\DataFixtures\ORM\LoadPlayerData');
+        $this->loadFixtures($fixtures);
+        $player = array_pop(LoadPlayerData::$players);
+
+        $this->client->request(
+            'GET',
+            sprintf('/api/player/get/%d.json', $player->getId()),
+            array('ACCEPT' => 'application/json')
+        );
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode(), $this->client->getResponse()->getContent());
+
+        $route = $this->getUrl( 'api_player_delete' , array(
+            'playerID'=>$player->getId(),
+            '_format'=>'json'
+        ));
+        $this->client->request(
+            'DELETE',
+            $route,
+            array(),
+            array(),
+            array('CONTENT_TYPE' => 'application/json')
+        );
+
+        $response = $this->client->getResponse();
+        $this->assertJsonResponse($response, 200);
+    }
+
+    /**
+     * Tests the api_player_delete API method with an invalid Player.
+     */
+    public function testDeletePageActionShouldNotDelete()
+    {
+        $id = 0;
+        $this->client->request(
+            'GET',
+            sprintf('/api/player/get/%d.json', $id),
+            array('ACCEPT' => 'application/json')
+        );
+        $this->assertEquals(404, $this->client->getResponse()->getStatusCode(), $this->client->getResponse()->getContent());
+
+        $route = $this->getUrl( 'api_player_delete' , array(
+            'playerID'=>$id,
+            '_format'=>'json'
+        ));
+        $this->client->request(
+            'DELETE',
+            $route,
+            array(),
+            array(),
+            array('CONTENT_TYPE' => 'application/json')
+        );
+
+        $response = $this->client->getResponse();
+        $this->assertJsonResponse($response, 404);
     }
 
 }
