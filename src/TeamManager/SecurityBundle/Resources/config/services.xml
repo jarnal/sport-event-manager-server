@@ -4,13 +4,32 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <!--
+    <parameters>
+        <parameter key="platform.entity.user.class">TeamManager\PlayerBundle\Entity\Player</parameter>
+        <parameter key="platform.user.provider.class">TeamManager\SecurityBundle\Provider\PlayerProvider</parameter>
+    </parameters>
+
     <services>
-        <service id="team_manager_security.example" class="TeamManager\SecurityBundle\Example">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
+        <service id="platform.user.manager" class="Doctrine\ORM\EntityManager"
+                 factory-service="doctrine" factory-method="getManagerForClass">
+            <argument>%platform.entity.user.class%</argument>
         </service>
+
+        <service id="platform.user.repository"
+                 class="TeamManager\PlayerBundle\Repository\PlayerRepository"
+                 factory-service="platform.user.manager" factory-method="getRepository">
+            <argument>%platform.entity.user.class%</argument>
+        </service>
+
+        <service id="platform.user.provider" class="%platform.user.provider.class%">
+            <argument type="service" id="platform.user.repository" />
+        </service>
+
+        <service id="platform.grant_type.api_key" class="TeamManager\SecurityBundle\OAuth\ApiKeyGrantExtension">
+            <tag name="fos_oauth_server.grant_extension" uri="http://www.teammanager.com/web/app_dev.php/grants/api_key" />
+            <argument type="service" id="platform.user.repository"/>
+        </service>
+
     </services>
-    -->
+
 </container>

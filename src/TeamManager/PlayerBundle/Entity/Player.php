@@ -118,6 +118,14 @@ class Player implements PlayerInterface, UserInterface, \Serializable
     private $level;
 
     /**
+     * Api key of the user.
+     *
+     * @var integer
+     * @ORM\Column(name="api_key", type="string", nullable=true)
+     */
+    private $api_key;
+
+    /**
      * @var ArrayCollection
      * @ORM\ManyToMany(targetEntity="TeamManager\SecurityBundle\Entity\Role", cascade="persist")
      * @ORM\JoinTable(name="tm_player_rel_role",
@@ -393,6 +401,26 @@ class Player implements PlayerInterface, UserInterface, \Serializable
     {
         $this->level = $pLevel;
         return $this;
+    }
+
+    /**
+     * Set player api key.
+     *
+     * @param mixed $api_key
+     */
+    public function setApiKey($api_key)
+    {
+        $this->api_key = $api_key;
+    }
+
+    /**
+     * Get player api key.
+     *
+     * @return mixed
+     */
+    public function getApiKey()
+    {
+        return $this->api_key;
     }
 
     /**

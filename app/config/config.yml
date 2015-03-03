@@ -87,6 +87,11 @@ fos_oauth_server:
     access_token_class:  TeamManager\SecurityBundle\Entity\AccessToken
     refresh_token_class: TeamManager\SecurityBundle\Entity\RefreshToken
     auth_code_class:     TeamManager\SecurityBundle\Entity\AuthCode
+    service:
+        user_provider: platform.user.provider
+        options:
+            supported_scopes: user
+
 
 # NelmioApiDoc Configuration
 nelmio_api_doc: ~
