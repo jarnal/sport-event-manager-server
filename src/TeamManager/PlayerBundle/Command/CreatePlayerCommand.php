@@ -81,5 +81,3 @@ class CreatePlayerCommand extends ContainerAwareCommand
         $output->writeln( $password );
     }
 }
-
-//www.teammanager.com/web/app_dev.php/oauth/v2/token?client_id=3_3k9xvu0iql2ckcs4kwksgo8gkccoco0gg8kcwkgcg4g4c8s8sg&client_secret=3ndsmfw42mo0ckcc0w4woww8ww00o4kk48o0wg4sgcwkk0s40s&grant_type=http://www.teammanager.com/web/app_dev.php/grants/api_key&api_key=04792dbbdb1d05c2a81c1d0a53bc267c0fb8cd70

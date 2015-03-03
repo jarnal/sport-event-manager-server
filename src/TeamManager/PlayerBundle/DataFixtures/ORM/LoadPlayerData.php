@@ -25,6 +25,7 @@ class LoadPlayerData extends AbstractFixture implements OrderedFixtureInterface
         $player1->setEmail("email1@email.fr");
         $player1->setJerseyNumber(1);
         $player1->setLevel(1);
+        $player1->setApiKey("theapikeyoftheplayer1");
 
         $player2 = new Player();
         $player2->setFirstName("TheFirstName2");
@@ -34,6 +35,7 @@ class LoadPlayerData extends AbstractFixture implements OrderedFixtureInterface
         $player2->setEmail("email2@email.fr");
         $player2->setJerseyNumber(2);
         $player2->setLevel(2);
+        $player2->setApiKey("theapikeyoftheplayer2");
 
         $manager->persist($player1);
         $manager->persist($player2);

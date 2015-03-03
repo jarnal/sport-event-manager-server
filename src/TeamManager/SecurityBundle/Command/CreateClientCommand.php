@@ -2,6 +2,8 @@
 
 namespace TeamManager\SecurityBundle\Command;
 
+use FOS\OAuthServerBundle\Model\ClientManagerInterface;
+use FOS\OAuthServerBundle\Tests\Propel\ClientManagerTest;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -52,11 +54,17 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        /**
+         * @var ClientManagerInterface
+         */
         $clientManager = $this->getContainer()->get('fos_oauth_server.client_manager.default');
+
         $client = $clientManager->createClient();
         $client->setRedirectUris($input->getOption('redirect-uri'));
         $client->setAllowedGrantTypes($input->getOption('grant-type'));
         $clientManager->updateClient($client);
+
+        $output->writeln(var_dump($input->getOption('grant-type')));
         $output->writeln(
             sprintf(
                 'Added a new client with public id <info>%s</info>, secret <info>%s</info>',

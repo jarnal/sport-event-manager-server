@@ -32,12 +32,9 @@ class ApiKeyGrantExtension implements GrantExtensionInterface
         $player = $this->playerRepository->findOneBy( array("api_key"=>$inputData['api_key']) );
 
         if ($player) {
-            //if you need to return access token with associated user
             return array(
                 'data' => $player
             );
-
-            //if you need an anonymous user token
             return true;
         }
 
