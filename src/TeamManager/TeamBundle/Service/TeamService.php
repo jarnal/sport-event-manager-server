@@ -1,12 +1,12 @@
 <?php
 
-namespace TeamManager\PlayerBundle\Service;
+namespace TeamManager\TeamBundle\Service;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\FormFactoryInterface;
 use TeamManager\CommonBundle\Service\EntityRestService;
 
-class PlayerService extends EntityRestService
+class TeamService extends EntityRestService
 {
 
     /**

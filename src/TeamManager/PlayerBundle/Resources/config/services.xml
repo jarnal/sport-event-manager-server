@@ -7,13 +7,17 @@
     <parameters>
         <parameter key="team_bundle.player.service.class">TeamManager\PlayerBundle\Service\PlayerService</parameter>
         <parameter key="team_bundle.player.class">TeamManager\PlayerBundle\Entity\Player</parameter>
+        <parameter key="team_bundle.player.form.class">TeamManager\PlayerBundle\Form\PlayerType</parameter>
+        <parameter key="team_bundle.player.form.exception.class">TeamManager\PlayerBundle\Exception\InvalidUserFormException</parameter>
     </parameters>
 
     <services>
         <service id="team_bundle.player.service" class="%team_bundle.player.service.class%">
             <argument type="service" id="doctrine.orm.entity_manager" />
-            <argument>%team_bundle.player.class%</argument>
             <argument type="service" id="form.factory"></argument>
+            <argument>%team_bundle.player.class%</argument>
+            <argument>%team_bundle.player.form.class%</argument>
+            <argument>%team_bundle.player.form.exception.class%</argument>
         </service>
     </services>
 

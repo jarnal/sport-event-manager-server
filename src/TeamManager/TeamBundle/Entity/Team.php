@@ -74,7 +74,7 @@ class Team
      * List of team players.
      *
      * @var ArrayCollection
-     * @ORM\ManyToMany(targetEntity="\TeamManager\TeamBundle\Entity\Team", cascade="persist", mappedBy="teams")
+     * @ORM\ManyToMany(targetEntity="\TeamManager\PlayerBundle\Entity\Player", cascade="persist", mappedBy="teams")
      */
     private $players;
 

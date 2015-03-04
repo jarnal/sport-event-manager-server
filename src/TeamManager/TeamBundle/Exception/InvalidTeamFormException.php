@@ -1,6 +1,6 @@
 <?php
 
-namespace TeamManager\PlayerBundle\Exception;
+namespace TeamManager\TeamBundle\Exception;
 
 use TeamManager\CommonBundle\Exception\InvalidEntityFormException;
 
@@ -8,7 +8,7 @@ use TeamManager\CommonBundle\Exception\InvalidEntityFormException;
  * Class InvalidFormException
  * @package TeamManager\PlayerBundle\Exception
  */
-class InvalidUserFormException extends InvalidEntityFormException
+class InvalidTeamFormException extends InvalidEntityFormException
 {
 
     /**

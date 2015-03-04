@@ -52,7 +52,9 @@ class PlayerRestController extends FOSRestController
      */
     public function getAllAction()
     {
-        return $this->get("team_bundle.player.service")->getAll();
+        if( $this->getUser() ){
+            return $this->get("team_bundle.player.service")->getAll();
+        }
     }
 
     /**
@@ -199,7 +201,7 @@ class PlayerRestController extends FOSRestController
                 return $this->routeRedirectView('api_player_get', $routeOptions, Codes::HTTP_CREATED);
             } else {
                 $player = $service->put(
-                    $player,
+                    $playerID,
                     $request->request->get($form->getName())
                 );
 
@@ -297,6 +299,3 @@ class PlayerRestController extends FOSRestController
     }
 
 }
-
-//curl -v -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{"player":{"firstname":"firstname", "username":"foo", "email": "foo@example.org", "password":"hahaha"}}' http://www.teammanager.com/web/app_dev.php/api/player/post
-//location=`curl -X POST -d '{"player":{"firstname":"firstname", "username":"foo", "email": "foo@example.org", "password":"hahaha"}}' \ http://www.teammanager.com/web/app_dev.php/api/player/post \ --header "Content-Type:application/json" -v 2>&1 | grep Location | cut -d \  -f 3`;

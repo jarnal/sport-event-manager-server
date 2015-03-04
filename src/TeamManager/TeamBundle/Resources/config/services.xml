@@ -4,13 +4,20 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <!--
+    <parameters>
+        <parameter key="team_bundle.team.service.class">TeamManager\TeamBundle\Service\TeamService</parameter>
+        <parameter key="team_bundle.team.class">TeamManager\TeamBundle\Entity\Team</parameter>
+        <parameter key="team_bundle.team.form.class">TeamManager\TeamBundle\Form\TeamType</parameter>
+        <parameter key="team_bundle.team.form.exception.class">TeamManager\TeamBundle\Exception\InvalidTeamFormException</parameter>
+    </parameters>
+
     <services>
-        <service id="team_manager_team.example" class="TeamManager\TeamBundle\Example">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
+        <service id="team_bundle.team.service" class="%team_bundle.team.service.class%">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="form.factory"></argument>
+            <argument>%team_bundle.team.class%</argument>
+            <argument>%team_bundle.team.form.class%</argument>
+            <argument>%team_bundle.team.form.exception.class%</argument>
         </service>
     </services>
-    -->
 </container>
