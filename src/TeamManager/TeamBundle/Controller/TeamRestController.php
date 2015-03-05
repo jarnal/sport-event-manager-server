@@ -21,7 +21,8 @@ use TeamManager\CommonBundle\Service\EntityServiceInterface;
 use TeamManager\PlayerBundle\Entity\Player;
 use FOS\RestBundle\Controller\Annotations\View;
 use TeamManager\PlayerBundle\Entity\PlayerInterface;
-use TeamManager\PlayerBundle\Exception\InvalidUserFormException;
+use TeamManager\TeamBundle\Entity\Team;
+use TeamManager\TeamBundle\Exception\InvalidTeamFormException;
 use TeamManager\TeamBundle\Form\TeamType;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -34,6 +35,7 @@ class TeamRestController extends FOSRestController
      *
      * @ApiDoc(
      *  resource=true,
+     *  section="Team API",
      *  output={
      *      "class"="TeamManager\TeamBundle\Entity\Team",
      *      "collection"=true,
@@ -62,9 +64,10 @@ class TeamRestController extends FOSRestController
      *
      * @ApiDoc(
      *  resource=true,
+     *  section="Team API",
      *  requirements={
      *      {
-     *          "name"="teamID",
+     *          "name"="id",
      *          "dataType"="integer",
      *          "requirement"="\d+",
      *          "description"="Team id"
@@ -85,13 +88,14 @@ class TeamRestController extends FOSRestController
      *
      * @View( serializerGroups={"Default"} )
      *
-     * @Get("/get/{teamID}", name="get", options={ "method_prefix" = false })
+     * @Get("/get/{id}", name="get", options={ "method_prefix" = false })
      *
      * @return Player
      */
-    public function getAction($teamID)
+    public function getAction($id)
     {
-        return $this->getService()->getOr404($teamID);
+        //return $id;
+        return $this->getService()->getOr404($id);
     }
 
     /**
@@ -99,6 +103,7 @@ class TeamRestController extends FOSRestController
      *
      * @ApiDoc(
      *  resource = true,
+     *  section="Team API",
      *  input="TeamManager\TeamBundle\Form\TeamType",
      *  statusCodes = {
      *      200 = "Returned when the team has been created",
@@ -120,21 +125,22 @@ class TeamRestController extends FOSRestController
      */
     public function postAction(Request $request)
     {
-        /*try {
-            $form = new TeamType();
-            $player = $this->container->get('team_bundle.player.service')->post(
-                $request->request->get($form->getName())
+        try {
+            $form = new TeamType($this->getUser());
+            $player = $this->getService()->post(
+                $request->request->get($form->getName()),
+                $this->getUser()
             );
 
             $routeOptions = array(
-                'teamID' => $player->getId(),
+                'id' => $player->getId(),
                 '_format' => $request->get('_format')
             );
 
-            return $this->routeRedirectView('api_player_get', $routeOptions, Codes::HTTP_CREATED);
-        } catch (InvalidUserFormException $exception) {
+            return $this->routeRedirectView('api_team_get', $routeOptions, Codes::HTTP_CREATED);
+        } catch (InvalidTeamFormException $exception) {
             return $exception->getForm();
-        }*/
+        }
     }
 
     /**
@@ -142,6 +148,7 @@ class TeamRestController extends FOSRestController
      *
      * @ApiDoc(
      *   resource = true,
+     *   section="Team API",
      *   statusCodes = {
      *     200 = "Returned when successful"
      *   }
@@ -156,9 +163,18 @@ class TeamRestController extends FOSRestController
      *
      * @return FormTypeInterface
      */
-    public function newAction()
+    public function newAction(Request $request)
     {
-        /*return $this->createForm(new TeamType());*/
+        $team = new Team();
+        $team->setManager( $this->getUser() );
+        return $this->createForm(
+            new TeamType(),
+            $team,
+            array(
+                "action" => $this->generateUrl('api_team_post', array("access_token"=>$_GET["access_token"])),
+                "method" => "POST"
+            )
+        );
     }
 
     /**
@@ -166,6 +182,7 @@ class TeamRestController extends FOSRestController
      *
      * @ApiDoc(
      *   resource = true,
+     *   section="Team API",
      *   input="TeamManager\TeamBundle\Form\TeamType",
      *   statusCodes = {
      *     201 = "Returned when a new team is created",
@@ -179,38 +196,38 @@ class TeamRestController extends FOSRestController
      *  template="TeamManagerTeamBundle:Team:teamEditForm.html.twig",
      * )
      *
-     * @Put("/put/{teamID}", name="put", options={ "method_prefix" = false })
+     * @Put("/put/{id}", name="put", options={ "method_prefix" = false })
      *
      * @return FormTypeInterface|View
      */
-    public function putAction(Request $request, $teamID)
+    public function putAction(Request $request, $id)
     {
-        /*$service = $this->container->get('team_bundle.player.service');
+        $service = $this->getService();
         try {
             $form = new TeamType();
-            if ( !($player = $service->get($teamID)) ) {
-                $player = $service->post(
+            if ( !($team = $service->get($id)) ) {
+                $team = $service->post(
                     $request->request->get($form->getName())
                 );
 
                 $routeOptions = array(
-                    'teamID' => $player->getId(),
+                    'id' => $team->getId(),
                     '_format' => $request->get('_format')
                 );
 
-                return $this->routeRedirectView('api_player_get', $routeOptions, Codes::HTTP_CREATED);
+                return $this->routeRedirectView('api_team_get', $routeOptions, Codes::HTTP_CREATED);
             } else {
-                $player = $service->put(
-                    $player,
+                $team = $service->put(
+                    $team,
                     $request->request->get($form->getName())
                 );
 
                 return $this->view(null, Codes::HTTP_NO_CONTENT);
             }
-        } catch (InvalidUserFormException $exception) {
+        } catch (InvalidTeamFormException $exception) {
 
             return $exception->getForm();
-        }*/
+        }
     }
 
     /**
@@ -218,12 +235,13 @@ class TeamRestController extends FOSRestController
      *
      * @ApiDoc(
      *  resource = true,
+     *  section="Team API",
      *  statusCodes = {
      *   200 = "Returned when successful"
      *  },
      *  requirements={
      *  {
-     *    "name"="teamID",
+     *    "name"="id",
      *    "dataType"="integer",
      *    "requirement"="\d+",
      *    "description"="Team id"
@@ -236,18 +254,17 @@ class TeamRestController extends FOSRestController
      *  templateVar = "form"
      * )
      *
-     * @Get("/edit/{teamID}", name="edit", options={ "method_prefix" = false })
+     * @Get("/edit/{id}", name="edit", options={ "method_prefix" = false })
      *
      * @return FormTypeInterface
      */
-    public function editAction($teamID)
+    public function editAction($id)
     {
-        /*$service = $this->container->get('team_bundle.player.service');
-        $player = $service->get($teamID);
-        return $this->createForm(new TeamType(), $player, array(
-            "action" => $this->generateUrl( 'api_team_put' , ['teamID'=>$teamID] ),
+        $team = $this->getService()->get($id);
+        return $this->createForm(new TeamType($this->getUser()), $team, array(
+            "action" => $this->generateUrl( 'api_team_put' , ['id'=>$id] ),
             "method" => "PUT"
-        ));*/
+        ));
     }
 
     /**
@@ -255,13 +272,14 @@ class TeamRestController extends FOSRestController
      *
      * @ApiDoc(
      *  resource = true,
+     *  section="Team API",
      *  statusCodes = {
      *   200 = "Returned when team has been successfully deleted.",
      *   404 = "Returned when team doesn't exist."
      *  },
      *  requirements={
      *   {
-     *    "name"="teamID",
+     *    "name"="id",
      *    "dataType"="integer",
      *    "requirement"="\d+",
      *    "description"="Player id"
@@ -269,33 +287,17 @@ class TeamRestController extends FOSRestController
      *  }
      * )
      *
-     * @Delete("/delete/{teamID}", name="delete", options={ "method_prefix" = false })
+     * @Delete("/delete/{id}", name="delete", options={ "method_prefix" = false })
      *
-     * @param $teamID
+     * @param $id
      */
-    public function deleteAction($teamID)
+    public function deleteAction($id)
     {
-        /*$player = $this->getOr404($teamID);
-        if ( isset($player) ) {
-            $service = $this->container->get('team_bundle.player.service');
-            return $service->delete( $player );
-        }*/
-    }
-
-    /**
-     * Fetchs the Player or throw a 404 exception.
-     *
-     * @param int $teamID
-     * @return PlayerInterface
-     * @throws NotFoundHttpException
-     */
-    protected function getOr404($teamID)
-    {
-        if (!($player = $this->container->get('team_bundle.player.service')->get($teamID))) {
-            throw new NotFoundHttpException(sprintf('The resource \'%s\' was not found.',$teamID));
+        $service = $this->getService();
+        $team = $service->getOr404($id);
+        if ( isset($team) ) {
+            return $service->delete($team);
         }
-
-        return $player;
     }
 
     /**

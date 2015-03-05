@@ -25,6 +25,7 @@ class AppKernel extends Kernel
             new TeamManager\ResultBundle\TeamManagerResultBundle(),
             new TeamManager\ActionBundle\TeamManagerActionBundle(),
             new TeamManager\SecurityBundle\TeamManagerSecurityBundle(),
+            new TeamManager\CommonBundle\TeamManagerCommonBundle(),
             new Nelmio\ApiDocBundle\NelmioApiDocBundle()
         );
 

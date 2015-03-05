@@ -1,14 +1,14 @@
 <?php
 
-namespace TeamManager\EventBundle\Entity;
+namespace TeamManager\CommonBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Location
  *
- * @ORM\Table(name="tm_event_location")
- * @ORM\Entity(repositoryClass="TeamManager\EventBundle\Repository\LocationRepository")
+ * @ORM\Table(name="tm_location")
+ * @ORM\Entity(repositoryClass="TeamManager\CommonBundle\Repository\LocationRepository")
  */
 class Location
 {
@@ -149,6 +149,14 @@ class Location
     {
         $this->longitude = $pLongitude;
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return $this->getName();
     }
 
 }

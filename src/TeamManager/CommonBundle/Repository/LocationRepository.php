@@ -1,6 +1,6 @@
 <?php
 
-namespace TeamManager\EventBundle\Repository;
+namespace TeamManager\CommonBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 

@@ -4,7 +4,7 @@ namespace TeamManager\TeamBundle\DataFixtures\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use TeamManager\EventBundle\Entity\Location;
+use TeamManager\CommonBundle\Entity\Location;
 use TeamManager\TeamBundle\Entity\Team;
 
 class LoadTeamData extends AbstractFixture implements OrderedFixtureInterface
@@ -16,7 +16,7 @@ class LoadTeamData extends AbstractFixture implements OrderedFixtureInterface
      */
     public function load(ObjectManager $manager)
     {
-        /*$manager->clear();
+        $manager->clear();
 
         $location = new Location();
         $location->setName("Salle Pouet");
@@ -42,7 +42,7 @@ class LoadTeamData extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('team-1', $team1);
         $this->addReference('team-2', $team2);
 
-        static::$teams = array($team1, $team2);*/
+        static::$teams = array($team1, $team2);
     }
 
     /**

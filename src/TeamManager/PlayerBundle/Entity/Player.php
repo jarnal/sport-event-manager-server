@@ -46,8 +46,8 @@ class Player implements PlayerInterface, UserInterface, \Serializable
      *
      * @var string
      * @ORM\Column(name="firstname", type="string")
-     * @Assert\NotBlank( message="form.player.___.blank" )
-     * @Assert\NotNull( message="form.player.___.null" )
+     * @Assert\NotBlank( message="form.player.firstname.blank" )
+     * @Assert\NotNull( message="form.player.firstname.null" )
      *
      * @Expose
      */

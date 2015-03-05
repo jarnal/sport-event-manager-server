@@ -2,12 +2,15 @@
 
 namespace TeamManager\TeamBundle\Form;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use TeamManager\PlayerBundle\Entity\Player;
 
 class TeamType extends AbstractType
 {
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -19,6 +22,9 @@ class TeamType extends AbstractType
             ->add('description')
             ->add('image_url')
             ->add('default_location')
+            ->add('manager', 'hidden_entity', array(
+                "class" => "TeamManager\\PlayerBundle\\Entity\\Player"
+            ));
         ;
     }
     
@@ -28,7 +34,8 @@ class TeamType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'TeamManager\TeamBundle\Entity\Team'
+            'data_class' => 'TeamManager\TeamBundle\Entity\Team',
+            'csrf_protection' => false
         ));
     }
 
@@ -37,6 +44,6 @@ class TeamType extends AbstractType
      */
     public function getName()
     {
-        return 'teammanager_teambundle_team';
+        return 'team';
     }
 }

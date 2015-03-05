@@ -18,7 +18,6 @@ security:
         user_provider:
             id: platform.user.provider
 
-
     # the main part of the security, where you can set up firewalls
     # for specific sections of your app
     firewalls:
@@ -60,6 +59,11 @@ security:
 
         api_player:
             pattern:    ^/api/player
+            fos_oauth:  true
+            stateless:  true
+
+        api_team:
+            pattern:    ^/api/team
             fos_oauth:  true
             stateless:  true
 

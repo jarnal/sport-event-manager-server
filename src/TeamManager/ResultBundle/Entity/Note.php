@@ -38,7 +38,7 @@ class Note
      * @ORM\ManyToOne(targetEntity="\TeamManager\EventBundle\Entity\Event", inversedBy="notes")
      * @ORM\JoinColumn(name="event_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $game;
+    private $event;
 
     /**
      * Player who received the note.
@@ -97,9 +97,9 @@ class Note
      * @param Game $pGame
      * @return Comment
      */
-    public function setGame(Game $pGame)
+    public function setEvent(Game $pGame)
     {
-        $this->game = $pGame;
+        $this->event = $pGame;
         return $this;
     }
 
@@ -108,9 +108,9 @@ class Note
      *
      * @return Game
      */
-    public function getGame()
+    public function getEvent()
     {
-        return $this->game;
+        return $this->event;
     }
 
     /**

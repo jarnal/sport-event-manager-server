@@ -4,6 +4,7 @@ namespace TeamManager\EventBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use TeamManager\CommonBundle\Entity\Location;
 use TeamManager\PlayerBundle\Entity\Player;
 use TeamManager\ResultBundle\Entity\Comment;
 use TeamManager\ResultBundle\Entity\Note;
@@ -18,7 +19,7 @@ use TeamManager\TeamBundle\Entity\Team;
  * @ORM\DiscriminatorColumn(name="event_type", type="string")
  * @ORM\DiscriminatorMap( {"training"="Training", "game"="Game", "game_friendly"="GameFriendly"} )
  */
-abstract class Event
+class Event
 {
 
     /**
@@ -67,9 +68,9 @@ abstract class Event
      * Limit of players that can be present in the event.
      *
      * @var integer
-     * @ORM\Column(name="limit", type="integer", nullable=true)
+     * @ORM\Column(name="player_limit", type="integer", nullable=true)
      */
-    private $limit;
+    private $player_limit;
 
     /**
      * Name of the opponent.
@@ -83,7 +84,7 @@ abstract class Event
      * Location where the event takes place.
      *
      * @var Location
-     * @ORM\ManyToOne(targetEntity="\TeamManager\EventBundle\Entity\Location")
+     * @ORM\ManyToOne(targetEntity="\TeamManager\CommonBundle\Entity\Location", cascade="persist")
      * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
      */
     private $location;
@@ -92,7 +93,7 @@ abstract class Event
      * Comments sent by users concerning the event.
      *
      * @var Comment
-     * @ORM\OneToMany(targetEntity="\TeamManager\ResultBundle\Entity\Comment", mappedBy="team")
+     * @ORM\OneToMany(targetEntity="\TeamManager\ResultBundle\Entity\Comment", mappedBy="event")
      */
     private $comments;
 
@@ -100,7 +101,7 @@ abstract class Event
      * Notes sent by users concerning the event.
      *
      * @var Comment
-     * @ORM\OneToMany(targetEntity="\TeamManager\ResultBundle\Entity\Note", mappedBy="team")
+     * @ORM\OneToMany(targetEntity="\TeamManager\ResultBundle\Entity\Note", mappedBy="event")
      */
     private $notes;
 
@@ -148,8 +149,8 @@ abstract class Event
         $this->comments = new ArrayCollection();
         $this->notes = new ArrayCollection();
         $this->expected_players = new ArrayCollection();
-        $this->$missing_players = new ArrayCollection();
-        $this->$present_players = new ArrayCollection();
+        $this->missing_players = new ArrayCollection();
+        $this->present_players = new ArrayCollection();
     }
 
     /**
@@ -255,9 +256,9 @@ abstract class Event
      *
      * @return int
      */
-    public function getLimit()
+    public function getPlayerLimit()
     {
-        return $this->limit;
+        return $this->player_limit;
     }
 
     /**
@@ -266,9 +267,9 @@ abstract class Event
      * @param int $pLimit
      * @return Event
      */
-    public function setLimit($pLimit)
+    public function setPlayerLimit($pLimit)
     {
-        $this->limit = $pLimit;
+        $this->player_limit = $pLimit;
         return $this;
     }
 

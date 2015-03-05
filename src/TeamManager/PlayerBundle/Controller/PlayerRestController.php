@@ -16,6 +16,7 @@ use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Acl\Exception\Exception;
+use TeamManager\CommonBundle\Service\EntityServiceInterface;
 use TeamManager\PlayerBundle\Entity\Player;
 use FOS\RestBundle\Controller\Annotations\View;
 use TeamManager\PlayerBundle\Entity\PlayerInterface;
@@ -32,6 +33,7 @@ class PlayerRestController extends FOSRestController
      *
      * @ApiDoc(
      *  resource=true,
+     *  section="Player API",
      *  output={
      *      "class"="TeamManager\PlayerBundle\Entity\Player",
      *      "collection"=true,
@@ -62,6 +64,7 @@ class PlayerRestController extends FOSRestController
      *
      * @ApiDoc(
      *  resource=true,
+     *  section="Player API",
      *  requirements={
      *      {
      *          "name"="playerID",
@@ -91,7 +94,7 @@ class PlayerRestController extends FOSRestController
      */
     public function getAction($playerID)
     {
-        return $this->getOr404($playerID);
+        return $this->getService()->getOr404($playerID);
     }
 
     /**
@@ -99,6 +102,7 @@ class PlayerRestController extends FOSRestController
      *
      * @ApiDoc(
      *  resource = true,
+     *  section="Player API",
      *  input="TeamManager\PlayerBundle\Form\PlayerType",
      *  statusCodes = {
      *      200 = "Returned when the player has been created",
@@ -122,7 +126,7 @@ class PlayerRestController extends FOSRestController
     {
         try {
             $form = new PlayerType();
-            $player = $this->container->get('team_bundle.player.service')->post(
+            $player = $this->getService()->post(
                 $request->request->get($form->getName())
             );
 
@@ -141,10 +145,11 @@ class PlayerRestController extends FOSRestController
      * Builds the form to use to create a new player.
      *
      * @ApiDoc(
-     *   resource = true,
-     *   statusCodes = {
-     *     200 = "Returned when successful"
-     *   }
+     *  resource = true,
+     *  section="Player API",
+     *  statusCodes = {
+     *    200 = "Returned when successful"
+     *  }
      * )
      *
      * @View(
@@ -158,16 +163,20 @@ class PlayerRestController extends FOSRestController
      */
     public function newAction()
     {
-        return $this->createForm(new PlayerType());
+        return $this->createForm(new PlayerType(), null, array(
+            "action" => $this->generateUrl('api_player_post'),
+            "method" => "POST"
+        ));
     }
 
     /**
      * Update existing player from the submitted data or create a new player with a specific id.
      *
      * @ApiDoc(
-     *   resource = true,
-     *   input="TeamManager\PlayerBundle\Form\PlayerType",
-     *   statusCodes = {
+     *  resource = true,
+     *  section="Player API",
+     *  input="TeamManager\PlayerBundle\Form\PlayerType",
+     *  statusCodes = {
      *     201 = "Returned when a new Player is created",
      *     204 = "Returned when Player has been updated successfully",
      *     400 = "Returned when the form has errors"
@@ -185,7 +194,7 @@ class PlayerRestController extends FOSRestController
      */
     public function putAction(Request $request, $playerID)
     {
-        $service = $this->container->get('team_bundle.player.service');
+        $service = $this->getService();
         try {
             $form = new PlayerType();
             if ( !($player = $service->get($playerID)) ) {
@@ -218,6 +227,7 @@ class PlayerRestController extends FOSRestController
      *
      * @ApiDoc(
      *  resource = true,
+     *  section="Player API",
      *  statusCodes = {
      *   200 = "Returned when successful"
      *  },
@@ -242,8 +252,7 @@ class PlayerRestController extends FOSRestController
      */
     public function editAction($playerID)
     {
-        $service = $this->container->get('team_bundle.player.service');
-        $player = $service->get($playerID);
+        $player = $this->getService()->get($playerID);
         return $this->createForm(new PlayerType(), $player, array(
             "action" => $this->generateUrl( 'api_player_put' , ['playerID'=>$playerID] ),
             "method" => "PUT"
@@ -255,6 +264,7 @@ class PlayerRestController extends FOSRestController
      *
      * @ApiDoc(
      *  resource = true,
+     *  section="Player API",
      *  statusCodes = {
      *   200 = "Returned when Player has been successfully deleted.",
      *   404 = "Returned when user doesn't exist."
@@ -275,27 +285,21 @@ class PlayerRestController extends FOSRestController
      */
     public function deleteAction($playerID)
     {
-        $player = $this->getOr404($playerID);
+        $service = $this->getService();
+        $player = $service->getOr404($playerID);
         if ( isset($player) ) {
-            $service = $this->container->get('team_bundle.player.service');
             return $service->delete( $player );
         }
     }
 
     /**
-     * Fetchs the Player or throw a 404 exception.
+     * Returns the appropriate service to handle related entity.
      *
-     * @param int $playerID
-     * @return PlayerInterface
-     * @throws NotFoundHttpException
+     * @return EntityServiceInterface
      */
-    protected function getOr404($playerID)
+    protected function getService()
     {
-        if (!($player = $this->container->get('team_bundle.player.service')->get($playerID))) {
-            throw new NotFoundHttpException(sprintf('The resource \'%s\' was not found.',$playerID));
-        }
-
-        return $player;
+        return $this->container->get('team_bundle.player.service');
     }
 
 }

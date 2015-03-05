@@ -31,6 +31,7 @@
                 <directory>../src/*/*Bundle/Tests</directory>
                 <directory>../src/*/Bundle/*Bundle/Resources</directory>
                 <directory>../src/*/Bundle/*Bundle/Tests</directory>
+                <file>../src/CommonBundle/Tests/EntityRestControllerTest.php</file>
             </exclude>
         </whitelist>
     </filter>

@@ -4,11 +4,12 @@ namespace TeamManager\TeamBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use TeamManager\ActionBundle\Entity\Goal;
+use TeamManager\CommonBundle\Entity\Location;
 use TeamManager\EventBundle\Entity\Game;
 use TeamManager\EventBundle\Entity\GameFriendly;
 use TeamManager\EventBundle\Entity\Training;
-use TeamManager\EventBundle\Entity\Location;
 use TeamManager\PlayerBundle\Entity\Player;
 
 /**
@@ -33,6 +34,7 @@ class Team
      *
      * @var string
      * @ORM\Column(name="name", type="string")
+     * @Assert\NotBlank(message="form.team.name.blank")
      */
     private $name;
 
@@ -56,8 +58,9 @@ class Team
      * Default location where de team plays and trains.
      *
      * @var Location
-     * @ORM\ManyToOne(targetEntity="\TeamManager\EventBundle\Entity\Location")
+     * @ORM\ManyToOne(targetEntity="\TeamManager\CommonBundle\Entity\Location", cascade="persist")
      * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
+     * @Assert\NotNull(message="form.team.location.null")
      */
     private $default_location;
 
@@ -65,8 +68,9 @@ class Team
      * Team manager.
      *
      * @var Player
-     * @ORM\ManyToOne(targetEntity="\TeamManager\PlayerBundle\Entity\Player", inversedBy="managed_team")
+     * @ORM\ManyToOne(targetEntity="\TeamManager\PlayerBundle\Entity\Player", inversedBy="managed_teams")
      * @ORM\JoinColumn(name="manager_id", referencedColumnName="id")
+     * @Assert\NotNull(message="form.team.manager.null")
      */
     private $manager;
 
@@ -114,10 +118,10 @@ class Team
     public function __construct()
     {
         $this->players = new ArrayCollection();
-        $this->trainings = new ArrayCollection();
+
         $this->games = new ArrayCollection();
         $this->games_friendly = new ArrayCollection();
-        $this->$goals = new ArrayCollection();
+        $this->goals = new ArrayCollection();
     }
 
     /**
