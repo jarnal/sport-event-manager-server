@@ -4,10 +4,10 @@ namespace TeamManager\EventBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use TeamManager\ActionBundle\Entity\Card;
 use TeamManager\ActionBundle\Entity\Goal;
 use TeamManager\ActionBundle\Entity\Injury;
-use TeamManager\ResultBundle\Entity\Comment;
 use TeamManager\TeamBundle\Entity\Team;
 
 /**
@@ -25,6 +25,7 @@ class Game extends Event
      * @var Team
      * @ORM\ManyToOne(targetEntity="TeamManager\TeamBundle\Entity\Team", inversedBy="games")
      * @ORM\JoinColumn(name="team_id", referencedColumnName="id", onDelete="CASCADE")
+     * @Assert\NotNull(message="form.game.team.blank")
      */
     private $team;
 

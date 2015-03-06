@@ -1,5 +1,5 @@
 <?php
-namespace TeamManager\PlayerBundle\DataFixtures\ORM;
+namespace TeamManager\EventBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
@@ -26,7 +26,7 @@ class LoadGameData extends AbstractFixture implements OrderedFixtureInterface
         $game1->setDate(new \DateTime());
         $game1->setPlayerLimit(10);
         $game1->setLocation($team->getDefaultLocation());
-        $game1->setOpponent(10);
+        $game1->setOpponent("Team Going To Die");
         $game1->setSubscriptionType("test");
         $game1->setTeam($team);
 

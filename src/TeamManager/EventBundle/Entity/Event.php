@@ -4,11 +4,11 @@ namespace TeamManager\EventBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use TeamManager\CommonBundle\Entity\Location;
 use TeamManager\PlayerBundle\Entity\Player;
 use TeamManager\ResultBundle\Entity\Comment;
 use TeamManager\ResultBundle\Entity\Note;
-use TeamManager\TeamBundle\Entity\Team;
 
 /**
  * Event
@@ -36,6 +36,7 @@ class Event
      *
      * @var string
      * @ORM\Column(name="name", type="string")
+     * @Assert\NotBlank(message="form.event.name.blank")
      */
     private $name;
 
@@ -52,6 +53,7 @@ class Event
      *
      * @var \DateTime
      * @ORM\Column(name="date", type="datetime")
+     * @Assert\NotBlank(message="form.event.date.blank")
      */
     private $date;
 
@@ -76,7 +78,8 @@ class Event
      * Name of the opponent.
      *
      * @var string
-     * @ORM\Column(name="opponent", type="integer")
+     * @ORM\Column(name="opponent", type="string")
+     * @Assert\NotBlank(message="form.event.opponent.blank")
      */
     private $opponent;
 
@@ -86,6 +89,7 @@ class Event
      * @var Location
      * @ORM\ManyToOne(targetEntity="\TeamManager\CommonBundle\Entity\Location", cascade="persist")
      * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
+     * @Assert\NotNull(message="form.event.location.blank")
      */
     private $location;
 

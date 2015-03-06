@@ -29,7 +29,7 @@ tm_result:
 tm_event:
     resource: "@TeamManagerEventBundle/Resources/config/routing_rest.yml"
     type:     rest
-    prefix:   /api/event/
+    prefix:   /api/
 
 tm_player:
     resource: "@TeamManagerPlayerBundle/Resources/config/routing_rest.yml"

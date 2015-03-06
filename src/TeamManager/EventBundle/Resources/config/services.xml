@@ -4,13 +4,20 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <!--
+    <parameters>
+        <parameter key="event_bundle.game.service.class">TeamManager\EventBundle\Service\GameService</parameter>
+        <parameter key="event_bundle.game.class">TeamManager\EventBundle\Entity\Game</parameter>
+        <parameter key="event_bundle.game.form.class">TeamManager\EventBundle\Form\GameType</parameter>
+        <parameter key="event_bundle.game.form.exception.class">TeamManager\EventBundle\Exception\InvalidGameFormException</parameter>
+    </parameters>
+
     <services>
-        <service id="team_manager_event.example" class="TeamManager\EventBundle\Example">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
+        <service id="event_bundle.game.service" class="%event_bundle.game.service.class%">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="form.factory"></argument>
+            <argument>%event_bundle.game.class%</argument>
+            <argument>%event_bundle.game.form.class%</argument>
+            <argument>%event_bundle.game.form.exception.class%</argument>
         </service>
     </services>
-    -->
 </container>

@@ -94,7 +94,6 @@ class TeamRestController extends FOSRestController
      */
     public function getAction($id)
     {
-        //return $id;
         return $this->getService()->getOr404($id);
     }
 
@@ -113,7 +112,7 @@ class TeamRestController extends FOSRestController
      *
      * @View(
      *  serializerGroups={"Default"},
-     *  template="TeamManagerTeamBundle:Team:teamForm.html.twig",
+     *  template="TeamManagerTeamBundle:Team:gameForm.html.twig",
      *  statusCode= Codes::HTTP_BAD_REQUEST,
      *  templateVar = "form"
      * )
@@ -193,7 +192,7 @@ class TeamRestController extends FOSRestController
      *
      * @View(
      *  serializerGroups={"Default"},
-     *  template="TeamManagerTeamBundle:Team:teamEditForm.html.twig",
+     *  template="TeamManagerTeamBundle:Team:gameEditForm.html.twig",
      * )
      *
      * @Put("/put/{id}", name="put", options={ "method_prefix" = false })
@@ -260,7 +259,7 @@ class TeamRestController extends FOSRestController
      */
     public function editAction($id)
     {
-        $team = $this->getService()->get($id);
+        $team = $this->getService()->getOr404($id);
         return $this->createForm(new TeamType($this->getUser()), $team, array(
             "action" => $this->generateUrl( 'api_team_put' , ['id'=>$id] ),
             "method" => "PUT"

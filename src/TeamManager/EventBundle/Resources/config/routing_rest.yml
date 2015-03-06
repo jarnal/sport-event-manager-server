@@ -1,24 +1,17 @@
-tm_event_event_rest:
-    type: rest
-    resource: "TeamManagerEventBundle:EventRest"
-    name_prefix: api_event
-
 tm_event_game_rest:
     type: rest
     resource: "TeamManagerEventBundle:GameRest"
-    name_prefix: api_game
+    name_prefix: api_game_
+    prefix:   game
 
 tm_event_gamefriendly_rest:
     type: rest
     resource: "TeamManagerEventBundle:GameFriendlyRest"
-    name_prefix: api_gamefriendly
-
-tm_event_location_rest:
-    type: rest
-    resource: "TeamManagerEventBundle:LocationRest"
-    name_prefix: api_location
+    name_prefix: api_gamefriendly_
+    prefix:   gamefriendly
 
 tm_event_training_rest:
     type: rest
     resource: "TeamManagerEventBundle:TrainingRest"
-    name_prefix: api_training
+    name_prefix: api_training_
+    prefix:   traning

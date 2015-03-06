@@ -252,7 +252,7 @@ class PlayerRestController extends FOSRestController
      */
     public function editAction($id)
     {
-        $player = $this->getService()->get($id);
+        $player = $this->getService()->getOr404($id);
         return $this->createForm(new PlayerType(), $player, array(
             "action" => $this->generateUrl( 'api_player_put' , ['id'=>$id] ),
             "method" => "PUT"
