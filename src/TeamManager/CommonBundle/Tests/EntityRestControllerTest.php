@@ -4,8 +4,8 @@ namespace TeamManager\CommonBundle\Tests;
 use Doctrine\Common\Cache\Cache;
 use Liip\FunctionalTestBundle\Test\WebTestCase;
 use TeamManager\PlayerBundle\DataFixtures\ORM\LoadPlayerData;
+use TeamManager\PlayerBundle\Entity\Player;
 use TeamManager\PlayerBundle\Entity\PlayerInterface;
-use TeamManager\SecurityBundle\DataFixtures\ORM\LoadOAuthClientData;
 use FOS\OAuthServerBundle\Entity\ClientManager;
 
 class EntityRestControllerTest extends WebTestCase {
@@ -25,6 +25,20 @@ class EntityRestControllerTest extends WebTestCase {
     public function testEmptyAction()
     {
         //$this->assertTrue(true);
+    }
+
+    /**
+     * Initializes test and returns a return token to use calling API methods.
+     *
+     * @return string
+     */
+    protected function initializeTest()
+    {
+        $this->loadDataFixtures();
+        $player = $this->getPlayer();
+        $access_token = $this->getAccessTokenPlayer($player->getApiKey());
+
+        return $access_token;
     }
 
     /**
@@ -132,11 +146,11 @@ class EntityRestControllerTest extends WebTestCase {
     }
 
     /**
-     *
+     * @return Player
      */
-    protected function getApiKey()
+    protected function getPlayer()
     {
-        return array_pop(LoadPlayerData::$players)->getApiKey();
+        return array_pop(LoadPlayerData::$players);
     }
 
     /**

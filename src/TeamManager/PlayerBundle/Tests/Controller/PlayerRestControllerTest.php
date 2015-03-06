@@ -3,18 +3,19 @@ namespace TeamManager\PlayerBundle\Tests\Controller;
 
 use Doctrine\Common\Cache\Cache;
 use Liip\FunctionalTestBundle\Test\WebTestCase;
+use TeamManager\CommonBundle\Tests\EntityRestControllerTest;
 use TeamManager\PlayerBundle\DataFixtures\ORM\LoadPlayerData;
 use TeamManager\PlayerBundle\Entity\PlayerInterface;
-use TeamManager\SecurityBundle\DataFixtures\ORM\LoadOAuthClientData;
 use FOS\OAuthServerBundle\Entity\ClientManager;
 
-class PlayerRestControllerTest extends WebTestCase {
+class PlayerRestControllerTest extends EntityRestControllerTest {
 
     /**
-     * Creates the client needed to perform the tests.
+     *
      */
-    public function setUp(){
-        $this->client = static::createClient();
+    public function __construct()
+    {
+        $this->entityName = "player";
     }
 
     /**
@@ -23,10 +24,9 @@ class PlayerRestControllerTest extends WebTestCase {
      */
     public function testGetAllAction()
     {
-        $player = $this->loadPlayers();
-        $access_token = $this->getAccessTokenPlayer( $player->getApiKey() );
+        $accessToken = $this->initializeTest();
 
-        $route =  $this->getUrl('api_player_get_all', array('_format' => 'json', 'access_token'=>$access_token));
+        $route =  $this->getUrl('api_player_get_all', array('_format' => 'json', 'access_token'=>$accessToken));
 
         $this->client->request('GET', $route, array('ACCEPT' => 'application/json'));
         $response = $this->client->getResponse();
@@ -43,10 +43,10 @@ class PlayerRestControllerTest extends WebTestCase {
      */
     public function testGetAction()
     {
-        $player = $this->loadPlayers();
-        $access_token = $this->getAccessTokenPlayer( $player->getApiKey() );
+        $accessToken = $this->initializeTest();
+        $player = $this->getPlayer();
 
-        $route = $this->buildGetRoute( $player->getId(), $access_token );
+        $route = $this->buildGetRoute($player->getId(), $accessToken);
         $this->client->request('GET', $route, array('ACCEPT' => 'application/json'));
         $response = $this->client->getResponse();
         $content = $response->getContent();
@@ -61,7 +61,9 @@ class PlayerRestControllerTest extends WebTestCase {
      */
     public function testPostAction()
     {
-        $route = $this->buildPostRoute();
+        $accessToken = $this->initializeTest();
+
+        $route = $this->buildPostRoute($accessToken);
         $this->client->request(
             'POST',
             $route,
@@ -80,7 +82,9 @@ class PlayerRestControllerTest extends WebTestCase {
      */
     public function testIncompletePostAction()
     {
-        $route = $this->buildPostRoute();
+        $accessToken = $this->initializeTest();
+
+        $route = $this->buildPostRoute($accessToken);
         $this->client->request(
             'POST',
             $route,
@@ -99,8 +103,8 @@ class PlayerRestControllerTest extends WebTestCase {
      */
     public function testJsonPutPageActionShouldModify()
     {
-        $player = $this->loadPlayers();
-        $accessToken = $this->getAccessTokenPlayer($player->getApiKey());
+        $accessToken = $this->initializeTest();
+        $player = $this->getPlayer();
 
         $route = $this->buildGetRoute($player->getId(), $accessToken);
         $this->client->request(
@@ -126,8 +130,7 @@ class PlayerRestControllerTest extends WebTestCase {
      */
     public function testJsonPutPageActionShouldCreate()
     {
-        $player = $this->loadPlayers();
-        $accessToken = $this->getAccessTokenPlayer($player->getApiKey());
+        $accessToken = $this->initializeTest();
 
         $id = 0;
         $route = $this->buildGetRoute($id, $accessToken);
@@ -156,8 +159,8 @@ class PlayerRestControllerTest extends WebTestCase {
      */
     public function testDeletePageActionShouldDelete()
     {
-        $player = $this->loadPlayers();
-        $accessToken = $this->getAccessTokenPlayer($player->getApiKey());
+        $accessToken = $this->initializeTest();
+        $player = $this->getPlayer();
 
         $route = $this->buildGetRoute($player->getId(), $accessToken);
         $this->client->request(
@@ -185,8 +188,7 @@ class PlayerRestControllerTest extends WebTestCase {
      */
     public function testDeletePageActionShouldNotDelete()
     {
-        $player = $this->loadPlayers();
-        $accessToken = $this->getAccessTokenPlayer($player->getApiKey());
+        $accessToken = $this->initializeTest();
 
         $id = 0;
         $route = $this->buildGetRoute($id, $accessToken);
@@ -211,159 +213,14 @@ class PlayerRestControllerTest extends WebTestCase {
     }
 
     /**
-     * Test is returned content is JSON type and corresponds to the passed status code.
-     *
-     * @param $response
-     * @param int $statusCode
+     * Loads all needed fixtures.
      */
-    protected function assertJsonResponse($response, $statusCode = 200) {
-        $this->assertEquals(
-            $statusCode, $response->getStatusCode(),
-            $response->getContent()
+    protected function loadDataFixtures()
+    {
+        $fixtures = array(
+            'TeamManager\PlayerBundle\DataFixtures\ORM\LoadPlayerData'
         );
-
-        $this->assertTrue(
-            $response->headers->contains('Content-Type', 'application/json'),
-            $response->headers
-        );
-    }
-
-    /**
-     * Loads players fixtures and returns the added players.
-     * Fixtures are loaded only once to have better performances.
-     *
-     * @return PlayerInterface
-     */
-    protected function loadPlayers()
-    {
-        if( is_null(LoadPlayerData::$players) || count(LoadPlayerData::$players)==0 ) {
-            $fixtures = array('TeamManager\PlayerBundle\DataFixtures\ORM\LoadPlayerData');
-            $this->loadFixtures($fixtures);
-        }
-        return array_pop(LoadPlayerData::$players);
-    }
-
-    /**
-     * Builds player get route.
-     *
-     * @return string
-     */
-    protected function buildGetRoute($pPlayerID, $pAccessToken)
-    {
-        return $this->getUrl(
-            'api_player_get',
-            array(
-                'playerID' => $pPlayerID,
-                'access_token' => $pAccessToken,
-                '_format' => 'json'
-            )
-        );
-    }
-
-    /**
-     * Builds player post route.
-     *
-     * @return string
-     */
-    protected function buildPostRoute()
-    {
-        return $route = $this->getUrl( 'api_player_post' , array(
-            'access_token'=>$this->getAccessTokenClient(),
-            '_format'=>'json'
-        ));
-    }
-
-    /**
-     * Builds player put route.
-     *
-     * @param $pPlayerID
-     * @param $pAccessToken
-     * @return string
-     */
-    protected function buildPutRoute($pPlayerID, $pAccessToken)
-    {
-        return $this->getUrl( 'api_player_put' , array(
-            'access_token'=>$pAccessToken,
-            'playerID'=>$pPlayerID,
-            '_format'=>'json'
-        ));
-    }
-
-    /**
-     * Builds delete put route.
-     *
-     * @param $pPlayerID
-     * @param $pAccessToken
-     * @return string
-     */
-    protected function buildDeleteRoute($pPlayerID, $pAccessToken)
-    {
-        return $this->getUrl( 'api_player_delete' , array(
-            'access_token'=>$pAccessToken,
-            'playerID'=>$pPlayerID,
-            '_format'=>'json'
-        ));
-    }
-
-    /**
-     * Builds an access token related to a user.
-     *
-     * @param $pUserApiKey
-     * @return string
-     */
-    protected function getAccessTokenPlayer($pUserApiKey)
-    {
-        $grantType = "http://www.teammanager.com/web/app_dev.php/grants/api_key";
-        $apiKey = $pUserApiKey;
-        return $this->getAccessToken($grantType, $apiKey);
-    }
-
-    /**
-     * Builds an access token related to the client.
-     * Used only for post method because an player can be posted anonymously (register).
-     *
-     * @return string
-     */
-    protected function getAccessTokenClient()
-    {
-        $grantType = "client_credentials";
-        return $this->getAccessToken($grantType);
-    }
-
-    /**
-     * Builds the access token calling OAuth route.
-     *
-     * @param $pGrantType
-     * @param $pApiKey
-     * @return string
-     */
-    protected function getAccessToken($pGrantType, $pApiKey=null)
-    {
-        $grantTypes = array(
-            "http://www.teammanager.com/web/app_dev.php/grants/api_key",
-            "client_credentials"
-        );
-
-        $clientManager = $this->getContainer()->get('fos_oauth_server.client_manager.default');
-        $client = $clientManager->createClient();
-        $client->setRedirectUris( array() );
-        $client->setAllowedGrantTypes( $grantTypes );
-        $clientManager->updateClient($client);
-
-        $route =  $this->getUrl('fos_oauth_server_token', array(
-            'client_id' => $client->getPublicId(),
-            'client_secret' => $client->getSecret(),
-            'grant_type' => $pGrantType,
-            'api_key' => $pApiKey
-        ));
-
-        $this->client->request('GET', $route, array('ACCEPT' => 'application/json'));
-        $response = $this->client->getResponse();
-        $content = $response->getContent();
-
-        $result = json_decode( $content, true );
-        $this->assertJsonResponse($response, 200);
-        return $result["access_token"];
+        $this->loadFixtures($fixtures);
     }
 
 }

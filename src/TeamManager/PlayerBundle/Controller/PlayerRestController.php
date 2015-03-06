@@ -67,7 +67,7 @@ class PlayerRestController extends FOSRestController
      *  section="Player API",
      *  requirements={
      *      {
-     *          "name"="playerID",
+     *          "name"="id",
      *          "dataType"="integer",
      *          "requirement"="\d+",
      *          "description"="Player id"
@@ -88,13 +88,13 @@ class PlayerRestController extends FOSRestController
      *
      * @View( serializerGroups={"Default"} )
      *
-     * @Get("/get/{playerID}", name="get", options={ "method_prefix" = false })
+     * @Get("/get/{id}", name="get", options={ "method_prefix" = false })
      *
      * @return Player
      */
-    public function getAction($playerID)
+    public function getAction($id)
     {
-        return $this->getService()->getOr404($playerID);
+        return $this->getService()->getOr404($id);
     }
 
     /**
@@ -131,7 +131,7 @@ class PlayerRestController extends FOSRestController
             );
 
             $routeOptions = array(
-                'playerID' => $player->getId(),
+                'id' => $player->getId(),
                 '_format' => $request->get('_format')
             );
 
@@ -188,29 +188,29 @@ class PlayerRestController extends FOSRestController
      *  template="TeamManagerPlayerBundle:Player:playerEditForm.html.twig",
      * )
      *
-     * @Put("/put/{playerID}", name="put", options={ "method_prefix" = false })
+     * @Put("/put/{id}", name="put", options={ "method_prefix" = false })
      *
      * @return FormTypeInterface|View
      */
-    public function putAction(Request $request, $playerID)
+    public function putAction(Request $request, $id)
     {
         $service = $this->getService();
         try {
             $form = new PlayerType();
-            if ( !($player = $service->get($playerID)) ) {
+            if ( !($player = $service->get($id)) ) {
                 $player = $service->post(
                     $request->request->get($form->getName())
                 );
 
                 $routeOptions = array(
-                    'playerID' => $player->getId(),
+                    'id' => $player->getId(),
                     '_format' => $request->get('_format')
                 );
 
                 return $this->routeRedirectView('api_player_get', $routeOptions, Codes::HTTP_CREATED);
             } else {
                 $player = $service->put(
-                    $playerID,
+                    $id,
                     $request->request->get($form->getName())
                 );
 
@@ -233,7 +233,7 @@ class PlayerRestController extends FOSRestController
      *  },
      *  requirements={
      *  {
-     *    "name"="playerID",
+     *    "name"="id",
      *    "dataType"="integer",
      *    "requirement"="\d+",
      *    "description"="Player id"
@@ -246,15 +246,15 @@ class PlayerRestController extends FOSRestController
      *  templateVar = "form"
      * )
      *
-     * @Get("/edit/{playerID}", name="edit", options={ "method_prefix" = false })
+     * @Get("/edit/{id}", name="edit", options={ "method_prefix" = false })
      *
      * @return FormTypeInterface
      */
-    public function editAction($playerID)
+    public function editAction($id)
     {
-        $player = $this->getService()->get($playerID);
+        $player = $this->getService()->get($id);
         return $this->createForm(new PlayerType(), $player, array(
-            "action" => $this->generateUrl( 'api_player_put' , ['playerID'=>$playerID] ),
+            "action" => $this->generateUrl( 'api_player_put' , ['id'=>$id] ),
             "method" => "PUT"
         ));
     }
@@ -271,7 +271,7 @@ class PlayerRestController extends FOSRestController
      *  },
      *  requirements={
      *   {
-     *    "name"="playerID",
+     *    "name"="id",
      *    "dataType"="integer",
      *    "requirement"="\d+",
      *    "description"="Player id"
@@ -279,14 +279,14 @@ class PlayerRestController extends FOSRestController
      *  }
      * )
      *
-     * @Delete("/delete/{playerID}", name="delete", options={ "method_prefix" = false })
+     * @Delete("/delete/{id}", name="delete", options={ "method_prefix" = false })
      *
-     * @param $playerID
+     * @param $id
      */
-    public function deleteAction($playerID)
+    public function deleteAction($id)
     {
         $service = $this->getService();
-        $player = $service->getOr404($playerID);
+        $player = $service->getOr404($id);
         if ( isset($player) ) {
             return $service->delete( $player );
         }

@@ -24,7 +24,7 @@ class Game extends Event
      *
      * @var Team
      * @ORM\ManyToOne(targetEntity="TeamManager\TeamBundle\Entity\Team", inversedBy="games")
-     * @ORM\JoinColumn(name="team_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="team_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $team;
 
