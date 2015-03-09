@@ -14,9 +14,13 @@ use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Link;
+use FOS\RestBundle\Controller\Annotations\Unlink;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Acl\Exception\Exception;
 use TeamManager\CommonBundle\Service\EntityServiceInterface;
+use TeamManager\EventBundle\Entity\Game;
 use TeamManager\PlayerBundle\Entity\Player;
 use FOS\RestBundle\Controller\Annotations\View;
 use TeamManager\PlayerBundle\Entity\PlayerInterface;
@@ -50,7 +54,7 @@ class PlayerRestController extends FOSRestController
      *
      * @Get("/all", name="get_all", options={ "method_prefix" = false })
      *
-     * @return JsonResponse
+     * @return array
      */
     public function getAllAction()
     {
@@ -290,6 +294,45 @@ class PlayerRestController extends FOSRestController
         if ( isset($player) ) {
             return $service->delete( $player );
         }
+    }
+
+    /**
+     * Returns all games for a given player.
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  section="Player API",
+     *  requirements={
+     *      {
+     *          "name"="id",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="Player id"
+     *      }
+     *  },
+     *  output={
+     *      "class"="\TeamManager\EventBundle\Entity\Game",
+     *      "parsers" = {
+     *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
+     *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
+     *      },
+     *      "groups"={"Default"}
+     *  },
+     *  statusCodes = {
+     *     200 = "Returned when player exists",
+     *     404 = "Returned when the player is not found"
+     *   }
+     * )
+     *
+     * @View( serializerGroups={"Default"} )
+     *
+     * @Get("/{id}/games", name="games", options={ "method_prefix" = false })
+     *
+     * @return array
+     */
+    public function listGamesAction($id)
+    {
+        return $this->getService()->listGames($id);
     }
 
     /**

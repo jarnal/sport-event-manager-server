@@ -5,6 +5,11 @@ namespace TeamManager\EventBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\VirtualProperty;
 use TeamManager\CommonBundle\Entity\Location;
 use TeamManager\PlayerBundle\Entity\Player;
 use TeamManager\ResultBundle\Entity\Comment;
@@ -18,6 +23,8 @@ use TeamManager\ResultBundle\Entity\Note;
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="event_type", type="string")
  * @ORM\DiscriminatorMap( {"training"="Training", "game"="Game", "game_friendly"="GameFriendly"} )
+ *
+ * @ExclusionPolicy("all")
  */
 class Event
 {
@@ -28,6 +35,8 @@ class Event
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Expose
      */
     private $id;
 
@@ -37,6 +46,8 @@ class Event
      * @var string
      * @ORM\Column(name="name", type="string")
      * @Assert\NotBlank(message="form.event.name.blank")
+     *
+     * @Expose
      */
     private $name;
 
@@ -45,6 +56,8 @@ class Event
      *
      * @var string
      * @ORM\Column(name="description", type="string", nullable=true)
+     *
+     * @Expose
      */
     private $description;
 
@@ -54,6 +67,8 @@ class Event
      * @var \DateTime
      * @ORM\Column(name="date", type="datetime")
      * @Assert\NotBlank(message="form.event.date.blank")
+     *
+     * @Expose
      */
     private $date;
 
@@ -80,6 +95,8 @@ class Event
      * @var string
      * @ORM\Column(name="opponent", type="string")
      * @Assert\NotBlank(message="form.event.opponent.blank")
+     *
+     * @Expose
      */
     private $opponent;
 
@@ -90,6 +107,8 @@ class Event
      * @ORM\ManyToOne(targetEntity="\TeamManager\CommonBundle\Entity\Location", cascade="persist")
      * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
      * @Assert\NotNull(message="form.event.location.blank")
+     *
+     * @Expose
      */
     private $location;
 

@@ -4,6 +4,11 @@ namespace TeamManager\EventBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\VirtualProperty;
 use Symfony\Component\Validator\Constraints as Assert;
 use TeamManager\ActionBundle\Entity\Card;
 use TeamManager\ActionBundle\Entity\Goal;
@@ -15,6 +20,8 @@ use TeamManager\TeamBundle\Entity\Team;
  *
  * @ORM\Entity
  * @ORM\Table(name="tm_game")
+ *
+ * @ExclusionPolicy("all")
  */
 class Game extends Event
 {

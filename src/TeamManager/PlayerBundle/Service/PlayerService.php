@@ -21,4 +21,13 @@ class PlayerService extends EntityRestService
         parent::__construct($pEntityManager, $pFormFactory, $pEntityClass, $pFormTypeClass, $pFormExceptionClass);
     }
 
+    /**
+     *
+     */
+    public function listGames($id)
+    {
+        $player = $this->getOr404($id);
+        return $this->repository->getPlayerGames($id);
+    }
+
 }

@@ -12,4 +12,20 @@ use Doctrine\ORM\EntityRepository;
  */
 class PlayerRepository extends EntityRepository
 {
+
+    /**
+     * @param $pPlayerID
+     */
+    public function getPlayerGames($pPlayerID)
+    {
+        $query = $this->_em->createQueryBuilder();
+        $query->select('game')
+            ->from('TeamManagerEventBundle:Game', 'game')
+            ->innerjoin('game.team', 'team', 'WITH', 'team = game.team')
+            ->innerjoin('team.players', 'player', 'WITH', $query->expr()->eq('player.id', $pPlayerID))
+        ;
+
+         return $query->getQuery()->getResult();
+    }
+
 }
