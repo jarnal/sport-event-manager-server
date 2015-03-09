@@ -242,7 +242,7 @@ class GameRestController extends FOSRestController
 
                 return $this->view(null, Codes::HTTP_NO_CONTENT);
             }
-        } catch (InvalidTeamFormException $exception) {
+        } catch (InvalidGameFormException$exception) {
             return $exception->getForm();
         }
     }

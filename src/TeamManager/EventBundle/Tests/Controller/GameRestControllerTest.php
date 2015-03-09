@@ -69,26 +69,13 @@ class GameRestControllerTest extends EntityRestControllerTest {
         $team = $this->getTeam();
 
         $route = $this->buildPostRoute($access_token);
-
-        $date = '{
-            "date":{
-                "month":1,
-                "day":1,
-                "year":2010
-            },
-            "time":{
-                "hour":0,
-                "minute":0
-            }
-        }';
-
         $this->client->request(
             'POST',
             $route,
             array(),
             array(),
             array('CONTENT_TYPE' => 'application/json'),
-            '{"game":{"name":"TheGame","location":1,"team":'.$team->getId().',"opponent":"test","date":'.$date.'}}'
+            '{"game":{"name":"TheGame","location":1,"team":'.$team->getId().',"opponent":"test","date":'.$this->getJSONDate().'}}'
         );
         $response = $this->client->getResponse();
 
@@ -121,10 +108,10 @@ class GameRestControllerTest extends EntityRestControllerTest {
      */
     public function testJsonPutPageActionShouldModify()
     {
-        /*$accessToken = $this->initializeTest();
-        $team = $this->getGame();
+        $accessToken = $this->initializeTest();
+        $game = $this->getGame();
 
-        $route = $this->buildGetRoute($team->getId(), $accessToken);
+        $route = $this->buildGetRoute($game->getId(), $accessToken);
         $this->client->request(
             'GET',
             $route,
@@ -132,15 +119,15 @@ class GameRestControllerTest extends EntityRestControllerTest {
         );
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode(), $this->client->getResponse()->getContent());
 
-        $route = $this->buildPutRoute($team->getId(), $accessToken);
+        $route = $this->buildPutRoute($game->getId(), $accessToken);
         $this->client->request(
             'PUT',
             $route,
             array(),
             array(),
             array('CONTENT_TYPE' => 'application/json'),
-            '{"team":{"name":"LaTeamChanged"}}'
-        );*/
+            '{"team":{"name":"LeGameChanged"}}'
+        );
     }
 
     /**
@@ -148,8 +135,8 @@ class GameRestControllerTest extends EntityRestControllerTest {
      */
     public function testJsonPutPageActionShouldCreate()
     {
-        /*$accessToken = $this->initializeTest();
-        $player = $this->getPlayer();
+        $accessToken = $this->initializeTest();
+        $team = $this->getTeam();
 
         $id = 0;
         $route = $this->buildGetRoute($id, $accessToken);
@@ -167,10 +154,10 @@ class GameRestControllerTest extends EntityRestControllerTest {
             array(),
             array(),
             array('CONTENT_TYPE' => 'application/json'),
-            '{"team":{"name":"LaTeam", "default_location":1, "manager":'.$player->getId().'}}'
+            '{"game":{"name":"TheGame","location":1,"team":'.$team->getId().',"opponent":"test","date":'.$this->getJSONDate().'}}'
         );
 
-        $this->assertJsonResponse($this->client->getResponse(), 201, false);*/
+        $this->assertJsonResponse($this->client->getResponse(), 201, false);
     }
 
     /**
@@ -178,10 +165,10 @@ class GameRestControllerTest extends EntityRestControllerTest {
      */
     public function testDeletePageActionShouldDelete()
     {
-        /*$accessToken = $this->initializeTest();
-        $team = $this->getGame();
+        $accessToken = $this->initializeTest();
+        $game = $this->getGame();
 
-        $route = $this->buildGetRoute($team->getId(), $accessToken);
+        $route = $this->buildGetRoute($game->getId(), $accessToken);
         $this->client->request(
             'GET',
             $route,
@@ -189,7 +176,7 @@ class GameRestControllerTest extends EntityRestControllerTest {
         );
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode(), $this->client->getResponse()->getContent());
 
-        $route = $this->buildDeleteRoute($team->getId(), $accessToken);
+        $route = $this->buildDeleteRoute($game->getId(), $accessToken);
         $this->client->request(
             'DELETE',
             $route,
@@ -199,7 +186,7 @@ class GameRestControllerTest extends EntityRestControllerTest {
         );
 
         $response = $this->client->getResponse();
-        $this->assertJsonResponse($response, 200);*/
+        $this->assertJsonResponse($response, 200);
     }
 
     /**
@@ -207,7 +194,7 @@ class GameRestControllerTest extends EntityRestControllerTest {
      */
     public function testDeletePageActionShouldNotDelete()
     {
-        /*$accessToken = $this->initializeTest();
+        $accessToken = $this->initializeTest();
 
         $id = 0;
         $route = $this->buildGetRoute($id, $accessToken);
@@ -228,7 +215,7 @@ class GameRestControllerTest extends EntityRestControllerTest {
         );
 
         $response = $this->client->getResponse();
-        $this->assertJsonResponse($response, 404);*/
+        $this->assertJsonResponse($response, 404);
     }
 
     /**
@@ -245,7 +232,25 @@ class GameRestControllerTest extends EntityRestControllerTest {
     }
 
     /**
-     * Returns a random team loaded by fixtures.
+     * Returns a JSON object reflecting date format incoming from HTML form.
+     */
+    public function getJSONDate()
+    {
+        return '{
+            "date":{
+                "month":1,
+                "day":1,
+                "year":2010
+            },
+            "time":{
+                "hour":0,
+                "minute":0
+            }
+        }';
+    }
+
+    /**
+     * Returns a random game loaded by fixtures.
      *
      * @return Game
      */
@@ -255,6 +260,8 @@ class GameRestControllerTest extends EntityRestControllerTest {
     }
 
     /**
+     * Returns a random team loaded by fixtures.
+     *
      * @return Team
      */
     protected function getTeam()
