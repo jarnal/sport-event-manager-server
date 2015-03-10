@@ -51,7 +51,7 @@ class GameRestController extends FOSRestController
      *
      * @View( serializerGroups={ "Default" } )
      *
-     * @Get("/all", name="get_all", options={ "method_prefix" = false })
+     * @Get("/", name="get_all", options={ "method_prefix" = false })
      *
      * @return JsonResponse
      */
@@ -89,7 +89,7 @@ class GameRestController extends FOSRestController
      *
      * @View( serializerGroups={"Default"} )
      *
-     * @Get("/get/{id}", name="get", options={ "method_prefix" = false })
+     * @Get("/{id}", name="get", options={ "method_prefix" = false })
      *
      * @return Player
      */
@@ -118,7 +118,7 @@ class GameRestController extends FOSRestController
      *      templateVar = "form"
      * )
      *
-     * @Post("/post" , name="post", options={ "method_prefix" = false })
+     * @Post("/" , name="post", options={ "method_prefix" = false })
      *
      * @return FormTypeInterface|View
      *
@@ -214,7 +214,7 @@ class GameRestController extends FOSRestController
      *      serializerGroups={"Default"},
      * )
      *
-     * @Put("/put/{id}", name="put", options={ "method_prefix" = false })
+     * @Put("/{id}", name="put", options={ "method_prefix" = false })
      *
      * @return FormTypeInterface|View
      */
@@ -311,7 +311,7 @@ class GameRestController extends FOSRestController
      *  }
      * )
      *
-     * @Delete("/delete/{id}", name="delete", options={ "method_prefix" = false })
+     * @Delete("/{id}", name="delete", options={ "method_prefix" = false })
      *
      * @param $id
      */
