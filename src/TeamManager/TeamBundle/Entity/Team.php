@@ -118,7 +118,6 @@ class Team
     public function __construct()
     {
         $this->players = new ArrayCollection();
-
         $this->games = new ArrayCollection();
         $this->games_friendly = new ArrayCollection();
         $this->goals = new ArrayCollection();
@@ -263,6 +262,7 @@ class Team
     public function addPlayer(Player $pPlayer)
     {
         $this->players[] = $pPlayer;
+        $pPlayer->addTeam($this);
         return $this;
     }
 
@@ -275,6 +275,7 @@ class Team
     public function removePlayer(Player $pPlayer)
     {
         $this->players->removeElement($pPlayer);
+        $pPlayer->removeTeam($this);
         return $this;
     }
 

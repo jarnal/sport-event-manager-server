@@ -23,6 +23,18 @@ class PlayerService extends EntityRestService
     }
 
     /**
+     * Returns all events of a given player.
+     *
+     * @param $id
+     * @return ArrayCollection
+     */
+    public function listEvents($id)
+    {
+        $player = $this->getOr404($id);
+        return $this->repository->getPlayerEvents($id);
+    }
+
+    /**
      * Returns all games of a given player.
      *
      * @param int $id
@@ -32,6 +44,30 @@ class PlayerService extends EntityRestService
     {
         $player = $this->getOr404($id);
         return $this->repository->getPlayerGames($id);
+    }
+
+    /**
+     * Returns all friendly games of a given player.
+     *
+     * @param int $id
+     * @return ArrayCollection
+     */
+    public function listFriendlyGames($id)
+    {
+        $player = $this->getOr404($id);
+        return $this->repository->getPlayerFriendlyGames($id);
+    }
+
+    /**
+     * Returns all trainings of a given player.
+     *
+     * @param int $id
+     * @return ArrayCollection
+     */
+    public function listTrainings($id)
+    {
+        $player = $this->getOr404($id);
+        return $this->repository->getPlayerTrainings($id);
     }
 
     /**

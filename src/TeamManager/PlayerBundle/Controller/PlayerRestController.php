@@ -297,6 +297,45 @@ class PlayerRestController extends FOSRestController
     }
 
     /**
+     * Returns all events for a given player.
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  section="Player API",
+     *  requirements={
+     *      {
+     *          "name"="id",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="Player id"
+     *      }
+     *  },
+     *  output={
+     *      "class"="\TeamManager\EventBundle\Entity\Game",
+     *      "parsers" = {
+     *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
+     *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
+     *      },
+     *      "groups"={"Default"}
+     *  },
+     *  statusCodes = {
+     *     200 = "Returned when player exists",
+     *     404 = "Returned when the player is not found"
+     *   }
+     * )
+     *
+     * @View( serializerGroups={"Default"} )
+     *
+     * @Get("/{id}/events", name="events", options={ "method_prefix" = false })
+     *
+     * @return array
+     */
+    public function listEventsAction($id)
+    {
+        return $this->getService()->listEvents($id);
+    }
+
+    /**
      * Returns all games for a given player.
      *
      * @ApiDoc(
@@ -333,6 +372,84 @@ class PlayerRestController extends FOSRestController
     public function listGamesAction($id)
     {
         return $this->getService()->listGames($id);
+    }
+
+    /**
+     * Returns all friendly games for a given player.
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  section="Player API",
+     *  requirements={
+     *      {
+     *          "name"="id",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="Player id"
+     *      }
+     *  },
+     *  output={
+     *      "class"="\TeamManager\EventBundle\Entity\Game",
+     *      "parsers" = {
+     *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
+     *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
+     *      },
+     *      "groups"={"Default"}
+     *  },
+     *  statusCodes = {
+     *     200 = "Returned when player exists",
+     *     404 = "Returned when the player is not found"
+     *   }
+     * )
+     *
+     * @View( serializerGroups={"Default"} )
+     *
+     * @Get("/{id}/friendly_games", name="friendly_games", options={ "method_prefix" = false })
+     *
+     * @return array
+     */
+    public function listFriendlyGamesAction($id)
+    {
+        return $this->getService()->listFriendlyGames($id);
+    }
+
+    /**
+     * Returns all trainings for a given player.
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  section="Player API",
+     *  requirements={
+     *      {
+     *          "name"="id",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="Player id"
+     *      }
+     *  },
+     *  output={
+     *      "class"="\TeamManager\EventBundle\Entity\Game",
+     *      "parsers" = {
+     *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
+     *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
+     *      },
+     *      "groups"={"Default"}
+     *  },
+     *  statusCodes = {
+     *     200 = "Returned when player exists",
+     *     404 = "Returned when the player is not found"
+     *   }
+     * )
+     *
+     * @View( serializerGroups={"Default"} )
+     *
+     * @Get("/{id}/trainings", name="trainings", options={ "method_prefix" = false })
+     *
+     * @return array
+     */
+    public function listTrainingsAction($id)
+    {
+        return $this->getService()->listTrainings($id);
     }
 
     /**

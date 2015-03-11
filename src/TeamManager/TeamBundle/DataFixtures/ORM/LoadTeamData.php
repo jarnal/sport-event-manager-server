@@ -18,6 +18,8 @@ class LoadTeamData extends AbstractFixture implements OrderedFixtureInterface
     {
         $manager->clear();
 
+        $player = $this->getReference('player-1');
+
         $location = new Location();
         $location->setName("Salle Pouet");
         $location->setAddress("47 rue Colin 69100 Villeurbanne");
@@ -28,11 +30,17 @@ class LoadTeamData extends AbstractFixture implements OrderedFixtureInterface
         $team1->setName("team1");
         $team1->setDescription("Description of team1");
         $team1->setDefaultLocation($location);
+        $team1->setManager($player);
+        $team1->addPlayer($this->getReference('player-1'));
+        $team1->addPlayer($this->getReference('player-2'));
 
         $team2 = new Team();
         $team2->setName("team1");
         $team2->setDescription("Description of team1");
         $team2->setDefaultLocation($location);
+        $team2->setManager($player);
+        $team2->addPlayer($this->getReference('player-1'));
+        $team2->addPlayer($this->getReference('player-2'));
 
         $manager->persist($team1);
         $manager->persist($team2);

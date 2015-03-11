@@ -61,6 +61,16 @@ class Game extends Event
     private $injuries;
 
     /**
+     *
+     */
+    public function __construct()
+    {
+        $this->goals = new ArrayCollection();
+        $this->cards = new ArrayCollection();
+        $this->injuries = new ArrayCollection();
+    }
+
+    /**
      * Get team participating to the game.
      *
      * @return Team

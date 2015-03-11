@@ -14,6 +14,43 @@ class PlayerRepository extends EntityRepository
 {
 
     /**
+     * Returns all events of a given player.
+     *
+     * @param $pPlayerID
+     */
+    public function getPlayerEvents($pPlayerID)
+    {
+        $query = $this->_em->createQueryBuilder();
+        $query->select('event')
+            ->from('TeamManagerEventBundle:Event', 'event')
+            ->leftJoin('TeamManagerEventBundle:Game', 'game', 'WITH', $query->expr()->eq('game.id', 'event.id'))
+            ->leftJoin('TeamManagerEventBundle:GameFriendly', 'game_friendly', 'WITH', $query->expr()->eq('game_friendly.id', 'event.id'))
+            ->leftJoin('TeamManagerEventBundle:Training', 'training', 'WITH', $query->expr()->eq('training.id', 'event.id'))
+            ->innerjoin('TeamManagerTeamBundle:Team', 'team', 'WITH', 'team = game.team OR team = game_friendly.team OR team = training.team')
+            ->innerjoin('team.players', 'player', 'WITH', $query->expr()->eq('player.id', $pPlayerID))
+            ->join('event.location', 'location')
+            ->orderBy('event.date')
+        ;
+
+        /*$query = $this->_em->createQueryBuilder();
+        $query->select('event.id, event.name, event.date')
+            ->from('TeamManagerPlayerBundle:Player', 'player')
+            ->innerJoin('player.teams', 'team')
+            ->leftJoin('team.games', 'game', 'WITH', 'game.team = team')
+            ->leftJoin('team.games_friendly', 'games_friendly', 'WITH', 'games_friendly.team = team')
+            ->leftJoin('team.trainings', 'training', 'WITH', 'training.team = team')
+            ->innerJoin('TeamManagerEventBundle:Event', 'event', 'WITH', 'event.id = game.id OR event.id = games_friendly.id OR game.id = training.id')
+            ->where('player.id = :playerID')
+            ->setParameter('playerID', $pPlayerID)
+            ->orderBy('event.date', 'DESC')
+        ;*/
+
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Returns all games of a given player.
+     *
      * @param $pPlayerID
      */
     public function getPlayerGames($pPlayerID)
@@ -23,9 +60,45 @@ class PlayerRepository extends EntityRepository
             ->from('TeamManagerEventBundle:Game', 'game')
             ->innerjoin('game.team', 'team', 'WITH', 'team = game.team')
             ->innerjoin('team.players', 'player', 'WITH', $query->expr()->eq('player.id', $pPlayerID))
+            ->orderBy('game.date')
         ;
 
          return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Returns all friendly games of a given player.
+     *
+     * @param $pPlayerID
+     */
+    public function getPlayerFriendlyGames($pPlayerID)
+    {
+        $query = $this->_em->createQueryBuilder();
+        $query->select('game')
+            ->from('TeamManagerEventBundle:GameFriendly', 'game')
+            ->innerjoin('game.team', 'team', 'WITH', 'team = game.team')
+            ->innerjoin('team.players', 'player', 'WITH', $query->expr()->eq('player.id', $pPlayerID))
+            ->orderBy('game.date', 'DESC')
+        ;
+
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Returns all trainings of a given player.
+     *
+     * @param $pPlayerID
+     */
+    public function getPlayerTrainings($pPlayerID)
+    {
+        $query = $this->_em->createQueryBuilder();
+        $query->select('training')
+            ->from('TeamManagerEventBundle:Training', 'training')
+            ->innerjoin('training.team', 'team', 'WITH', 'team = training.team')
+            ->innerjoin('team.players', 'player', 'WITH', $query->expr()->eq('player.id', $pPlayerID))
+        ;
+
+        return $query->getQuery()->getResult();
     }
 
 }
