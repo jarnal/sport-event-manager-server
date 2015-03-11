@@ -19,12 +19,12 @@ NelmioApiDocBundle:
 tm_action:
     resource: "@TeamManagerActionBundle/Resources/config/routing_rest.yml"
     type:     rest
-    prefix:   /api/action/
+    prefix:   /api/
 
 tm_result:
     resource: "@TeamManagerResultBundle/Resources/config/routing_rest.yml"
     type:     rest
-    prefix:   /api/result/
+    prefix:   /api/
 
 tm_event:
     resource: "@TeamManagerEventBundle/Resources/config/routing_rest.yml"

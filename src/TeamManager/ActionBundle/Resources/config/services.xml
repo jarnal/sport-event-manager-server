@@ -4,13 +4,56 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <!--
+    <parameters>
+        <parameter key="action_bundle.card.service.class">TeamManager\ActionBundle\Service\CardService</parameter>
+        <parameter key="action_bundle.card.class">TeamManager\ActionBundle\Entity\Card</parameter>
+        <parameter key="action_bundle.card.form.class">TeamManager\ActionBundle\Form\CardType</parameter>
+        <parameter key="action_bundle.card.form.exception.class">TeamManager\ActionBundle\Exception\InvalidCardFormException</parameter>
+        
+        <parameter key="action_bundle.goal.service.class">TeamManager\ActionBundle\Service\GoalService</parameter>
+        <parameter key="action_bundle.goal.class">TeamManager\ActionBundle\Entity\Goal</parameter>
+        <parameter key="action_bundle.goal.form.class">TeamManager\ActionBundle\Form\GoalType</parameter>
+        <parameter key="action_bundle.goal.form.exception.class">TeamManager\ActionBundle\Exception\InvalidGoalFormException</parameter>
+        
+        <parameter key="action_bundle.injury.service.class">TeamManager\ActionBundle\Service\InjuryService</parameter>
+        <parameter key="action_bundle.injury.class">TeamManager\ActionBundle\Entity\Injury</parameter>
+        <parameter key="action_bundle.injury.form.class">TeamManager\ActionBundle\Form\InjuryType</parameter>
+        <parameter key="action_bundle.injury.form.exception.class">TeamManager\ActionBundle\Exception\InvalidInjuryFormException</parameter>
+
+        <parameter key="action_bundle.play_time.service.class">TeamManager\ActionBundle\Service\PlayTimeService</parameter>
+        <parameter key="action_bundle.play_time.class">TeamManager\ActionBundle\Entity\PlayTime</parameter>
+        <parameter key="action_bundle.play_time.form.class">TeamManager\ActionBundle\Form\PlayTimeType</parameter>
+        <parameter key="action_bundle.play_time.form.exception.class">TeamManager\ActionBundle\Exception\InvalidPlayTimeFormException</parameter>
+    </parameters>
+
     <services>
-        <service id="team_manager_action.example" class="TeamManager\ActionBundle\Example">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
+        <service id="action_bundle.card.service" class="%action_bundle.card.service.class%">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="form.factory"></argument>
+            <argument>%action_bundle.card.class%</argument>
+            <argument>%action_bundle.card.form.class%</argument>
+            <argument>%action_bundle.card.form.exception.class%</argument>
+        </service>
+        <service id="action_bundle.goal.service" class="%action_bundle.goal.service.class%">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="form.factory"></argument>
+            <argument>%action_bundle.goal.class%</argument>
+            <argument>%action_bundle.goal.form.class%</argument>
+            <argument>%action_bundle.goal.form.exception.class%</argument>
+        </service>
+        <service id="action_bundle.injury.service" class="%action_bundle.injury.service.class%">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="form.factory"></argument>
+            <argument>%action_bundle.injury.class%</argument>
+            <argument>%action_bundle.injury.form.class%</argument>
+            <argument>%action_bundle.injury.form.exception.class%</argument>
+        </service>
+        <service id="action_bundle.play_time.service" class="%action_bundle.play_time.service.class%">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="form.factory"></argument>
+            <argument>%action_bundle.play_time.class%</argument>
+            <argument>%action_bundle.play_time.form.class%</argument>
+            <argument>%action_bundle.play_time.form.exception.class%</argument>
         </service>
     </services>
-    -->
 </container>
