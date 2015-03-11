@@ -13,6 +13,10 @@
         <parameter key="event_bundle.game_friendly.class">TeamManager\EventBundle\Entity\GameFriendly</parameter>
         <parameter key="event_bundle.game_friendly.form.class">TeamManager\EventBundle\Form\GameFriendlyType</parameter>
         <parameter key="event_bundle.game_friendly.form.exception.class">TeamManager\EventBundle\Exception\InvalidGameFriendlyFormException</parameter>
+        <parameter key="event_bundle.training.service.class">TeamManager\EventBundle\Service\TrainingService</parameter>
+        <parameter key="event_bundle.training.class">TeamManager\EventBundle\Entity\Training</parameter>
+        <parameter key="event_bundle.training.form.class">TeamManager\EventBundle\Form\TrainingType</parameter>
+        <parameter key="event_bundle.training.form.exception.class">TeamManager\EventBundle\Exception\InvalidTrainingFormException</parameter>
     </parameters>
 
     <services>
@@ -29,6 +33,13 @@
             <argument>%event_bundle.game_friendly.class%</argument>
             <argument>%event_bundle.game_friendly.form.class%</argument>
             <argument>%event_bundle.game_friendly.form.exception.class%</argument>
+        </service>
+        <service id="event_bundle.training.service" class="%event_bundle.training.service.class%">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="form.factory"></argument>
+            <argument>%event_bundle.training.class%</argument>
+            <argument>%event_bundle.training.form.class%</argument>
+            <argument>%event_bundle.training.form.exception.class%</argument>
         </service>
     </services>
 </container>

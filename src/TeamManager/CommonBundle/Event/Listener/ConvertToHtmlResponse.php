@@ -3,14 +3,28 @@
 namespace TeamManager\CommonBundle\Event\Listener;
 
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Kernel;
 
 class ConvertToHtmlResponse {
+
+    /**
+     * @var Kernel
+     */
+    private $kernel;
+
+    /**
+     *
+     */
+    public function __construct(Kernel $kernel)
+    {
+        $this->kernel = $kernel;
+    }
 
     /**
      * @param FilterResponseEvent $event
      */
     public function onKernelResponse(FilterResponseEvent $event) {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMasterRequest() || "dev"!=$this->kernel->getEnvironment()) {
             return;
         }
 

@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class GameFriendlyType extends EventType
+class TrainingType extends EventType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -27,6 +27,6 @@ class GameFriendlyType extends EventType
      */
     public function getName()
     {
-        return 'game_friendly';
+        return 'training';
     }
 }

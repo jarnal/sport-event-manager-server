@@ -19,7 +19,9 @@ use Symfony\Component\Security\Acl\Exception\Exception;
 use TeamManager\CommonBundle\Service\EntityRestService;
 use TeamManager\CommonBundle\Service\EntityServiceInterface;
 use TeamManager\EventBundle\Entity\Game;
+use TeamManager\EventBundle\Entity\GameFriendly;
 use TeamManager\EventBundle\Exception\InvalidGameFriendlyFormException;
+use TeamManager\EventBundle\Form\GameFriendlyType;
 use TeamManager\EventBundle\Form\GameType;
 use TeamManager\PlayerBundle\Entity\Player;
 use FOS\RestBundle\Controller\Annotations\View;
@@ -45,7 +47,7 @@ class GameFriendlyRestController extends FOSRestController
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
      *      },
-     *      "collectionName" = "game"
+     *      "collectionName" = "game_friendly"
      *  }
      * )
      *
@@ -126,14 +128,14 @@ class GameFriendlyRestController extends FOSRestController
     public function postAction(Request $request)
     {
         try {
-            $form = new GameType();
-            $player = $this->getService()->post(
+            $form = new GameFriendlyType();
+            $game = $this->getService()->post(
                 $request->request->get($form->getName()),
                 $this->getUser()
             );
 
             $routeOptions = array(
-                'id' => $player->getId(),
+                'id' => $game->getId(),
                 '_format' => $request->get('_format')
             );
 
@@ -158,7 +160,7 @@ class GameFriendlyRestController extends FOSRestController
      *          "name"="teamID",
      *          "dataType"="integer",
      *          "requirement"="\d+",
-     *          "description"="The game to which the friendly game will be related."
+     *          "description"="The team to which the friendly game will be related."
      *      }
      *  }
      * )
@@ -175,11 +177,11 @@ class GameFriendlyRestController extends FOSRestController
     public function newAction(Request $request, $teamID)
     {
         $team = $this->get('team_bundle.team.service')->getOr404($teamID);
-        $game = new Game();
+        $game = new GameFriendly();
         $game->setTeam($team);
 
         return $this->createForm(
-            new GameType(),
+            new GameFriendlyType(),
             $game,
             array(
                 "action" => $this->generateUrl('api_game_friendly_post', array("access_token" => $_GET["access_token"])),
@@ -205,7 +207,7 @@ class GameFriendlyRestController extends FOSRestController
      *          "name"="id",
      *          "dataType"="integer",
      *          "requirement"="\d+",
-     *          "description"="Team id"
+     *          "description"="Game id"
      *       }
      *   }
      * )
@@ -222,7 +224,7 @@ class GameFriendlyRestController extends FOSRestController
     {
         $service = $this->getService();
         try {
-            $form = new GameType();
+            $form = new GameFriendlyType();
             if (!($game = $service->get($id))) {
                 $game = $service->post(
                     $request->request->get($form->getName())
@@ -262,7 +264,7 @@ class GameFriendlyRestController extends FOSRestController
      *          "name"="id",
      *          "dataType"="integer",
      *          "requirement"="\d+",
-     *          "description"="Team id"
+     *          "description"="Game id"
      *      }
      *  }
      * )
@@ -280,13 +282,7 @@ class GameFriendlyRestController extends FOSRestController
     {
         $game = $this->getService()->getOr404($id);
         return $this->createForm(new GameType(), $game, array(
-            "action" => $this->generateUrl(
-                'api_game_put',
-                [
-                    'id' => $id,
-                    'access_token' => $_GET['access_token']
-                ]
-            ),
+            "action" => $this->generateUrl('api_game_put', ['id' => $id, 'access_token' => $_GET['access_token']]),
             "method" => "PUT"
         ));
     }
@@ -306,7 +302,7 @@ class GameFriendlyRestController extends FOSRestController
      *          "name"="id",
      *          "dataType"="integer",
      *          "requirement"="\d+",
-     *          "description"="Player id"
+     *          "description"="Game id"
      *      }
      *  }
      * )
@@ -318,9 +314,9 @@ class GameFriendlyRestController extends FOSRestController
     public function deleteAction($id)
     {
         $service = $this->getService();
-        $team = $service->getOr404($id);
-        if (isset($team)) {
-            return $service->delete($team);
+        $game = $service->getOr404($id);
+        if (isset($game)) {
+            return $service->delete($game);
         }
     }
 

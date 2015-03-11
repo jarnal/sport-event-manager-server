@@ -6,6 +6,7 @@
 
     <services>
         <service id="team_manager.kernel.convert_html" class="TeamManager\CommonBundle\Event\Listener\ConvertToHtmlResponse">
+            <argument type="service" id="kernel" />
             <tag name="kernel.event_listener" event="kernel.response"/>
         </service>
     </services>

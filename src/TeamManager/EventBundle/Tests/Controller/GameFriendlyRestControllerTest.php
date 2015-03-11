@@ -76,7 +76,7 @@ class GameFriendlyRestControllerTest extends EntityRestControllerTest {
             array(),
             array(),
             array('CONTENT_TYPE' => 'application/json'),
-            '{"game":{"name":"TheGame","location":1,"team":'.$team->getId().',"opponent":"test","date":'.$this->getJSONDate().'}}'
+            '{"game_friendly":{"name":"TheGame","location":1,"team":'.$team->getId().',"opponent":"test","date":'.$this->getJSONDate().'}}'
         );
         $response = $this->client->getResponse();
 
@@ -97,7 +97,7 @@ class GameFriendlyRestControllerTest extends EntityRestControllerTest {
             array(),
             array(),
             array('CONTENT_TYPE' => 'application/json'),
-            '{"game":{"name":"TheGame","location":1,"opponent":"test"}}'
+            '{"game_friendly":{"name":"TheGame","location":1,"opponent":"test"}}'
         );
         $response = $this->client->getResponse();
 
@@ -127,7 +127,7 @@ class GameFriendlyRestControllerTest extends EntityRestControllerTest {
             array(),
             array(),
             array('CONTENT_TYPE' => 'application/json'),
-            '{"team":{"name":"LeGameChanged"}}'
+            '{"game_friendly":{"name":"LeGameChanged"}}'
         );
     }
 
@@ -155,7 +155,7 @@ class GameFriendlyRestControllerTest extends EntityRestControllerTest {
             array(),
             array(),
             array('CONTENT_TYPE' => 'application/json'),
-            '{"game":{"name":"TheGame","location":1,"team":'.$team->getId().',"opponent":"test","date":'.$this->getJSONDate().'}}'
+            '{"game_friendly":{"name":"TheGame","location":1,"team":'.$team->getId().',"opponent":"test","date":'.$this->getJSONDate().'}}'
         );
 
         $this->assertJsonResponse($this->client->getResponse(), 201, false);

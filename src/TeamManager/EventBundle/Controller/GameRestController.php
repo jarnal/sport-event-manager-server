@@ -127,13 +127,13 @@ class GameRestController extends FOSRestController
     {
         try {
             $form = new GameType();
-            $player = $this->getService()->post(
+            $game = $this->getService()->post(
                 $request->request->get($form->getName()),
                 $this->getUser()
             );
 
             $routeOptions = array(
-                'id' => $player->getId(),
+                'id' => $game->getId(),
                 '_format' => $request->get('_format')
             );
 
@@ -158,7 +158,7 @@ class GameRestController extends FOSRestController
      *          "name"="teamID",
      *          "dataType"="integer",
      *          "requirement"="\d+",
-     *          "description"="The game to which the game will be related."
+     *          "description"="The team to which the game will be related."
      *      }
      *  }
      * )
@@ -205,7 +205,7 @@ class GameRestController extends FOSRestController
      *          "name"="id",
      *          "dataType"="integer",
      *          "requirement"="\d+",
-     *          "description"="Team id"
+     *          "description"="Game id"
      *       }
      *   }
      * )
@@ -262,7 +262,7 @@ class GameRestController extends FOSRestController
      *          "name"="id",
      *          "dataType"="integer",
      *          "requirement"="\d+",
-     *          "description"="Team id"
+     *          "description"="Game id"
      *      }
      *  }
      * )
@@ -280,13 +280,7 @@ class GameRestController extends FOSRestController
     {
         $game = $this->getService()->getOr404($id);
         return $this->createForm(new GameType(), $game, array(
-            "action" => $this->generateUrl(
-                'api_game_put',
-                [
-                    'id'=>$id,
-                    'access_token'=>$_GET['access_token']
-                ]
-            ),
+            "action" => $this->generateUrl('api_game_put',['id'=>$id, 'access_token'=>$_GET['access_token']]),
             "method" => "PUT"
         ));
     }
@@ -306,7 +300,7 @@ class GameRestController extends FOSRestController
      *          "name"="id",
      *          "dataType"="integer",
      *          "requirement"="\d+",
-     *          "description"="Player id"
+     *          "description"="Game id"
      *      }
      *  }
      * )
@@ -318,9 +312,9 @@ class GameRestController extends FOSRestController
     public function deleteAction($id)
     {
         $service = $this->getService();
-        $team = $service->getOr404($id);
-        if ( isset($team) ) {
-            return $service->delete($team);
+        $game = $service->getOr404($id);
+        if ( isset($game) ) {
+            return $service->delete($game);
         }
     }
 
