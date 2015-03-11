@@ -6,6 +6,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\VirtualProperty;
 use TeamManager\ActionBundle\Entity\Card;
 use TeamManager\ActionBundle\Entity\Goal;
 use TeamManager\ActionBundle\Entity\Injury;
@@ -14,11 +19,6 @@ use TeamManager\ResultBundle\Entity\Comment;
 use TeamManager\ResultBundle\Entity\Note;
 use TeamManager\SecurityBundle\Entity\Role;
 use TeamManager\TeamBundle\Entity\Team;
-use JMS\Serializer\Annotation\ExclusionPolicy;
-use JMS\Serializer\Annotation\Expose;
-use JMS\Serializer\Annotation\Groups;
-use JMS\Serializer\Annotation\SerializedName;
-use JMS\Serializer\Annotation\VirtualProperty;
 
 /**
  * Player

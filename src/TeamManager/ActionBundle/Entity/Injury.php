@@ -3,6 +3,12 @@
 namespace TeamManager\ActionBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\VirtualProperty;
+use Symfony\Component\Validator\Constraints as Assert;
 use TeamManager\EventBundle\Entity\Game;
 use TeamManager\PlayerBundle\Entity\Player;
 use TeamManager\TeamBundle\Entity\Team;
@@ -12,6 +18,8 @@ use TeamManager\TeamBundle\Entity\Team;
  *
  * @ORM\Table(name="tm_injury")
  * @ORM\Entity(repositoryClass="TeamManager\ActionBundle\Repository\InjuryRepository")
+ *
+ * @ExclusionPolicy("all")
  */
 class Injury
 {
@@ -33,6 +41,8 @@ class Injury
      *
      * @var string
      * @ORM\Column(name="type", type="string")
+     *
+     * @Assert\NotBlank(message="form.injury.type.blank")
      */
     private $type;
 
@@ -42,6 +52,8 @@ class Injury
      * @var Player
      * @ORM\ManyToOne(targetEntity="\TeamManager\PlayerBundle\Entity\Player", inversedBy="injuries")
      * @ORM\JoinColumn(name="player_id", referencedColumnName="id", onDelete="CASCADE")
+     *
+     * @Assert\NotNull(message="form.injury.player.null")
      */
     private $player;
 
@@ -51,17 +63,10 @@ class Injury
      * @var Game
      * @ORM\ManyToOne(targetEntity="\TeamManager\EventBundle\Entity\Game", inversedBy="injuries")
      * @ORM\JoinColumn(name="game_id", referencedColumnName="id", onDelete="CASCADE")
+     *
+     * @Assert\NotNull(message="form.injury.game.null")
      */
     private $game;
-
-    /**
-     * Team in which the player was playing when injured.
-     *
-     * @var Team
-     * @ORM\ManyToOne(targetEntity="TeamManager\TeamBundle\Entity\Team")
-     * @ORM\JoinColumn(name="team_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private $team;
 
 
     /**
@@ -138,23 +143,5 @@ class Injury
     public function getGame()
     {
         return $this->game;
-    }
-
-    /**
-     * @param Team $pTeam
-     * @return Injury
-     */
-    public function setTeam(Team $pTeam)
-    {
-        $this->team = $pTeam;
-        return $this;
-    }
-
-    /**
-     * @return Team
-     */
-    public function getTeam()
-    {
-        return $this->team;
     }
 }

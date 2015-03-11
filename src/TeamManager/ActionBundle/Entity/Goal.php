@@ -3,6 +3,12 @@
 namespace TeamManager\ActionBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\VirtualProperty;
+use Symfony\Component\Validator\Constraints as Assert;
 use TeamManager\EventBundle\Entity\Game;
 use TeamManager\PlayerBundle\Entity\Player;
 use TeamManager\TeamBundle\Entity\Team;
@@ -12,6 +18,8 @@ use TeamManager\TeamBundle\Entity\Team;
  *
  * @ORM\Table(name="tm_goal")
  * @ORM\Entity(repositoryClass="TeamManager\ActionBundle\Repository\GoalRepository")
+ *
+ * @ExclusionPolicy("all")
  */
 class Goal
 {
@@ -35,6 +43,8 @@ class Goal
      *
      * @var string
      * @ORM\Column(name="type", type="string")
+     *
+     * @Assert\NotBlank(message="form.goal.type.blank")
      */
     private $type;
 
@@ -52,6 +62,8 @@ class Goal
      * @var Player
      * @ORM\ManyToOne(targetEntity="\TeamManager\PlayerBundle\Entity\Player", inversedBy="goals")
      * @ORM\JoinColumn(name="player_id", referencedColumnName="id", onDelete="CASCADE")
+     *
+     * @Assert\NotNull(message="form.goal.player.null")
      */
     private $player;
 
@@ -61,17 +73,10 @@ class Goal
      * @var Game
      * @ORM\ManyToOne(targetEntity="\TeamManager\EventBundle\Entity\Game", inversedBy="goals")
      * @ORM\JoinColumn(name="game_id", referencedColumnName="id", onDelete="CASCADE")
+     *
+     * @Assert\NotNull(message="form.goal.game.null")
      */
     private $game;
-
-    /**
-     * Team in which the player was playing when goal has been scored.
-     *
-     * @var Team
-     * @ORM\ManyToOne(targetEntity="TeamManager\TeamBundle\Entity\Team", inversedBy="goals")
-     * @ORM\JoinColumn(name="team_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private $team;
 
     /**
      * Get id
@@ -169,23 +174,5 @@ class Goal
     public function getGame()
     {
         return $this->game;
-    }
-
-    /**
-     * @param Team $pTeam
-     * @return Goal
-     */
-    public function setTeam(Team $pTeam)
-    {
-        $this->team = $pTeam;
-        return $this;
-    }
-
-    /**
-     * @return Team
-     */
-    public function getTeam()
-    {
-        return $this->team;
     }
 }

@@ -3,6 +3,12 @@
 namespace TeamManager\ActionBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\VirtualProperty;
+use Symfony\Component\Validator\Constraints as Assert;
 use TeamManager\EventBundle\Entity\Game;
 use TeamManager\PlayerBundle\Entity\Player;
 use TeamManager\TeamBundle\Entity\Team;
@@ -12,6 +18,8 @@ use TeamManager\TeamBundle\Entity\Team;
  *
  * @ORM\Table(name="tm_card")
  * @ORM\Entity(repositoryClass="TeamManager\ActionBundle\Repository\CardRepository")
+ *
+ * @ExclusionPolicy("all")
  */
 class Card
 {
@@ -31,6 +39,8 @@ class Card
      *
      * @var string
      * @ORM\Column(name="type", type="string")
+     *
+     * @Assert\NotBlank(message="form.card.type.blank")
      */
     private $type;
 
@@ -48,6 +58,8 @@ class Card
      * @var Player
      * @ORM\ManyToOne(targetEntity="\TeamManager\PlayerBundle\Entity\Player", inversedBy="cards")
      * @ORM\JoinColumn(name="player_id", referencedColumnName="id", onDelete="CASCADE")
+     *
+     * @Assert\NotNull(message="form.player.type.null")
      */
     private $player;
 
@@ -57,17 +69,10 @@ class Card
      * @var Game
      * @ORM\ManyToOne(targetEntity="\TeamManager\EventBundle\Entity\Game", inversedBy="cards")
      * @ORM\JoinColumn(name="game_id", referencedColumnName="id", onDelete="CASCADE")
+     *
+     * @Assert\NotNull(message="form.game.type.null")
      */
     private $game;
-
-    /**
-     * Team in which the player was playing when card has been received.
-     *
-     * @var Team
-     * @ORM\ManyToOne(targetEntity="TeamManager\TeamBundle\Entity\Team")
-     * @ORM\JoinColumn(name="team_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private $team;
 
     /**
      * Get id
@@ -165,24 +170,6 @@ class Card
     public function getGame()
     {
         return $this->game;
-    }
-
-    /**
-     * @return Team
-     */
-    public function getTeam()
-    {
-        return $this->team;
-    }
-
-    /**
-     * @param Team $pTeam
-     * @return Game
-     */
-    public function setTeam(Team $pTeam)
-    {
-        $this->team = $pTeam;
-        return $this;
     }
 
 }

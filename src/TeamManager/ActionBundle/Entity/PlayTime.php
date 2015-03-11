@@ -3,6 +3,12 @@
 namespace TeamManager\ActionBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\VirtualProperty;
+use Symfony\Component\Validator\Constraints as Assert;
 use TeamManager\EventBundle\Entity\Game;
 use TeamManager\PlayerBundle\Entity\Player;
 use TeamManager\TeamBundle\Entity\Team;
@@ -12,6 +18,8 @@ use TeamManager\TeamBundle\Entity\Team;
  *
  * @ORM\Table(name="tm_play_time")
  * @ORM\Entity(repositoryClass="TeamManager\ActionBundle\Repository\PlayTimeRepository")
+ *
+ * @ExclusionPolicy("all")
  */
 class PlayTime
 {
@@ -29,6 +37,8 @@ class PlayTime
      *
      * @var integer
      * @ORM\Column(name="duration", type="integer")
+     *
+     * @Assert\NotBlank(message="form.play_time.duration.blank")
      */
     private $duration;
 
@@ -38,6 +48,8 @@ class PlayTime
      * @var Player
      * @ORM\ManyToOne(targetEntity="\TeamManager\PlayerBundle\Entity\Player", inversedBy="play_times")
      * @ORM\JoinColumn(name="player_id", referencedColumnName="id", onDelete="CASCADE")
+     *
+     * @Assert\NotNull(message="form.play_time.player.null")
      */
     private $player;
 
@@ -47,17 +59,10 @@ class PlayTime
      * @var Game
      * @ORM\ManyToOne(targetEntity="\TeamManager\EventBundle\Entity\Game")
      * @ORM\JoinColumn(name="game_id", referencedColumnName="id", onDelete="CASCADE")
+     *
+     * @Assert\NotNull(message="form.play_time.game.null")
      */
     private $game;
-
-    /**
-     * Team in which the player was playing when playing.
-     *
-     * @var Team
-     * @ORM\ManyToOne(targetEntity="TeamManager\TeamBundle\Entity\Team")
-     * @ORM\JoinColumn(name="team_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private $team;
 
     /**
      * Get id
@@ -133,23 +138,5 @@ class PlayTime
     public function getGame()
     {
         return $this->game;
-    }
-
-    /**
-     * @param Team $pTeam
-     * @return PlayTime
-     */
-    public function setTeam(Team $pTeam)
-    {
-        $this->team = $pTeam;
-        return $this;
-    }
-
-    /**
-     * @return Team
-     */
-    public function getTeam()
-    {
-        return $this->team;
     }
 }
