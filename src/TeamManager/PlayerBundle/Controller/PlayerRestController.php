@@ -453,13 +453,107 @@ class PlayerRestController extends FOSRestController
     }
 
     /**
+     * Returns all cards for a given player.
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  section="Player API",
+     *  requirements={
+     *      {
+     *          "name"="id",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="Player id"
+     *      }
+     *  },
+     *  output={
+     *      "class"="\TeamManager\ActionBundle\Entity\Card",
+     *      "collection"=true,
+     *      "collectionName"="cards",
+     *      "parsers" = {
+     *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
+     *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
+     *      },
+     *      "groups"={"Default"}
+     *  },
+     *  statusCodes = {
+     *     200 = "Returned when player exists",
+     *     404 = "Returned when the player is not found"
+     *   }
+     * )
+     *
+     * @View( serializerGroups={"Default"} )
+     *
+     * @Get("/{id}/cards", name="cards", options={ "method_prefix" = false })
+     *
+     * @return array
+     */
+    public function listCardsAction($id)
+    {
+        $this->getService()->getOr404($id);
+        $cards = $this->get('action_bundle.card.service')->getPlayerCards($id);
+        return array("cards"=>$cards);
+    }
+
+    /**
+     * Returns all cards for a given player in a specific game.
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  section="Player API",
+     *  requirements={
+     *      {
+     *          "name"="playerID",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="Player id"
+     *      },
+     *      {
+     *          "name"="gameID",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="Game id"
+     *      }
+     *  },
+     *  output={
+     *      "class"="\TeamManager\ActionBundle\Entity\Card",
+     *      "collection"=true,
+     *      "collectionName"="cards",
+     *      "parsers" = {
+     *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
+     *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
+     *      },
+     *      "groups"={"Default"}
+     *  },
+     *  statusCodes = {
+     *     200 = "Returned when all related entities exists",
+     *     404 = "Returned when at least one of the related entities are not found"
+     *   }
+     * )
+     *
+     * @View( serializerGroups={"Default"} )
+     *
+     * @Get("/{playerID}/game/{gameID}/cards", name="game_cards", options={ "method_prefix" = false })
+     *
+     * @return array
+     */
+    public function listCardsForGameAction($playerID, $gameID)
+    {
+        $this->getService()->getOr404($playerID);
+        $this->get('event_bundle.game.service')->getOr404($gameID);
+
+        $cards = $this->get('action_bundle.card.service')->getCardsByPlayerForGame($playerID, $gameID);
+        return array("cards"=>$cards);
+    }
+
+    /**
      * Returns the appropriate service to handle related entity.
      *
      * @return EntityServiceInterface
      */
     protected function getService()
     {
-        return $this->container->get('team_bundle.player.service');
+        return $this->container->get('player_bundle.player.service');
     }
 
 }

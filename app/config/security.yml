@@ -72,6 +72,21 @@ security:
             fos_oauth:  true
             stateless:  true
 
+        api_game_friendly:
+            pattern:    ^/api/game_friendly
+            fos_oauth:  true
+            stateless:  true
+
+        api_training:
+            pattern:    ^/api/training
+            fos_oauth:  true
+            stateless:  true
+
+        api_card:
+            pattern:    ^/api/card
+            fos_oauth:  true
+            stateless:  true
+
     # with these settings you can restrict or allow access for different parts
     # of your application based on roles, ip, host or methods
     # http://symfony.com/doc/current/cookbook/security/access_control.html

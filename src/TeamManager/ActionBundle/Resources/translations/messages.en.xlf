@@ -4,7 +4,11 @@
         <body>
             <trans-unit id="1">
                 <source>card.yellow.label</source>
-                <target>Test test test</target>
+                <target>Yellow card</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>card.red.label</source>
+                <target>Red card</target>
             </trans-unit>
         </body>
     </file>

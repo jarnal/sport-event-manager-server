@@ -23,6 +23,18 @@ class TrainingType extends EventType
     }
 
     /**
+     * @param OptionsResolverInterface $resolver
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+            'data_class' => 'TeamManager\EventBundle\Entity\Training',
+            'csrf_protection' => false,
+            'validation_groups' => array($this->getName())
+        ));
+    }
+
+    /**
      * @return string
      */
     public function getName()

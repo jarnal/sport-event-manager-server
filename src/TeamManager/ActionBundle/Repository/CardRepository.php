@@ -12,4 +12,82 @@ use Doctrine\ORM\EntityRepository;
  */
 class CardRepository extends EntityRepository
 {
+
+    /**
+     * Retrieves all cards for a given player.
+     *
+     * @param $id
+     */
+    public function getCardsByPlayer($playerID)
+    {
+        $query = $this->createQueryBuilder('card');
+        $query->innerJoin('card.player', 'player', 'WITH', 'player.id = :playerID')
+            ->setParameter('playerID', $playerID)
+        ;
+
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Retrieves all cards of a specific season for a given player.
+     *
+     * @param $playerID
+     * @param $seasonID
+     */
+    public function getCardsByPlayerForSeason($playerID, $seasonID)
+    {
+
+    }
+
+    /**
+     * Retrieves all cards of a specific game for a given player.
+     *
+     * @param $playerID
+     * @param $gameID
+     */
+    public function getCardsByPlayerForGame($playerID, $gameID)
+    {
+        $query = $this->createQueryBuilder('card');
+        $query->join('card.player', 'player')
+            ->join('card.game', 'game')
+            ->where('game.id = :gameID')
+            ->andWhere('player.id = :playerID')
+            ->setParameter('gameID', $gameID)
+            ->setParameter('playerID', $playerID)
+        ;
+
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Retrieves all cards for a given team.
+     *
+     * @param $id
+     */
+    public function getCardsByTeam($teamID)
+    {
+
+    }
+
+    /**
+     * Retrieves all cards of a specific season for a given team.
+     *
+     * @param $playerID
+     * @param $seasonID
+     */
+    public function getCardsByTeamForSeason($playerID, $seasonID)
+    {
+
+    }
+
+    /**
+     * Retrieves all cards for a given game.
+     *
+     * @param $id
+     */
+    public function getCardsByGame($gameID)
+    {
+
+    }
+
 }

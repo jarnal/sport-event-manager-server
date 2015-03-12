@@ -14,4 +14,4 @@ tm_event_training_rest:
     type: rest
     resource: "TeamManagerEventBundle:TrainingRest"
     name_prefix: api_training_
-    prefix:   traning
+    prefix:   training

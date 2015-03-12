@@ -18,8 +18,8 @@ class ActionType extends AbstractType
             ->add('player', 'hidden_entity', array(
                 "class" => "TeamManager\\PlayerBundle\\Entity\\Player"
             ))
-            ->add('team', 'hidden_entity', array(
-                "class" => "TeamManager\\TeamBundle\\Entity\\Team"
+            ->add('game', 'hidden_entity', array(
+                "class" => "TeamManager\\EventBundle\\Entity\\Game"
             ));
         ;
     }

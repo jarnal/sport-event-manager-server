@@ -31,6 +31,8 @@ class Card
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Expose
      */
     private $id;
 
@@ -41,6 +43,8 @@ class Card
      * @ORM\Column(name="type", type="string")
      *
      * @Assert\NotBlank(message="form.card.type.blank")
+     *
+     * @Expose
      */
     private $type;
 
@@ -49,6 +53,8 @@ class Card
      *
      * @var \DateTime
      * @ORM\Column(name="time", type="datetime", nullable=true)
+     *
+     * @Expose
      */
     private $time;
 
@@ -73,6 +79,17 @@ class Card
      * @Assert\NotNull(message="form.game.type.null")
      */
     private $game;
+
+    /**
+     * GameFriendly in which the card has been received.
+     *
+     * @var Game
+     * @ORM\ManyToOne(targetEntity="\TeamManager\EventBundle\Entity\GameFriendly", inversedBy="cards")
+     * @ORM\JoinColumn(name="game_friendly_id", referencedColumnName="id", onDelete="CASCADE")
+     *
+     * @Assert\NotNull(message="form.game.type.null", groups={'game_friendly'})
+     */
+    private $game_friendly;
 
     /**
      * Get id
@@ -112,7 +129,7 @@ class Card
      * @param \DateTime $pTime
      * @return Card
      */
-    public function setTime(\DateTime $pTime)
+    public function setTime($pTime)
     {
         $this->time = $pTime;
         return $this;

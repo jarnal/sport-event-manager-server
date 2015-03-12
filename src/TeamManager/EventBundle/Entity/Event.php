@@ -38,7 +38,7 @@ class Event
      *
      * @Expose
      */
-    private $id;
+    protected $id;
 
     /**
      * Name of the event.
@@ -49,7 +49,7 @@ class Event
      *
      * @Expose
      */
-    private $name;
+    protected $name;
 
     /**
      * Description of the event.
@@ -59,7 +59,7 @@ class Event
      *
      * @Expose
      */
-    private $description;
+    protected $description;
 
     /**
      * Date of the event.
@@ -70,7 +70,7 @@ class Event
      *
      * @Expose
      */
-    private $date;
+    protected $date;
 
     /**
      * Type of subscription of the event.
@@ -79,7 +79,7 @@ class Event
      * @var string
      * @ORM\Column(name="subscription_type", type="string", nullable=true)
      */
-    private $subscription_type;
+    protected $subscription_type;
 
     /**
      * Limit of players that can be present in the event.
@@ -87,18 +87,18 @@ class Event
      * @var integer
      * @ORM\Column(name="player_limit", type="integer", nullable=true)
      */
-    private $player_limit;
+    protected $player_limit;
 
     /**
      * Name of the opponent.
      *
      * @var string
-     * @ORM\Column(name="opponent", type="string")
-     * @Assert\NotBlank(message="form.event.opponent.blank")
+     * @ORM\Column(name="opponent", type="string", nullable=true)
+     * @Assert\NotBlank(message="form.event.opponent.blank", groups={"game", "game_friendly"})
      *
      * @Expose
      */
-    private $opponent;
+    protected $opponent;
 
     /**
      * Location where the event takes place.
@@ -110,7 +110,7 @@ class Event
      *
      * @Expose
      */
-    private $location;
+    protected $location;
 
     /**
      * Comments sent by users concerning the event.
@@ -118,7 +118,7 @@ class Event
      * @var Comment
      * @ORM\OneToMany(targetEntity="\TeamManager\ResultBundle\Entity\Comment", mappedBy="event")
      */
-    private $comments;
+    protected $comments;
 
     /**
      * Notes sent by users concerning the event.
@@ -126,7 +126,7 @@ class Event
      * @var Comment
      * @ORM\OneToMany(targetEntity="\TeamManager\ResultBundle\Entity\Note", mappedBy="event")
      */
-    private $notes;
+    protected $notes;
 
     /**
      * Players expected to play during this event.
@@ -138,7 +138,7 @@ class Event
      *      inverseJoinColumns={@ORM\JoinColumn(name="player_id", referencedColumnName="id", onDelete="CASCADE")}
      *      )
      */
-    private $expected_players;
+    protected $expected_players;
 
     /**
      * Players that will be missing for the event (among those expected).
@@ -150,7 +150,7 @@ class Event
      *      inverseJoinColumns={@ORM\JoinColumn(name="player_id", referencedColumnName="id", onDelete="CASCADE")}
      *      )
      */
-    private $missing_players;
+    protected $missing_players;
 
     /**
      * Players that will be present for the event (among those expected).
@@ -162,7 +162,7 @@ class Event
      *      inverseJoinColumns={@ORM\JoinColumn(name="player_id", referencedColumnName="id", onDelete="CASCADE")}
      *      )
      */
-    private $present_players;
+    protected $present_players;
 
     /**
      *

@@ -26,17 +26,6 @@ class EventType extends AbstractType
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
-     */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $resolver->setDefaults(array(
-            'data_class' => 'TeamManager\EventBundle\Entity\Event',
-            'csrf_protection' => false
-        ));
-    }
-
-    /**
      * @return string
      */
     public function getName()

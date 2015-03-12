@@ -107,12 +107,6 @@ class Team
     private $games_friendly;
 
     /**
-     * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="TeamManager\ActionBundle\Entity\Goal", cascade="persist", mappedBy="team")
-     */
-    private $goals;
-
-    /**
      *
      */
     public function __construct()
@@ -120,7 +114,6 @@ class Team
         $this->players = new ArrayCollection();
         $this->games = new ArrayCollection();
         $this->games_friendly = new ArrayCollection();
-        $this->goals = new ArrayCollection();
     }
 
     /**
@@ -378,40 +371,6 @@ class Team
     public function removeGamesFriendly(GameFriendly $pGame)
     {
         $this->games_friendly->removeElement($pGame);
-        return $this;
-    }
-
-    /**
-     * Get team goals list.
-     *
-     * @return ArrayCollection
-     */
-    public function getGoals()
-    {
-        return $this->goals;
-    }
-
-    /**
-     * Add goal in goals list.
-     *
-     * @param Goal $pGoal
-     * @return Team
-     */
-    public function addGoal(Goal $pGoal)
-    {
-        $this->goals[] = $pGoal;
-        return $this;
-    }
-
-    /**
-     * Remove goal from goals list.
-     *
-     * @param Goal $pGoal
-     * @return Team
-     */
-    public function removeGoal(Goal $pGoal)
-    {
-        $this->goals->removeElement($pGoal);
         return $this;
     }
 

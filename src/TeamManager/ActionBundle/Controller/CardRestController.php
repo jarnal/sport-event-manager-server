@@ -13,27 +13,30 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use TeamManager\ActionBundle\Entity\Card;
+use TeamManager\ActionBundle\Exception\InvalidCardFormException;
+use TeamManager\ActionBundle\Form\CardType;
+use TeamManager\ActionBundle\Service\CardService;
 use TeamManager\CommonBundle\Service\EntityServiceInterface;
-use TeamManager\PlayerBundle\Entity\Player;
 
 class CardRestController extends FOSRestController
 {
 
     /**
-     * Returns all teams.
+     * Returns all cards.
      *
      * @ApiDoc(
      *  resource=true,
-     *  section="Team API",
+     *  section="Card API",
      *  output={
-     *      "class"="TeamManager\TeamBundle\Entity\Team",
+     *      "class"="TeamManager\ActionBundle\Entity\Card",
      *      "collection"=true,
      *      "groups"={"Default"},
      *      "parsers" = {
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
      *      },
-     *      "collectionName" = "team"
+     *      "collectionName" = "cards"
      *  }
      * )
      *
@@ -49,29 +52,29 @@ class CardRestController extends FOSRestController
     }
 
     /**
-     * Returns a team by id.
+     * Returns a card by id.
      *
      * @ApiDoc(
      *  resource=true,
-     *  section="Team API",
+     *  section="Card API",
      *  requirements={
      *      {
      *          "name"="id",
      *          "dataType"="integer",
      *          "requirement"="\d+",
-     *          "description"="Team id"
+     *          "description"="Card id"
      *      }
      *  },
      *  output={
-     *      "class"="\TeamManager\TeamBundle\Entity\Team",
+     *      "class"="\TeamManager\ActionBundle\Entity\Card",
      *      "parsers" = {
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser"
      *      },
      *      "groups"={"Default"}
      *  },
      *  statusCodes = {
-     *     200 = "Returned when team exists",
-     *     404 = "Returned when the team is not found"
+     *     200 = "Returned when card exists",
+     *     404 = "Returned when the card is not found"
      *   }
      * )
      *
@@ -79,7 +82,7 @@ class CardRestController extends FOSRestController
      *
      * @Get("/{id}", name="get", options={ "method_prefix" = false })
      *
-     * @return Player
+     * @return Card
      */
     public function getAction($id)
     {
@@ -87,21 +90,21 @@ class CardRestController extends FOSRestController
     }
 
     /**
-     * Adds a new team.
+     * Adds a new card.
      *
      * @ApiDoc(
      *  resource = true,
-     *  section="Team API",
-     *  input="TeamManager\TeamBundle\Form\TeamType",
+     *  section="Card API",
+     *  input="TeamManager\ActionBundle\Form\CardType",
      *  statusCodes = {
-     *      200 = "Returned when the team has been created",
-     *      400 = "Returned when the team form has errors"
+     *      200 = "Returned when the card has been created",
+     *      400 = "Returned when the card form has errors"
      *  }
      * )
      *
      * @View(
      *  serializerGroups={"Default"},
-     *  template="TeamManagerTeamBundle:Team:gameForm.html.twig",
+     *  template="TeamManagerActionBundle:Card:cardForm.html.twig",
      *  statusCode= Codes::HTTP_BAD_REQUEST,
      *  templateVar = "form"
      * )
@@ -114,7 +117,7 @@ class CardRestController extends FOSRestController
     public function postAction(Request $request)
     {
         try {
-            $form = new TeamType($this->getUser());
+            $form = new CardType($this->getUser());
             $player = $this->getService()->post(
                 $request->request->get($form->getName()),
                 $this->getUser()
@@ -126,62 +129,66 @@ class CardRestController extends FOSRestController
             );
 
             return $this->routeRedirectView('api_team_get', $routeOptions, Codes::HTTP_CREATED);
-        } catch (InvalidTeamFormException $exception) {
+        } catch (InvalidCardFormException $exception) {
             return $exception->getForm();
         }
     }
 
     /**
-     * Builds the form to use to create a new team.
+     * Builds the form to use to create a new card.
      *
      * @ApiDoc(
      *   resource = true,
-     *   section="Team API",
+     *   section="Card API",
      *   statusCodes = {
      *     200 = "Returned when successful"
      *   }
      * )
      *
      * @View(
-     *  template="TeamManagerTeamBundle:Team:teamForm.html.twig",
+     *  template="TeamManagerActionBundle:Card:cardForm.html.twig",
      *  templateVar = "form"
      * )
      *
-     * @Get("/new", name="new", options={ "method_prefix" = false })
+     * @Get("/new/player/{playerID}/game/{gameID}", name="new", options={ "method_prefix" = false })
      *
      * @return FormTypeInterface
      */
-    public function newAction(Request $request)
+    public function newAction(Request $request, $playerID, $gameID)
     {
-        $team = new Team();
-        $team->setManager( $this->getUser() );
+        $player = $this-> get('player_bundle.player.service')->getOr404($playerID);
+        $game = $this->get('event_bundle.game.service')->getOr404($gameID);
+
+        $card = new Card();
+        $card->setPlayer($player);
+        $card->setGame($game);
         return $this->createForm(
-            new TeamType(),
-            $team,
+            new CardType(),
+            $card,
             array(
-                "action" => $this->generateUrl('api_team_post', array("access_token"=>$_GET["access_token"])),
+                "action" => $this->generateUrl('api_card_post', array("access_token"=>$_GET["access_token"])),
                 "method" => "POST"
             )
         );
     }
 
     /**
-     * Update existing team from the submitted data or create a new team with a specific id.
+     * Update existing card from the submitted data or create a new card with a specific id.
      *
      * @ApiDoc(
      *   resource = true,
-     *   section="Team API",
-     *   input="TeamManager\TeamBundle\Form\TeamType",
+     *   section="Card API",
+     *   input="TeamManager\ActionBundle\Form\CardType",
      *   statusCodes = {
-     *     201 = "Returned when a new team is created",
-     *     204 = "Returned when team has been updated successfully",
+     *     201 = "Returned when a new card is created",
+     *     204 = "Returned when card has been updated successfully",
      *     400 = "Returned when the form has errors"
      *   }
      * )
      *
      * @View(
      *  serializerGroups={"Default"},
-     *  template="TeamManagerTeamBundle:Team:gameEditForm.html.twig",
+     *  template="TeamManagerActionBundle:Card:cardEditForm.html.twig",
      * )
      *
      * @Put("/{id}", name="put", options={ "method_prefix" = false })
@@ -192,38 +199,38 @@ class CardRestController extends FOSRestController
     {
         $service = $this->getService();
         try {
-            $form = new TeamType();
-            if ( !($team = $service->get($id)) ) {
-                $team = $service->post(
+            $form = new CardType();
+            if ( !($card = $service->get($id)) ) {
+                $card = $service->post(
                     $request->request->get($form->getName())
                 );
 
                 $routeOptions = array(
-                    'id' => $team->getId(),
+                    'id' => $card->getId(),
                     '_format' => $request->get('_format')
                 );
 
-                return $this->routeRedirectView('api_team_get', $routeOptions, Codes::HTTP_CREATED);
+                return $this->routeRedirectView('api_card_get', $routeOptions, Codes::HTTP_CREATED);
             } else {
-                $team = $service->put(
-                    $team,
+                $service->put(
+                    $card,
                     $request->request->get($form->getName())
                 );
 
                 return $this->view(null, Codes::HTTP_NO_CONTENT);
             }
-        } catch (InvalidTeamFormException $exception) {
+        } catch (InvalidCardFormException $exception) {
 
             return $exception->getForm();
         }
     }
 
     /**
-     * Builds the form to use to update an existing team.
+     * Builds the form to use to update an existing card.
      *
      * @ApiDoc(
      *  resource = true,
-     *  section="Team API",
+     *  section="Card API",
      *  statusCodes = {
      *   200 = "Returned when successful"
      *  },
@@ -232,13 +239,13 @@ class CardRestController extends FOSRestController
      *    "name"="id",
      *    "dataType"="integer",
      *    "requirement"="\d+",
-     *    "description"="Team id"
+     *    "description"="Card id"
      *   }
      *  }
      * )
      *
      * @View(
-     *  template="TeamManagerTeamBundle:Team:teamEditForm.html.twig",
+     *  template="TeamManagerActionBundle:Card:cardEditForm.html.twig",
      *  templateVar = "form"
      * )
      *
@@ -248,29 +255,29 @@ class CardRestController extends FOSRestController
      */
     public function editAction($id)
     {
-        $team = $this->getService()->getOr404($id);
-        return $this->createForm(new TeamType($this->getUser()), $team, array(
-            "action" => $this->generateUrl( 'api_team_put' , ['id'=>$id] ),
+        $card = $this->getService()->getOr404($id);
+        return $this->createForm(new CardType(), $card, array(
+            "action" => $this->generateUrl( 'api_card_put' , ['id'=>$id] ),
             "method" => "PUT"
         ));
     }
 
     /**
-     * Deletes a team depending on the passed id.
+     * Deletes a card depending on the passed id.
      *
      * @ApiDoc(
      *  resource = true,
-     *  section="Team API",
+     *  section="Card API",
      *  statusCodes = {
-     *   200 = "Returned when team has been successfully deleted.",
-     *   404 = "Returned when team doesn't exist."
+     *   200 = "Returned when card has been successfully deleted.",
+     *   404 = "Returned when card doesn't exist."
      *  },
      *  requirements={
      *   {
      *    "name"="id",
      *    "dataType"="integer",
      *    "requirement"="\d+",
-     *    "description"="Player id"
+     *    "description"="Card id"
      *   }
      *  }
      * )
@@ -282,20 +289,35 @@ class CardRestController extends FOSRestController
     public function deleteAction($id)
     {
         $service = $this->getService();
-        $team = $service->getOr404($id);
-        if ( isset($team) ) {
-            return $service->delete($team);
+        $card = $service->getOr404($id);
+        if ( isset($card) ) {
+            return $service->delete($card);
         }
     }
+
+    /*public function listPlayerCards($id)
+    {
+        return $this->getService()->getPlayerCards($id);
+    }
+
+    public function listTeamCards()
+    {
+
+    }
+
+    public function listGameCards()
+    {
+
+    }*/
 
     /**
      * Returns the appropriate service to handle related entity.
      *
-     * @return EntityServiceInterface
+     * @return CardService
      */
     protected function getService()
     {
-        return $this->container->get('team_bundle.team.service');
+        return $this->container->get('action_bundle.card.service');
     }
 
 }
