@@ -96,7 +96,7 @@ class GameRestControllerTest extends EntityRestControllerTest {
             array(),
             array(),
             array('CONTENT_TYPE' => 'application/json'),
-            '{"game":{"name":"TheGame","location":1,"opponent":"test"}}'
+            '{"game":{"name":"TheGame","location":1,"opponent":"test","date":""}}'
         );
         $response = $this->client->getResponse();
 

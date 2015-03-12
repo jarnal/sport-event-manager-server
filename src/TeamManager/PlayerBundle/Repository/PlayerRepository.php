@@ -24,9 +24,8 @@ class PlayerRepository extends EntityRepository
         $query->select('event')
             ->from('TeamManagerEventBundle:Event', 'event')
             ->leftJoin('TeamManagerEventBundle:Game', 'game', 'WITH', $query->expr()->eq('game.id', 'event.id'))
-            ->leftJoin('TeamManagerEventBundle:GameFriendly', 'game_friendly', 'WITH', $query->expr()->eq('game_friendly.id', 'event.id'))
             ->leftJoin('TeamManagerEventBundle:Training', 'training', 'WITH', $query->expr()->eq('training.id', 'event.id'))
-            ->innerjoin('TeamManagerTeamBundle:Team', 'team', 'WITH', 'team = game.team OR team = game_friendly.team OR team = training.team')
+            ->innerjoin('TeamManagerTeamBundle:Team', 'team', 'WITH', 'team = game.team OR team = training.team')
             ->innerjoin('team.players', 'player', 'WITH', $query->expr()->eq('player.id', $pPlayerID))
             ->join('event.location', 'location')
             ->orderBy('event.date')
@@ -75,10 +74,11 @@ class PlayerRepository extends EntityRepository
     {
         $query = $this->_em->createQueryBuilder();
         $query->select('game')
-            ->from('TeamManagerEventBundle:GameFriendly', 'game')
+            ->from('TeamManagerEventBundle:Game', 'game')
             ->innerjoin('game.team', 'team', 'WITH', 'team = game.team')
             ->innerjoin('team.players', 'player', 'WITH', $query->expr()->eq('player.id', $pPlayerID))
-            ->orderBy('game.date', 'DESC')
+            ->where('game.friendly = 1')
+            ->orderBy('game.date')
         ;
 
         return $query->getQuery()->getResult();

@@ -59,7 +59,7 @@ class PlayerRestController extends FOSRestController
     public function getAllAction()
     {
         if( $this->getUser() ){
-            return $this->get("team_bundle.player.service")->getAll();
+            return $this->get("player_bundle.player.service")->getAll();
         }
     }
 
@@ -332,6 +332,8 @@ class PlayerRestController extends FOSRestController
      */
     public function listEventsAction($id)
     {
+        $this->getService()->getOr404($id);
+        $events = $this->get('event_bundle.event.service')->getPlayerEvents($id);
         return $this->getService()->listEvents($id);
     }
 

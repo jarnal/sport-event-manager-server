@@ -4,12 +4,6 @@ tm_event_game_rest:
     name_prefix: api_game_
     prefix:   game
 
-tm_event_gamefriendly_rest:
-    type: rest
-    resource: "TeamManagerEventBundle:GameFriendlyRest"
-    name_prefix: api_game_friendly_
-    prefix:   gamefriendly
-
 tm_event_training_rest:
     type: rest
     resource: "TeamManagerEventBundle:TrainingRest"

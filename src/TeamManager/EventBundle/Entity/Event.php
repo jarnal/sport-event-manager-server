@@ -18,11 +18,11 @@ use TeamManager\ResultBundle\Entity\Note;
 /**
  * Event
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="TeamManager\EventBundle\Repository\EventRepository")
  * @ORM\Table(name="tm_event")
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="event_type", type="string")
- * @ORM\DiscriminatorMap( {"training"="Training", "game"="Game", "game_friendly"="GameFriendly"} )
+ * @ORM\DiscriminatorMap( {"training"="Training", "game"="Game"} )
  *
  * @ExclusionPolicy("all")
  */
@@ -66,7 +66,7 @@ class Event
      *
      * @var \DateTime
      * @ORM\Column(name="date", type="datetime")
-     * @Assert\NotBlank(message="form.event.date.blank")
+     * @Assert\DateTime(message="form.event.date.blank")
      *
      * @Expose
      */

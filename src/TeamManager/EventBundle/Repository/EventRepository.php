@@ -12,4 +12,44 @@ use Doctrine\ORM\EntityRepository;
  */
 class EventRepository extends EntityRepository
 {
+
+    /**
+     * Returns all events of a given player.
+     *
+     * @param $pPlayerID
+     * @return array
+     */
+    public function findEventsByPlayer($pPlayerID)
+    {
+        $query = $this->createQueryBuilder('event');
+        $query->leftJoin('TeamManagerEventBundle:Game', 'game', 'WITH', $query->expr()->eq('game.id', 'event.id'))
+            ->leftJoin('TeamManagerEventBundle:Training', 'training', 'WITH', $query->expr()->eq('training.id', 'event.id'))
+            ->innerjoin('TeamManagerTeamBundle:Team', 'team', 'WITH', 'team = game.team OR team = training.team')
+            ->innerjoin('team.players', 'player', 'WITH', $query->expr()->eq('player.id', $pPlayerID))
+            ->join('event.location', 'location')
+            ->orderBy('event.date')
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Returns all events of a given team.
+     *
+     * @param $teamID
+     * @return array
+     */
+    public function findEventsByTeam($teamID)
+    {
+        $query = $this->createQueryBuilder('event');
+        $query->leftJoin('TeamManagerEventBundle:Game', 'game', 'WITH', $query->expr()->eq('game.id', 'event.id'))
+            ->leftJoin('TeamManagerEventBundle:Training', 'training', 'WITH', $query->expr()->eq('training.id', 'event.id'))
+            ->innerjoin('TeamManagerTeamBundle:Team', 'team', 'WITH', 'team = game.team OR team = training.team')
+            ->where('team.id = :teamID')
+            ->setParameter('teamID', $teamID)
+            ->join('event.location', 'location')
+            ->orderBy('event.date')
+        ;
+        return $query->getQuery()->getResult();
+    }
+
 }

@@ -99,14 +99,6 @@ class Team
     private $games;
 
     /**
-     * Friendly games of the team.
-     *
-     * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="\TeamManager\EventBundle\Entity\GameFriendly", mappedBy="team")
-     */
-    private $games_friendly;
-
-    /**
      *
      */
     public function __construct()
@@ -337,40 +329,6 @@ class Team
     public function removeGame(Game $pGame)
     {
         $this->games->removeElement($pGame);
-        return $this;
-    }
-
-    /**
-     * Get team friendly games list.
-     *
-     * @return ArrayCollection
-     */
-    public function getGamesFriendly()
-    {
-        return $this->games_friendly;
-    }
-
-    /**
-     * Add friendly game in team friendly games list.
-     *
-     * @param GameFriendly $pGame
-     * @return Team
-     */
-    public function addGamesFriendly(GameFriendly $pGame)
-    {
-        $this->games_friendly[] = $pGame;
-        return $this;
-    }
-
-    /**
-     * Remove friendly game from team friendly games list.
-     *
-     * @param GameFriendly $pGame
-     * @return Team
-     */
-    public function removeGamesFriendly(GameFriendly $pGame)
-    {
-        $this->games_friendly->removeElement($pGame);
         return $this;
     }
 

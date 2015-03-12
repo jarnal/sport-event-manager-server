@@ -81,17 +81,6 @@ class Card
     private $game;
 
     /**
-     * GameFriendly in which the card has been received.
-     *
-     * @var Game
-     * @ORM\ManyToOne(targetEntity="\TeamManager\EventBundle\Entity\GameFriendly", inversedBy="cards")
-     * @ORM\JoinColumn(name="game_friendly_id", referencedColumnName="id", onDelete="CASCADE")
-     *
-     * @Assert\NotNull(message="form.game.type.null", groups={'game_friendly'})
-     */
-    private $game_friendly;
-
-    /**
      * Get id
      *
      * @return integer 

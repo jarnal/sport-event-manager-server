@@ -295,21 +295,6 @@ class CardRestController extends FOSRestController
         }
     }
 
-    /*public function listPlayerCards($id)
-    {
-        return $this->getService()->getPlayerCards($id);
-    }
-
-    public function listTeamCards()
-    {
-
-    }
-
-    public function listGameCards()
-    {
-
-    }*/
-
     /**
      * Returns the appropriate service to handle related entity.
      *

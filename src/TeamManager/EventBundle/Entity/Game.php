@@ -18,13 +18,23 @@ use TeamManager\TeamBundle\Entity\Team;
 /**
  * Game
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="TeamManager\EventBundle\Repository\GameRepository")
  * @ORM\Table(name="tm_game")
  *
  * @ExclusionPolicy("all")
  */
 class Game extends Event
 {
+
+    /**
+     * Defines if the game is friendly or not.
+     *
+     * @var boolean
+     * @ORM\Column(name="friendly", type="boolean", )
+     *
+     * @Expose
+     */
+    private $friendly = false;
 
     /**
      * Team participating to the game.
@@ -192,6 +202,26 @@ class Game extends Event
     {
         $this->injuries->removeElement($pInjury);
         return $this;
+    }
+
+    /**
+     * Get if game is friendly or not.
+     *
+     * @return boolean
+     */
+    public function isFriendly()
+    {
+        return $this->friendly;
+    }
+
+    /**
+     * Set if game is friendly or not.
+     *
+     * @param boolean $friendly
+     */
+    public function setFriendly($friendly)
+    {
+        $this->friendly = $friendly;
     }
 
 }

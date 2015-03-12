@@ -17,7 +17,7 @@ class EventType extends AbstractType
         $builder
             ->add('name')
             ->add('description')
-            ->add('date')
+            ->add('date', 'datetime')
             ->add('subscription_type')
             ->add('player_limit')
             ->add('opponent')
