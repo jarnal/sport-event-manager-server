@@ -29,7 +29,7 @@ class GameService extends EntityRestService
      */
     public function getPlayerGames($playerID)
     {
-
+        return $this->repository->findGamesByPlayer($playerID);
     }
 
     /**
@@ -39,9 +39,9 @@ class GameService extends EntityRestService
      * @param $seasonID
      * @return array
      */
-    public function getPlayerGamesForSeason($playerID, $seasonID)
+    public function getPlayerGamesForSeason($playerID, $season)
     {
-
+        return $this->repository->findGamesForPlayerBySeason($playerID, $season);
     }
 
     /**
@@ -52,7 +52,7 @@ class GameService extends EntityRestService
      */
     public function getPlayerFriendlyGames($playerID)
     {
-
+        return $this->repository->findFriendlyGamesByPlayer($playerID);
     }
 
     /**
@@ -62,9 +62,9 @@ class GameService extends EntityRestService
      * @param $seasonID
      * @return array
      */
-    public function getPlayerFriendlyGamesForSeason($playerID, $seasonID)
+    public function getPlayerFriendlyGamesForSeason($playerID, $season)
     {
-
+        return $this->repository->findFriendlyGamesForPlayerBySeason($playerID, $season);
     }
 
     /**
@@ -75,7 +75,7 @@ class GameService extends EntityRestService
      */
     public function getTeamGames($teamID)
     {
-
+        return $this->repository->findGamesByTeam($teamID);
     }
 
     /**
@@ -85,9 +85,9 @@ class GameService extends EntityRestService
      * @param $seasonID
      * @return array
      */
-    public function getTeamGamesForSeason($teamID, $seasonID)
+    public function getTeamGamesForSeason($teamID, $season)
     {
-
+        return $this->repository->findGamesForTeamBySeason($teamID, $season);
     }
 
     /**
@@ -98,7 +98,7 @@ class GameService extends EntityRestService
      */
     public function getTeamFriendlyGames($teamID)
     {
-
+        return $this->repository->findFriendlyGamesByTeam($teamID);
     }
 
     /**
@@ -108,9 +108,9 @@ class GameService extends EntityRestService
      * @param $seasonID
      * @return array
      */
-    public function getTeamFriendlyGamesForSeason($teamID, $seasonID)
+    public function getTeamFriendlyGamesForSeason($teamID, $season)
     {
-
+        return $this->repository->findFriendlyGamesForTeamBySeason($teamID, $season);
     }
 
 }

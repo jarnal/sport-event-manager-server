@@ -22,6 +22,7 @@ class EventType extends AbstractType
             ->add('player_limit')
             ->add('opponent')
             ->add('location')
+            ->add('season')
         ;
     }
 

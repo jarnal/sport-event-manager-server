@@ -334,7 +334,7 @@ class PlayerRestController extends FOSRestController
     {
         $this->getService()->getOr404($id);
         $events = $this->get('event_bundle.event.service')->getPlayerEvents($id);
-        return $this->getService()->listEvents($id);
+        return array("cards"=>$events);
     }
 
     /**
@@ -373,7 +373,9 @@ class PlayerRestController extends FOSRestController
      */
     public function listGamesAction($id)
     {
-        return $this->getService()->listGames($id);
+        $this->getService()->getOr404($id);
+        $games = $this->get('event_bundle.game.service')->getPlayerGames($id);
+        return array("games"=>$games);
     }
 
     /**
@@ -412,7 +414,9 @@ class PlayerRestController extends FOSRestController
      */
     public function listFriendlyGamesAction($id)
     {
-        return $this->getService()->listFriendlyGames($id);
+        $this->getService()->getOr404($id);
+        $games = $this->get('event_bundle.game.service')->getPlayerFriendlyGames($id);
+        return array("friendly_games"=>$games);
     }
 
     /**

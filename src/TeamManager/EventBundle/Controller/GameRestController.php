@@ -16,8 +16,10 @@ use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Acl\Exception\Exception;
+use Symfony\Component\Validator\Constraints\Date;
 use TeamManager\CommonBundle\Service\EntityRestService;
 use TeamManager\CommonBundle\Service\EntityServiceInterface;
+use TeamManager\CommonBundle\Utils\CommonUtils;
 use TeamManager\EventBundle\Entity\Game;
 use TeamManager\EventBundle\Exception\InvalidGameFormException;
 use TeamManager\EventBundle\Form\GameType;
@@ -177,6 +179,7 @@ class GameRestController extends FOSRestController
         $team = $this->get('team_bundle.team.service')->getOr404($teamID);
         $game = new Game();
         $game->setTeam($team);
+        $game->setSeason(CommonUtils::getCurrentSeason());
 
         return $this->createForm(
             new GameType(),
@@ -242,7 +245,7 @@ class GameRestController extends FOSRestController
 
                 return $this->view(null, Codes::HTTP_NO_CONTENT);
             }
-        } catch (InvalidGameFormException$exception) {
+        } catch (InvalidGameFormException $exception) {
             return $exception->getForm();
         }
     }

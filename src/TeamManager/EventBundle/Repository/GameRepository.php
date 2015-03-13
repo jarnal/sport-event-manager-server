@@ -12,4 +12,149 @@ use Doctrine\ORM\EntityRepository;
  */
 class GameRepository extends EntityRepository
 {
+
+    /**
+     *
+     *
+     * @param $playerID
+     * @return array
+     */
+    public function findGamesByPlayer($playerID)
+    {
+        $query = $this->createQueryBuilder('game');
+        $query->innerjoin('game.team', 'team', 'WITH', 'team = game.team')
+            ->innerjoin('team.players', 'player', 'WITH', $query->expr()->eq('player.id', $playerID))
+            ->where('game.friendly = 0')
+            ->orderBy('game.date')
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     *
+     *
+     * @param $playerID
+     * @param $seasonID
+     * @return array
+     */
+    public function findGamesForPlayerBySeason($playerID, $season)
+    {
+        $query = $this->createQueryBuilder('game');
+        $query->innerjoin('game.team', 'team', 'WITH', 'team = game.team')
+            ->innerjoin('team.players', 'player', 'WITH', $query->expr()->eq('player.id', $playerID))
+            ->where('game.friendly = 0')
+            ->andWhere('game.season = :season')
+            ->setParameter('season', $season)
+            ->orderBy('game.date')
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     *
+     *
+     * @param $playerID
+     * @return array
+     */
+    public function findFriendlyGamesByPlayer($playerID)
+    {
+        $query = $this->createQueryBuilder('game');
+        $query->innerjoin('game.team', 'team', 'WITH', 'team = game.team')
+            ->innerjoin('team.players', 'player', 'WITH', $query->expr()->eq('player.id', $playerID))
+            ->where('game.friendly = 1')
+            ->orderBy('game.date')
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     *
+     *
+     * @param $playerID
+     * @param $seasonID
+     * @return array
+     */
+    public function findFriendlyGamesForPlayerBySeason($playerID, $season)
+    {
+        $query = $this->createQueryBuilder('game');
+        $query->innerjoin('game.team', 'team', 'WITH', 'team = game.team')
+            ->innerjoin('team.players', 'player', 'WITH', $query->expr()->eq('player.id', $playerID))
+            ->where('game.friendly = 1')
+            ->andWhere('game.season = :season')
+            ->setParameter('season', $season)
+            ->orderBy('game.date')
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     *
+     *
+     * @param $teamID
+     * @return array
+     */
+    public function findGamesByTeam($teamID)
+    {
+        $query = $this->createQueryBuilder('game');
+        $query->innerjoin('game.team', 'team', 'WITH', $query->expr()->eq('team.id', $teamID))
+            ->where('game.friendly = 0')
+            ->orderBy('game.date')
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     *
+     *
+     * @param $teamID
+     * @param $seasonID
+     * @return array
+     */
+    public function findGamesForTeamBySeason($teamID, $season)
+    {
+        $query = $this->createQueryBuilder('game');
+        $query->innerjoin('game.team', 'team', 'WITH', $query->expr()->eq('team.id', $teamID))
+            ->where('game.friendly = 0')
+            ->andWhere('game.season = :season')
+            ->setParameter('season', $season)
+            ->orderBy('game.date')
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     *
+     *
+     * @param $teamID
+     * @return array
+     */
+    public function findFriendlyGamesByTeam($teamID)
+    {
+        $query = $this->createQueryBuilder('game');
+        $query->innerjoin('game.team', 'team', 'WITH', $query->expr()->eq('team.id', $teamID))
+            ->where('game.friendly = 1')
+            ->orderBy('game.date')
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     *
+     *
+     * @param $teamID
+     * @param $seasonID
+     * @return array
+     */
+    public function findFriendlyGamesForTeamBySeason($teamID, $season)
+    {
+        $query = $this->createQueryBuilder('game');
+        $query->innerjoin('game.team', 'team', 'WITH', $query->expr()->eq('team.id', $teamID))
+            ->where('game.friendly = 1')
+            ->andWhere('game.season = :season')
+            ->setParameter('season', $season)
+            ->orderBy('game.date')
+        ;
+        return $query->getQuery()->getResult();
+    }
+
 }

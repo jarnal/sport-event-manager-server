@@ -94,11 +94,23 @@ class Event
      *
      * @var string
      * @ORM\Column(name="opponent", type="string", nullable=true)
-     * @Assert\NotBlank(message="form.event.opponent.blank", groups={"game", "game_friendly"})
+     * @Assert\NotBlank(message="form.event.opponent.blank")
      *
      * @Expose
      */
     protected $opponent;
+
+    /**
+     * Season in which the event takes place.
+     * For season 09/2014-09/2015 = 14-15.
+     *
+     * @var string
+     * @ORM\Column(name="season", type="string")
+     * @Assert\NotBlank(message="form.event.season.blank")
+     *
+     * @Expose
+     */
+    protected $season;
 
     /**
      * Location where the event takes place.
@@ -318,6 +330,26 @@ class Event
     {
         $this->opponent = $pOpponent;
         return $this;
+    }
+
+    /**
+     * Get season of the event.
+     *
+     * @return string
+     */
+    public function getSeason()
+    {
+        return $this->season;
+    }
+
+    /**
+     * Set season of the event.
+     *
+     * @param string $season
+     */
+    public function setSeason($season)
+    {
+        $this->season = $season;
     }
 
     /**

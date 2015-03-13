@@ -29,8 +29,8 @@ class GameType extends EventType
     {
         $resolver->setDefaults(array(
             'data_class' => 'TeamManager\EventBundle\Entity\Game',
-            'csrf_protection' => false,
-            'validation_groups' => array($this->getName())
+            'csrf_protection' => false/*,
+            'validation_groups' => array($this->getName())*/
         ));
     }
 

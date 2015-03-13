@@ -37,6 +37,7 @@ class LoadGameFriendlyData extends AbstractFixture implements OrderedFixtureInte
         $game1->setOpponent("Team Going To Die");
         $game1->setSubscriptionType("test");
         $game1->setTeam($team);
+        $game1->setSeason('2014-2015');
 
         $game2 = new Game();
         $game2->setName("Friendly 2");
@@ -48,6 +49,7 @@ class LoadGameFriendlyData extends AbstractFixture implements OrderedFixtureInte
         $game2->setOpponent("Team Going To Die");
         $game2->setSubscriptionType("test");
         $game2->setTeam($team);
+        $game2->setSeason('2014-2015');
 
         $manager->persist($game1);
         $manager->persist($game2);

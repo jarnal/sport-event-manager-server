@@ -34,6 +34,7 @@ class LoadTrainingFriendlyData extends AbstractFixture implements OrderedFixture
         $training1->setPlayerLimit(10);
         $training1->setLocation($team->getDefaultLocation());
         $training1->setTeam($team);
+        $training1->setSeason('2014-2015');
 
         $training2 = new Training();
         $training2->setName("Training 2");
@@ -42,6 +43,7 @@ class LoadTrainingFriendlyData extends AbstractFixture implements OrderedFixture
         $training2->setPlayerLimit(10);
         $training2->setLocation($team->getDefaultLocation());
         $training2->setTeam($team);
+        $training2->setSeason('2014-2015');
 
         $manager->persist($training1);
         $manager->persist($training2);

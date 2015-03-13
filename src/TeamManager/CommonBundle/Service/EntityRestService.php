@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping\Entity;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use TeamManager\EventBundle\Exception\InvalidGameFormException;
 use TeamManager\PlayerBundle\Entity\Player;
 use TeamManager\PlayerBundle\Entity\PlayerInterface;
 use TeamManager\PlayerBundle\Exception\InvalidUserFormException;
@@ -127,7 +128,9 @@ abstract class EntityRestService implements EntityServiceInterface
     protected function processForm($entity, array $pParameters, $pMethod = "PUT")
     {
         $form = $this->formFactory->create(new $this->formType(), $entity, array('method' => $pMethod));
-        $form->submit($pParameters, 'PATCH' !== $pMethod);
+        $form->submit($pParameters);
+
+        //throw new \Exception(var_dump($form));
 
         if ($form->isValid()) {
 
