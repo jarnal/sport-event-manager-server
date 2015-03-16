@@ -24,7 +24,7 @@ class TrainingRepository extends EntityRepository
         $query = $this->createQueryBuilder('training');
         $query->innerjoin('training.team', 'team', 'WITH', 'team = training.team')
             ->innerjoin('team.players', 'player', 'WITH', $query->expr()->eq('player.id', $playerID))
-            ->orderBy('training.date')
+            ->orderBy('training.date', 'DESC')
         ;
         return $query->getQuery()->getResult();
     }
@@ -43,7 +43,7 @@ class TrainingRepository extends EntityRepository
             ->innerjoin('team.players', 'player', 'WITH', $query->expr()->eq('player.id', $playerID))
             ->andWhere('training.season = :season')
             ->setParameter('season', $season)
-            ->orderBy('training.date')
+            ->orderBy('training.date', 'DESC')
         ;
         return $query->getQuery()->getResult();
     }
@@ -58,7 +58,7 @@ class TrainingRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder('training');
         $query->innerjoin('training.team', 'team', 'WITH', $query->expr()->eq('team.id', $teamID))
-            ->orderBy('training.date')
+            ->orderBy('training.date', 'DESC')
         ;
         return $query->getQuery()->getResult();
     }
@@ -76,7 +76,7 @@ class TrainingRepository extends EntityRepository
         $query->innerjoin('training.team', 'team', 'WITH', $query->expr()->eq('team.id', $teamID))
             ->andWhere('training.season = :season')
             ->setParameter('season', $season)
-            ->orderBy('training.date')
+            ->orderBy('training.date', 'DESC')
         ;
         return $query->getQuery()->getResult();
     }

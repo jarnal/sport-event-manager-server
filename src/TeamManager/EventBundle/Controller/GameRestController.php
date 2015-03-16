@@ -17,6 +17,7 @@ use FOS\RestBundle\Controller\Annotations\Delete;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Acl\Exception\Exception;
 use Symfony\Component\Validator\Constraints\Date;
+use TeamManager\ActionBundle\Entity\Card;
 use TeamManager\CommonBundle\Service\EntityRestService;
 use TeamManager\CommonBundle\Service\EntityServiceInterface;
 use TeamManager\CommonBundle\Utils\CommonUtils;
@@ -93,7 +94,7 @@ class GameRestController extends FOSRestController
      *
      * @Get("/{id}", name="get", options={ "method_prefix" = false })
      *
-     * @return Player
+     * @return Game
      */
     public function getAction($id)
     {
@@ -319,6 +320,48 @@ class GameRestController extends FOSRestController
         if ( isset($game) ) {
             return $service->delete($game);
         }
+    }
+
+    /**
+     * Returns all cards for a given game.
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  section="Game API",
+     *  requirements={
+     *      {
+     *          "name"="id",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="Game id"
+     *      }
+     *  },
+     *  output={
+     *      "class"="\TeamManager\ActionBundle\Entity\Card",
+     *      "collection"=true,
+     *      "collectionName"="cards",
+     *      "parsers" = {
+     *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
+     *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
+     *      },
+     *      "groups"={"Default", "Game"}
+     *  },
+     *  statusCodes = {
+     *     200 = "Returned when game exists",
+     *     404 = "Returned when the game is not found"
+     *   }
+     * )
+     *
+     * @View( serializerGroups={"Default", "Game"} )
+     *
+     * @Get("/{id}/cards", name="get_cards", options={ "method_prefix" = false })
+     *
+     * @return Card
+     */
+    public function listCardsAction($id)
+    {
+        $this->getService()->getOr404($id);
+        return $this->get('action_bundle.card.service')->getGameCards($id);
     }
 
     /**

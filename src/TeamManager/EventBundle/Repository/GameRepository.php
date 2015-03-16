@@ -25,7 +25,7 @@ class GameRepository extends EntityRepository
         $query->innerjoin('game.team', 'team', 'WITH', 'team = game.team')
             ->innerjoin('team.players', 'player', 'WITH', $query->expr()->eq('player.id', $playerID))
             ->where('game.friendly = 0')
-            ->orderBy('game.date')
+            ->orderBy('game.date', 'DESC')
         ;
         return $query->getQuery()->getResult();
     }
@@ -45,7 +45,7 @@ class GameRepository extends EntityRepository
             ->where('game.friendly = 0')
             ->andWhere('game.season = :season')
             ->setParameter('season', $season)
-            ->orderBy('game.date')
+            ->orderBy('game.date', 'DESC')
         ;
         return $query->getQuery()->getResult();
     }
@@ -62,7 +62,7 @@ class GameRepository extends EntityRepository
         $query->innerjoin('game.team', 'team', 'WITH', 'team = game.team')
             ->innerjoin('team.players', 'player', 'WITH', $query->expr()->eq('player.id', $playerID))
             ->where('game.friendly = 1')
-            ->orderBy('game.date')
+            ->orderBy('game.date', 'DESC')
         ;
         return $query->getQuery()->getResult();
     }
@@ -82,7 +82,7 @@ class GameRepository extends EntityRepository
             ->where('game.friendly = 1')
             ->andWhere('game.season = :season')
             ->setParameter('season', $season)
-            ->orderBy('game.date')
+            ->orderBy('game.date', 'DESC')
         ;
         return $query->getQuery()->getResult();
     }
@@ -98,7 +98,7 @@ class GameRepository extends EntityRepository
         $query = $this->createQueryBuilder('game');
         $query->innerjoin('game.team', 'team', 'WITH', $query->expr()->eq('team.id', $teamID))
             ->where('game.friendly = 0')
-            ->orderBy('game.date')
+            ->orderBy('game.date', 'DESC')
         ;
         return $query->getQuery()->getResult();
     }
@@ -117,7 +117,7 @@ class GameRepository extends EntityRepository
             ->where('game.friendly = 0')
             ->andWhere('game.season = :season')
             ->setParameter('season', $season)
-            ->orderBy('game.date')
+            ->orderBy('game.date', 'DESC')
         ;
         return $query->getQuery()->getResult();
     }
@@ -133,7 +133,7 @@ class GameRepository extends EntityRepository
         $query = $this->createQueryBuilder('game');
         $query->innerjoin('game.team', 'team', 'WITH', $query->expr()->eq('team.id', $teamID))
             ->where('game.friendly = 1')
-            ->orderBy('game.date')
+            ->orderBy('game.date', 'DESC')
         ;
         return $query->getQuery()->getResult();
     }
@@ -152,7 +152,7 @@ class GameRepository extends EntityRepository
             ->where('game.friendly = 1')
             ->andWhere('game.season = :season')
             ->setParameter('season', $season)
-            ->orderBy('game.date')
+            ->orderBy('game.date', 'DESC')
         ;
         return $query->getQuery()->getResult();
     }

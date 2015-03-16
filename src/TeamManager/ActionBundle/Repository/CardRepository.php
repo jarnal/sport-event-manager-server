@@ -34,9 +34,18 @@ class CardRepository extends EntityRepository
      * @param $playerID
      * @param $seasonID
      */
-    public function getCardsByPlayerForSeason($playerID, $seasonID)
+    public function getCardsByPlayerForSeason($playerID, $season)
     {
-
+        $query = $this->createQueryBuilder('card');
+        $query->innerJoin('card.player', 'player', 'WITH', 'player.id = :playerID')
+            ->join('card.game', 'game')
+            ->where('game.season = :season')
+            ->setParameters( array(
+                'playerID'=>$playerID,
+                'season'=>$season
+            ))
+        ;
+        return $query->getQuery()->getResult();
     }
 
     /**
@@ -66,7 +75,14 @@ class CardRepository extends EntityRepository
      */
     public function getCardsByTeam($teamID)
     {
+        $query = $this->createQueryBuilder('card');
+        $query->join('card.player', 'player')
+            ->join('card.game', 'game')
+            ->join('game.team', 'team', 'WITH', 'team.id = :teamID')
+            ->setParameter('teamID', $teamID)
+        ;
 
+        return $query->getQuery()->getResult();
     }
 
     /**
@@ -75,9 +91,39 @@ class CardRepository extends EntityRepository
      * @param $playerID
      * @param $seasonID
      */
-    public function getCardsByTeamForSeason($playerID, $seasonID)
+    public function getCardsByTeamForSeason($teamID, $season)
     {
+        $query = $this->createQueryBuilder('card');
+        $query->join('card.player', 'player')
+            ->join('card.game', 'game')
+            ->join('game.team', 'team', 'WITH', 'team.id = :teamID')
+            ->where('game.season = :season')
+            ->setParameters( array(
+                'teamID'=> $teamID,
+                'season'=>$season
+            ))
+        ;
 
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Retrieves all cards of a specific game for a given team.
+     *
+     * @param $playerID
+     * @param $gameID
+     */
+    public function getCardsByTeamForGame($teamID, $gameID)
+    {
+        $query = $this->createQueryBuilder('card');
+        $query->join('card.player', 'player')
+            ->join('card.game', 'game')
+            ->innerjoin('game.team', 'team', 'WITH', 'team.id = :teamID')
+            ->setParameter('teamID', $teamID)
+            ->where('game.id = :gameID')
+            ->setParameter('gameID', $gameID)
+        ;
+        return $query->getQuery()->getResult();
     }
 
     /**
@@ -87,7 +133,13 @@ class CardRepository extends EntityRepository
      */
     public function getCardsByGame($gameID)
     {
-
+        $query = $this->createQueryBuilder('card');
+        $query->join('card.player', 'player')
+            ->join('card.game', 'game')
+            ->where('game.id = :gameID')
+            ->setParameter('gameID', $gameID)
+        ;
+        return $query->getQuery()->getResult();
     }
 
 }

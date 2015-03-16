@@ -33,11 +33,19 @@ class CardService extends EntityRestService
     }
 
     /**
+     *
+     */
+    public function getPlayerCardsForSeason($playerID, $season)
+    {
+        return $this->repository->getCardsByPlayerForSeason($playerID, $season);
+    }
+
+    /**
      * @param $playerID
      * @param $gameID
      * @return ArrayCollection
      */
-    public function getCardsByPlayerForGame($playerID, $gameID)
+    public function getPlayerCardsForGame($playerID, $gameID)
     {
         return $this->repository->getCardsByPlayerForGame($playerID, $gameID);
     }
@@ -47,7 +55,23 @@ class CardService extends EntityRestService
      */
     public function getTeamCards($id)
     {
-        $this->repository->getCardsByTeam($id);
+        return $this->repository->getCardsByTeam($id);
+    }
+
+    /**
+     *
+     */
+    public function getTeamCardsForSeason($teamID, $season)
+    {
+        return $this->repository->getCardsByTeamForSeason($teamID, $season);
+    }
+
+    /*
+     *
+     */
+    public function getTeamCardsForGame($teamID, $gameID)
+    {
+        return $this->repository->getCardsByTeamForGame($teamID, $gameID);
     }
 
     /**
@@ -55,7 +79,7 @@ class CardService extends EntityRestService
      */
     public function getGameCards($id)
     {
-        $this->repository->getCardsByGame($id);
+        return $this->repository->getCardsByGame($id);
     }
 
 }

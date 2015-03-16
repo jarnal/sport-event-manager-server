@@ -33,6 +33,7 @@ class Card
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @Expose
+     * @Groups({"Default", "Team", "Player"})
      */
     private $id;
 
@@ -45,6 +46,7 @@ class Card
      * @Assert\NotBlank(message="form.card.type.blank")
      *
      * @Expose
+     * @Groups({"Default", "Team", "Player"})
      */
     private $type;
 
@@ -55,6 +57,7 @@ class Card
      * @ORM\Column(name="time", type="datetime", nullable=true)
      *
      * @Expose
+     * @Groups({"Default", "Team", "Player"})
      */
     private $time;
 
@@ -66,6 +69,9 @@ class Card
      * @ORM\JoinColumn(name="player_id", referencedColumnName="id", onDelete="CASCADE")
      *
      * @Assert\NotNull(message="form.player.type.null")
+     *
+     * @Expose
+     * @Groups({"Team", "Game"})
      */
     private $player;
 
@@ -77,6 +83,9 @@ class Card
      * @ORM\JoinColumn(name="game_id", referencedColumnName="id", onDelete="CASCADE")
      *
      * @Assert\NotNull(message="form.game.type.null")
+     *
+     * @Expose
+     * @Groups({"Player"})
      */
     private $game;
 

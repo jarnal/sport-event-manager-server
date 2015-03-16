@@ -355,7 +355,7 @@ class PlayerRestController extends FOSRestController
      *      {
      *          "name"="season",
      *          "dataType"="string",
-     *          "description"="Season name (14-15 or 15/16 format)"
+     *          "description"="Season name (2014-2015 format)"
      *      }
      *  },
      *  output={
@@ -446,7 +446,7 @@ class PlayerRestController extends FOSRestController
      *      {
      *          "name"="season",
      *          "dataType"="string",
-     *          "description"="Season name (14-15 or 15/16 format)"
+     *          "description"="Season name (2014-2015 format)"
      *      }
      *  },
      *  output={
@@ -537,7 +537,7 @@ class PlayerRestController extends FOSRestController
      *      {
      *          "name"="season",
      *          "dataType"="string",
-     *          "description"="Season name (14-15 or 15/16 format)"
+     *          "description"="Season name (2014-2015 format)"
      *      }
      *  },
      *  output={
@@ -628,7 +628,7 @@ class PlayerRestController extends FOSRestController
      *      {
      *          "name"="season",
      *          "dataType"="string",
-     *          "description"="Season name (14-15 or 15/16 format)"
+     *          "description"="Season name (2014-2015 format)"
      *      }
      *  },
      *  output={
@@ -719,7 +719,7 @@ class PlayerRestController extends FOSRestController
      *      {
      *          "name"="season",
      *          "dataType"="string",
-     *          "description"="Season name (14-15 or 15/16 format)"
+     *          "description"="Season name (2014-2015 format)"
      *      }
      *  },
      *  output={
@@ -798,7 +798,7 @@ class PlayerRestController extends FOSRestController
         $this->getService()->getOr404($playerID);
         $this->get('event_bundle.game.service')->getOr404($gameID);
 
-        $cards = $this->get('action_bundle.card.service')->getCardsByPlayerForGame($playerID, $gameID);
+        $cards = $this->get('action_bundle.card.service')->getPlayerCardsForGame($playerID, $gameID);
         return array("cards"=>$cards);
     }
 

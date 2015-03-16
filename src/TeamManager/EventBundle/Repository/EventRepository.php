@@ -27,7 +27,7 @@ class EventRepository extends EntityRepository
             ->innerjoin('TeamManagerTeamBundle:Team', 'team', 'WITH', 'team = game.team OR team = training.team')
             ->innerjoin('team.players', 'player', 'WITH', $query->expr()->eq('player.id', $pPlayerID))
             ->join('event.location', 'location')
-            ->orderBy('event.date')
+            ->orderBy('event.date', 'DESC')
         ;
         return $query->getQuery()->getResult();
     }
@@ -48,7 +48,7 @@ class EventRepository extends EntityRepository
             ->join('event.location', 'location')
             ->where('event.season = :season')
             ->setParameter('season', $season)
-            ->orderBy('event.date')
+            ->orderBy('event.date', 'DESC')
         ;
         return $query->getQuery()->getResult();
     }
@@ -68,7 +68,7 @@ class EventRepository extends EntityRepository
             ->where('team.id = :teamID')
             ->setParameter('teamID', $teamID)
             ->join('event.location', 'location')
-            ->orderBy('event.date')
+            ->orderBy('event.date', 'DESC')
         ;
         return $query->getQuery()->getResult();
     }
@@ -90,7 +90,7 @@ class EventRepository extends EntityRepository
             ->andWhere('event.season = :season')
             ->setParameter('season', $season)
             ->join('event.location', 'location')
-            ->orderBy('event.date')
+            ->orderBy('event.date', 'DESC')
         ;
         return $query->getQuery()->getResult();
     }
