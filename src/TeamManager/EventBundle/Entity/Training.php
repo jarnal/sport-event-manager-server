@@ -13,7 +13,7 @@ use TeamManager\TeamBundle\Entity\Team;
 /**
  * Training
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="TeamManager\EventBundle\Repository\TrainingRepository")
  * @ORM\Table(name="tm_training")
  *
  * @ExclusionPolicy("all")

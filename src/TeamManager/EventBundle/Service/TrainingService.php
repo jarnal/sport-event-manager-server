@@ -21,4 +21,50 @@ class TrainingService extends EntityRestService
         parent::__construct($pEntityManager, $pFormFactory, $pEntityClass, $pFormTypeClass, $pFormExceptionClass);
     }
 
+    /**
+     *
+     *
+     * @param $playerID
+     * @return array
+     */
+    public function getPlayerTrainings($playerID)
+    {
+        return $this->repository->findTrainingsByPlayer($playerID);
+    }
+
+    /**
+     *
+     *
+     * @param $playerID
+     * @param $seasonID
+     * @return array
+     */
+    public function getPlayerTrainingsForSeason($playerID, $season)
+    {
+        return $this->repository->findTrainingsForPlayerBySeason($playerID, $season);
+    }
+
+    /**
+     *
+     *
+     * @param $teamID
+     * @return array
+     */
+    public function getTeamTrainings($teamID)
+    {
+        return $this->repository->findTrainingsByTeam($teamID);
+    }
+
+    /**
+     *
+     *
+     * @param $teamID
+     * @param $seasonID
+     * @return array
+     */
+    public function getTeamTrainingsForSeason($teamID, $season)
+    {
+        return $this->repository->findTrainingsForTeamBySeason($teamID, $season);
+    }
+
 }

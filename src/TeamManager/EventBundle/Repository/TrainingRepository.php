@@ -12,4 +12,73 @@ use Doctrine\ORM\EntityRepository;
  */
 class TrainingRepository extends EntityRepository
 {
+
+    /**
+     *
+     *
+     * @param $playerID
+     * @return array
+     */
+    public function findTrainingsByPlayer($playerID)
+    {
+        $query = $this->createQueryBuilder('training');
+        $query->innerjoin('training.team', 'team', 'WITH', 'team = training.team')
+            ->innerjoin('team.players', 'player', 'WITH', $query->expr()->eq('player.id', $playerID))
+            ->orderBy('training.date')
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     *
+     *
+     * @param $playerID
+     * @param $seasonID
+     * @return array
+     */
+    public function findTrainingsForPlayerBySeason($playerID, $season)
+    {
+        $query = $this->createQueryBuilder('training');
+        $query->innerjoin('training.team', 'team', 'WITH', 'team = training.team')
+            ->innerjoin('team.players', 'player', 'WITH', $query->expr()->eq('player.id', $playerID))
+            ->andWhere('training.season = :season')
+            ->setParameter('season', $season)
+            ->orderBy('training.date')
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     *
+     *
+     * @param $teamID
+     * @return array
+     */
+    public function findTrainingsByTeam($teamID)
+    {
+        $query = $this->createQueryBuilder('training');
+        $query->innerjoin('training.team', 'team', 'WITH', $query->expr()->eq('team.id', $teamID))
+            ->orderBy('training.date')
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     *
+     *
+     * @param $teamID
+     * @param $seasonID
+     * @return array
+     */
+    public function findTrainingsForTeamBySeason($teamID, $season)
+    {
+        $query = $this->createQueryBuilder('training');
+        $query->innerjoin('training.team', 'team', 'WITH', $query->expr()->eq('team.id', $teamID))
+            ->andWhere('training.season = :season')
+            ->setParameter('season', $season)
+            ->orderBy('training.date')
+        ;
+        return $query->getQuery()->getResult();
+    }
+
 }

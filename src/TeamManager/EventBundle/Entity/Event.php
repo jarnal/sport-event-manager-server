@@ -116,7 +116,7 @@ class Event
      * Location where the event takes place.
      *
      * @var Location
-     * @ORM\ManyToOne(targetEntity="\TeamManager\CommonBundle\Entity\Location", cascade="persist")
+     * @ORM\ManyToOne(targetEntity="\TeamManager\CommonBundle\Entity\Location", cascade="persist", fetch="EAGER")
      * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
      * @Assert\NotNull(message="form.event.location.blank")
      *

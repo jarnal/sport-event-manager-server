@@ -44,9 +44,9 @@ class EventService extends EntityRestService
      * @param $seasonID
      * @return array
      */
-    public function getPlayerEventsForSeason($playerID, $seasonID)
+    public function getPlayerEventsForSeason($playerID, $season)
     {
-        //return $this->repository->findEventsByPlayerForSeason($playerID, $seasonID);
+        return $this->repository->findEventsByPlayerForSeason($playerID, $season);
     }
 
     /**
@@ -67,9 +67,9 @@ class EventService extends EntityRestService
      * @param $seasonID
      * @return array
      */
-    public function getTeamEventsForSeason($playerID, $seasonID)
+    public function getTeamEventsForSeason($playerID, $season)
     {
-        //return $this->repository->findEventsByTeamForSeason($playerID, $seasonID);
+        return $this->repository->findEventsByTeamForSeason($playerID, $season);
     }
 
 }
