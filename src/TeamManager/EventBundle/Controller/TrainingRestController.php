@@ -39,7 +39,7 @@ class TrainingRestController extends FOSRestController
      *  output={
      *      "class"="TeamManager\EventBundle\Entity\Training",
      *      "collection"=true,
-     *      "groups"={"Default"},
+     *      "groups"={"Default", "EventGlobal"},
      *      "parsers" = {
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
@@ -48,7 +48,7 @@ class TrainingRestController extends FOSRestController
      *  }
      * )
      *
-     * @View( serializerGroups={ "Default" } )
+     * @View( serializerGroups={"Default", "EventGlobal"} )
      *
      * @Get("/", name="get_all", options={ "method_prefix" = false })
      *
@@ -78,7 +78,7 @@ class TrainingRestController extends FOSRestController
      *      "parsers" = {
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser"
      *      },
-     *      "groups"={"Default"}
+     *      "groups"={"Default", "EventDetails"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when training exists",
@@ -86,7 +86,7 @@ class TrainingRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"Default"} )
+     * @View( serializerGroups={"Default", "EventDetails"} )
      *
      * @Get("/{id}", name="get", options={ "method_prefix" = false })
      *

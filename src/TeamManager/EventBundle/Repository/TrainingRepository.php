@@ -15,6 +15,38 @@ class TrainingRepository extends EntityRepository
 
     /**
      *
+     */
+    public function findAll()
+    {
+        $query = $this->createQueryBuilder('training');
+        $query->join('training.location', 'location')
+            ->addSelect('location')
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * @param $id
+     */
+    public function findOneById($id)
+    {
+        $query = $this->createQueryBuilder('training');
+        $query->leftJoin('training.expected_players', 'expected_players')
+            ->leftJoin('training.missing_players', 'missing_players')
+            ->leftJoin('training.present_players', 'present_players')
+            ->join('training.location', 'location')
+            ->addSelect('expected_players')
+            ->addSelect('missing_players')
+            ->addSelect('present_players')
+            ->addSelect('location')
+            ->where('training.id = :id')
+            ->setParameter(':id', $id)
+        ;
+        return $query->getQuery()->getResult()[0];
+    }
+
+    /**
+     *
      *
      * @param $playerID
      * @return array

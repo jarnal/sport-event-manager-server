@@ -75,6 +75,7 @@ class Game extends Event
      */
     public function __construct()
     {
+        parent::__construct();
         $this->goals = new ArrayCollection();
         $this->cards = new ArrayCollection();
         $this->injuries = new ArrayCollection();

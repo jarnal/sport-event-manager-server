@@ -36,6 +36,7 @@ class Event
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
+     * @Groups({"EventGlobal", "EventDetails"})
      * @Expose
      */
     protected $id;
@@ -47,6 +48,7 @@ class Event
      * @ORM\Column(name="name", type="string")
      * @Assert\NotBlank(message="form.event.name.blank")
      *
+     * @Groups({"EventGlobal", "EventDetails"})
      * @Expose
      */
     protected $name;
@@ -57,6 +59,7 @@ class Event
      * @var string
      * @ORM\Column(name="description", type="string", nullable=true)
      *
+     * @Groups({"EventGlobal", "EventDetails"})
      * @Expose
      */
     protected $description;
@@ -68,6 +71,7 @@ class Event
      * @ORM\Column(name="date", type="datetime")
      * @Assert\DateTime(message="form.event.date.blank")
      *
+     * @Groups({"EventGlobal", "EventDetails"})
      * @Expose
      */
     protected $date;
@@ -96,6 +100,7 @@ class Event
      * @ORM\Column(name="opponent", type="string", nullable=true)
      * @Assert\NotBlank(message="form.event.opponent.blank")
      *
+     * @Groups({"EventGlobal", "EventDetails"})
      * @Expose
      */
     protected $opponent;
@@ -108,6 +113,7 @@ class Event
      * @ORM\Column(name="season", type="string")
      * @Assert\NotBlank(message="form.event.season.blank")
      *
+     * @Groups({"EventGlobal", "EventDetails"})
      * @Expose
      */
     protected $season;
@@ -120,6 +126,7 @@ class Event
      * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
      * @Assert\NotNull(message="form.event.location.blank")
      *
+     * @Groups({"EventGlobal", "EventDetails"})
      * @Expose
      */
     protected $location;
@@ -146,9 +153,12 @@ class Event
      * @var ArrayCollection
      * @ORM\ManyToMany(targetEntity="\TeamManager\PlayerBundle\Entity\Player")
      * @ORM\JoinTable(name="tm_event_expected_player",
-     *      joinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id")},
+     *      joinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="player_id", referencedColumnName="id", onDelete="CASCADE")}
      *      )
+     *
+     * @Groups({"EventDetails"})
+     * @Expose
      */
     protected $expected_players;
 
@@ -158,9 +168,12 @@ class Event
      * @var ArrayCollection
      * @ORM\ManyToMany(targetEntity="\TeamManager\PlayerBundle\Entity\Player")
      * @ORM\JoinTable(name="tm_event_missing_player",
-     *      joinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id")},
+     *      joinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="player_id", referencedColumnName="id", onDelete="CASCADE")}
      *      )
+     *
+     * @Groups({"EventDetails"})
+     * @Expose
      */
     protected $missing_players;
 
@@ -170,9 +183,12 @@ class Event
      * @var ArrayCollection
      * @ORM\ManyToMany(targetEntity="\TeamManager\PlayerBundle\Entity\Player")
      * @ORM\JoinTable(name="tm_event_present_player",
-     *      joinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id")},
+     *      joinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="player_id", referencedColumnName="id", onDelete="CASCADE")}
      *      )
+     *
+     * @Groups({"EventDetails"})
+     * @Expose
      */
     protected $present_players;
 
@@ -443,6 +459,17 @@ class Event
     }
 
     /**
+     * Set expected event players list.
+     *
+     * @return Event
+     */
+    public function setExpectedPlayers($pExpectedPlayers)
+    {
+        $this->expected_players = $pExpectedPlayers;
+        return $this;
+    }
+
+    /**
      * Get expected event players list.
      *
      * @return ArrayCollection
@@ -456,7 +483,7 @@ class Event
      * Add player in expected players list.
      *
      * @param Player $pPlayer
-     * @return $this
+     * @return Event
      */
     public function addExpectedPlayer(Player $pPlayer)
     {
@@ -473,6 +500,17 @@ class Event
     public function removeExpectedPlayer(Player $pPlayer)
     {
         $this->expected_players->removeElement($pPlayer);
+        return $this;
+    }
+
+    /**
+     * Set missing event players list.
+     *
+     * @return Event
+     */
+    public function setMissingPlayers($pMissingPlayers)
+    {
+        $this->missing_players = $pMissingPlayers;
         return $this;
     }
 
@@ -507,6 +545,17 @@ class Event
     public function removeMissingPlayer(Player $pPlayer)
     {
         $this->missing_players->removeElement($pPlayer);
+        return $this;
+    }
+
+    /**
+     * Set present event players list.
+     *
+     * @return Event
+     */
+    public function setPresentPlayers($pMissingPlayers)
+    {
+        $this->present_players = $pMissingPlayers;
         return $this;
     }
 

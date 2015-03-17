@@ -8,27 +8,22 @@ use TeamManager\ActionBundle\Entity\Card;
 use TeamManager\CommonBundle\Entity\Location;
 use TeamManager\TeamBundle\Entity\Team;
 
-class LoadCardData extends AbstractFixture implements OrderedFixtureInterface
+class LoadGoalData extends AbstractFixture implements OrderedFixtureInterface
 {
-    static public $cards;
+    static public $goals;
 
     /**
      * {@inheritDoc}
      */
     public function load(ObjectManager $manager)
     {
-        $manager->clear();
+        /*$manager->clear();
 
-        $player1 = $this->getReference('player-1');
-        $player2 = $this->getReference('player-2');
-        $player3 = $this->getReference('player-3');
+        $player = $this->getReference('player-1');
+        $game = $this->getReference('game-1');
 
-        $game1 = $this->getReference('game-1');
-        $game2 = $this->getReference('game-2');
-        $game3 = $this->getReference('game-3');
-
-        $card1 = $this->buildCard($player1, $game1, Card::YELLOW_CARD);
-        $card2 = $this->buildCard($player1, $game1, Card::RED_CARD);
+        $card1 = $this->buildCard($player, $game, Card::YELLOW_CARD);
+        $card2 = $this->buildCard($player, $game, Card::RED_CARD);
 
         $manager->persist($card1);
         $manager->persist($card2);
@@ -38,7 +33,7 @@ class LoadCardData extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('card-1', $card1);
         $this->addReference('card-2', $card2);
 
-        static::$cards = array($card1, $card2);
+        static::$goals = array($card1, $card2);*/
     }
 
     /**
@@ -46,7 +41,7 @@ class LoadCardData extends AbstractFixture implements OrderedFixtureInterface
      */
     public function getOrder()
     {
-        return 7;
+        return 8;
     }
 
     /**
@@ -56,11 +51,11 @@ class LoadCardData extends AbstractFixture implements OrderedFixtureInterface
      */
     private function buildCard($player, $game, $type)
     {
-        $card = new Card();
+        /*$card = new Card();
         $card->setPlayer($player)
             ->setGame($game)
             ->setType($type)
         ;
-        return $card;
+        return $card;*/
     }
 }

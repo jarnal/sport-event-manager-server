@@ -5,8 +5,10 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use TeamManager\CommonBundle\Entity\Location;
+use TeamManager\EventBundle\Entity\Game;
 use TeamManager\EventBundle\Entity\GameFriendly;
 use TeamManager\EventBundle\Entity\Training;
+use TeamManager\TeamBundle\Entity\Team;
 
 class LoadTrainingFriendlyData extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -19,41 +21,25 @@ class LoadTrainingFriendlyData extends AbstractFixture implements OrderedFixture
     {
         $manager->clear();
 
-        $team = $this->getReference("team-1");
+        $team1 = $this->getReference("team-1");
+        $team2 = $this->getReference("team-2");
 
-        $date1 = new \DateTime();
-        $date1->setTime(18, 00, 00);
+        $season1 = "2013-2014";
+        $season2 = "2014-2015";
 
-        $date2 = new \DateTime();
-        $date2->setTime(22, 00, 00);
+        static::$trainings = array();
+        for($i=1; $i<=10; $i++)
+        {
+            $team = ($i%2>0||$i==0||$i==3)? $team1 : $team2;
+            $season = ($i%2>0||$i==0||$i==3)? $season1 : $season2;
+            $training = $this->buildTraining($i, $team, $season);
+            $manager->persist($training);
+            $manager->flush();
 
-        $training1 = new Training();
-        $training1->setName("Training 1");
-        $training1->setDescription("Training 1");
-        $training1->setDate($date1);
-        $training1->setPlayerLimit(10);
-        $training1->setLocation($team->getDefaultLocation());
-        $training1->setTeam($team);
-        $training1->setSeason('2014-2015');
+            $this->addReference('training-'.$i, $training);
 
-        $training2 = new Training();
-        $training2->setName("Training 2");
-        $training2->setDescription("Training 2");
-        $training2->setDate($date2);
-        $training2->setPlayerLimit(10);
-        $training2->setLocation($team->getDefaultLocation());
-        $training2->setTeam($team);
-        $training2->setSeason('2014-2015');
-
-        $manager->persist($training1);
-        $manager->persist($training2);
-
-        $manager->flush();
-
-        $this->addReference('training-1', $training1);
-        $this->addReference('training-2', $training2);
-
-        static::$trainings = array($training1, $training2);
+            static::$trainings[] = $training;
+        }
     }
 
     /**
@@ -62,5 +48,35 @@ class LoadTrainingFriendlyData extends AbstractFixture implements OrderedFixture
     public function getOrder()
     {
         return 5;
+    }
+
+    /**
+     * @param $id
+     * @param $team Team
+     * @param $season
+     * @return Game
+     */
+    private function buildTraining($id, $team, $season)
+    {
+        $date = new \DateTime();
+        $date->setTime($id, 00, 00);
+        $training = new Training();
+
+        $expectedPlayers = $team->getPlayers();
+        $presentPlayers = $expectedPlayers->slice(0, 9);
+        $missingPlayers = $expectedPlayers->slice(10, 14);
+        $training->setExpectedPlayers($expectedPlayers);
+        $training->setPresentPlayers($presentPlayers);
+        $training->setMissingPlayers($missingPlayers);
+
+        $training->setName("Training ".$id);
+        $training->setDescription("Training ".$id);
+        $training->setDate($date);
+        $training->setPlayerLimit(10);
+        $training->setLocation($team->getDefaultLocation());
+        $training->setSubscriptionType("Training ".$id);
+        $training->setTeam($team);
+        $training->setSeason($season);
+        return $training;
     }
 }

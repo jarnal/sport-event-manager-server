@@ -6,6 +6,7 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use TeamManager\CommonBundle\Entity\Location;
 use TeamManager\EventBundle\Entity\Game;
+use TeamManager\TeamBundle\Entity\Team;
 
 class LoadGameData extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -18,29 +19,25 @@ class LoadGameData extends AbstractFixture implements OrderedFixtureInterface
     {
         $manager->clear();
 
-        $team = $this->getReference("team-1");
+        $team1 = $this->getReference("team-1");
+        $team2 = $this->getReference("team-2");
 
-        $date1 = new \DateTime();
-        $date1->setTime(12, 00, 00);
+        $season1 = "2013-2014";
+        $season2 = "2014-2015";
 
-        $game1 = new Game();
-        $game1->setName("Game 1");
-        $game1->setDescription("Game 1");
-        $game1->setDate($date1);
-        $game1->setPlayerLimit(10);
-        $game1->setLocation($team->getDefaultLocation());
-        $game1->setOpponent("Team Going To Die");
-        $game1->setSubscriptionType("Game 1");
-        $game1->setTeam($team);
-        $game1->setSeason('2014-2015');
+        static::$games = array();
+        for($i=1; $i<=15; $i++)
+        {
+            $team = ($i%2>0||$i==0||$i==3)? $team1 : $team2;
+            $season = ($i%2>0||$i==0||$i==3)? $season1 : $season2;
+            $game = $this->buildGame($i, $team, $season);
+            $manager->persist($game);
+            $manager->flush();
 
-        $manager->persist($game1);
+            $this->addReference('game-'.$i, $game);
 
-        $manager->flush();
-
-        $this->addReference('game-1', $game1);
-
-        static::$games = array($game1);
+            static::$games[] = $game;
+        }
     }
 
     /**
@@ -49,5 +46,36 @@ class LoadGameData extends AbstractFixture implements OrderedFixtureInterface
     public function getOrder()
     {
         return 3;
+    }
+
+    /**
+     * @param $id
+     * @param $team Team
+     * @param $season
+     * @return Game
+     */
+    private function buildGame($id, $team, $season)
+    {
+        $date = new \DateTime();
+        $date->setTime($id, 00, 00);
+        $game = new Game();
+
+        $expectedPlayers = $team->getPlayers();
+        $presentPlayers = $expectedPlayers->slice(0, 9);
+        $missingPlayers = $expectedPlayers->slice(10, 14);
+        $game->setExpectedPlayers($expectedPlayers);
+        $game->setPresentPlayers($presentPlayers);
+        $game->setMissingPlayers($missingPlayers);
+
+        $game->setName("Game ".$id);
+        $game->setDescription("Game ".$id);
+        $game->setDate($date);
+        $game->setPlayerLimit(10);
+        $game->setLocation($team->getDefaultLocation());
+        $game->setOpponent("Team Going To Die ".$id);
+        $game->setSubscriptionType("Game ".$id);
+        $game->setTeam($team);
+        $game->setSeason($season);
+        return $game;
     }
 }

@@ -12,4 +12,34 @@ use Doctrine\ORM\EntityRepository;
  */
 class TeamRepository extends EntityRepository
 {
+
+    /**
+     * @param $id
+     */
+    public function findAll()
+    {
+        $query = $this->createQueryBuilder('team');
+        $query->join('team.default_location', 'location')
+            ->addSelect('location')
+            ->join('team.manager', 'manager')
+            ->addSelect('manager');
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * @param $id
+     */
+    public function findOneById($id)
+    {
+        $query = $this->createQueryBuilder('team');
+        $query->join('team.default_location', 'location')
+            ->addSelect('location')
+            ->join('team.manager', 'manager')
+            ->addSelect('manager')
+            ->where('team.id = :teamID')
+            ->setParameter('teamID', $id)
+        ;
+        return $query->getQuery()->getResult()[0];
+    }
+
 }

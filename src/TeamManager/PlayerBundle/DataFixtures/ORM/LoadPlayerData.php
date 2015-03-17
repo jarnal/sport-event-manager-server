@@ -17,35 +17,17 @@ class LoadPlayerData extends AbstractFixture implements OrderedFixtureInterface
     {
         $manager->clear();
 
-        $player1 = new Player();
-        $player1->setFirstName("TheFirstName1");
-        $player1->setLastName("TheLastName1");
-        $player1->setUserName("TheUserName1");
-        $player1->setPassword("ThePassword1");
-        $player1->setEmail("email1@email.fr");
-        $player1->setJerseyNumber(1);
-        $player1->setLevel(1);
-        $player1->setApiKey("theapikey1");
+        static::$players = array();
+        for($i=1; $i<=30; $i++)
+        {
+            $player = $this->buildUser($i);
+            $manager->persist($player);
+            $manager->flush();
 
-        $player2 = new Player();
-        $player2->setFirstName("TheFirstName2");
-        $player2->setLastName("TheLastName2");
-        $player2->setUserName("TheUserName2");
-        $player2->setPassword("ThePassword2");
-        $player2->setEmail("email2@email.fr");
-        $player2->setJerseyNumber(2);
-        $player2->setLevel(2);
-        $player2->setApiKey("theapikey2");
+            $this->addReference('player-'.$i, $player);
 
-        $manager->persist($player1);
-        $manager->persist($player2);
-
-        $manager->flush();
-
-        $this->addReference('player-1', $player1);
-        $this->addReference('player-2', $player2);
-
-        static::$players = array($player1, $player2);
+            static::$players[] = $player;
+        }
     }
 
     /**
@@ -54,5 +36,23 @@ class LoadPlayerData extends AbstractFixture implements OrderedFixtureInterface
     public function getOrder()
     {
         return 1;
+    }
+
+    /**
+     * @param $id
+     * @return Player
+     */
+    private function buildUser($id)
+    {
+        $player = new Player();
+        $player->setFirstName("TheFirstName".$id);
+        $player->setLastName("TheLastName".$id);
+        $player->setUserName("TheUserName".$id);
+        $player->setPassword("ThePassword".$id);
+        $player->setEmail("email".$id."@email.fr");
+        $player->setJerseyNumber($id);
+        $player->setLevel($id);
+        $player->setApiKey("theapikey".$id);
+        return $player;
     }
 }

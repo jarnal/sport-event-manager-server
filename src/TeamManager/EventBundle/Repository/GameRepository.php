@@ -15,6 +15,38 @@ class GameRepository extends EntityRepository
 
     /**
      *
+     */
+    public function findAll()
+    {
+        $query = $this->createQueryBuilder('game');
+        $query->join('game.location', 'location')
+            ->addSelect('location')
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * @param $id
+     */
+    public function findOneById($id)
+    {
+        $query = $this->createQueryBuilder('game');
+        $query->leftJoin('game.expected_players', 'expected_players')
+            ->leftJoin('game.missing_players', 'missing_players')
+            ->leftJoin('game.present_players', 'present_players')
+            ->join('game.location', 'location')
+            ->addSelect('expected_players')
+            ->addSelect('missing_players')
+            ->addSelect('present_players')
+            ->addSelect('location')
+            ->where('game.id = :id')
+            ->setParameter(':id', $id)
+        ;
+        return $query->getQuery()->getResult()[0];
+    }
+
+    /**
+     *
      *
      * @param $playerID
      * @return array

@@ -18,7 +18,7 @@ class LoadTeamData extends AbstractFixture implements OrderedFixtureInterface
     {
         $manager->clear();
 
-        $player = $this->getReference('player-1');
+        $teamManager = $this->getReference('player-1');
 
         $location = new Location();
         $location->setName("Salle Pouet");
@@ -26,31 +26,28 @@ class LoadTeamData extends AbstractFixture implements OrderedFixtureInterface
         $location->setLatitude(45.772502);
         $location->setLongitude(4.874019);
 
-        $team1 = new Team();
-        $team1->setName("team1");
-        $team1->setDescription("Description of team1");
-        $team1->setDefaultLocation($location);
-        $team1->setManager($player);
-        $team1->addPlayer($this->getReference('player-1'));
-        $team1->addPlayer($this->getReference('player-2'));
+        $arrPlayers1 = array();
+        for($i=1; $i<=15; $i++) {
+            $arrPlayers1[] = $this->getReference('player-'.$i);
+        }
 
-        $team2 = new Team();
-        $team2->setName("team1");
-        $team2->setDescription("Description of team1");
-        $team2->setDefaultLocation($location);
-        $team2->setManager($player);
-        $team2->addPlayer($this->getReference('player-1'));
-        $team2->addPlayer($this->getReference('player-2'));
+        $arrPlayers2 = array();
+        for($i=15; $i<=30; $i++) {
+            $arrPlayers2[] = $this->getReference('player-'.$i);
+        }
 
-        $manager->persist($team1);
-        $manager->persist($team2);
+        static::$teams = array();
+        for($i=1; $i<=2; $i++)
+        {
+            $arrPlayers = ($i%2>0)? $arrPlayers1 : $arrPlayers2;
+            $team = $this->buildTeam($i, $location, $teamManager, $arrPlayers);
+            $manager->persist($team);
+            $manager->flush();
 
-        $manager->flush();
+            $this->addReference('team-'.$i, $team);
 
-        $this->addReference('team-1', $team1);
-        $this->addReference('team-2', $team2);
-
-        static::$teams = array($team1, $team2);
+            static::$teams[] = $team;
+        }
     }
 
     /**
@@ -59,5 +56,26 @@ class LoadTeamData extends AbstractFixture implements OrderedFixtureInterface
     public function getOrder()
     {
         return 2;
+    }
+
+    /**
+     * @param $id
+     * @param $location
+     * @param $manager
+     * @param $arrPlayers
+     * @return Team
+     */
+    private function buildTeam($id, $location, $manager, $arrPlayers)
+    {
+        $team = new Team();
+        $team->setName("team".$id);
+        $team->setDescription("Description of team".$id);
+        $team->setDefaultLocation($location);
+        $team->setManager($manager);
+        foreach($arrPlayers as $player)
+        {
+            $team->addPlayer($player);
+        }
+        return $team;
     }
 }

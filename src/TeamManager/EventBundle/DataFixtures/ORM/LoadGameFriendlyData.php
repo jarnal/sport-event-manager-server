@@ -7,6 +7,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use TeamManager\CommonBundle\Entity\Location;
 use TeamManager\EventBundle\Entity\Game;
 use TeamManager\EventBundle\Entity\GameFriendly;
+use TeamManager\TeamBundle\Entity\Team;
 
 class LoadGameFriendlyData extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -19,47 +20,25 @@ class LoadGameFriendlyData extends AbstractFixture implements OrderedFixtureInte
     {
         $manager->clear();
 
-        $team = $this->getReference("team-1");
+        $team1 = $this->getReference("team-1");
+        $team2 = $this->getReference("team-2");
 
-        $date1 = new \DateTime();
-        $date1->setTime(11, 00, 00);
+        $season1 = "2013-2014";
+        $season2 = "2014-2015";
 
-        $date2 = new \DateTime();
-        $date2->setTime(14, 00, 00);
+        static::$games = array();
+        for($i=1; $i<=15; $i++)
+        {
+            $team = ($i%2>0||$i==0||$i==3)? $team1 : $team2;
+            $season = ($i%2>0||$i==0||$i==3)? $season1 : $season2;
+            $game = $this->buildGame($i, $team, $season);
+            $manager->persist($game);
+            $manager->flush();
 
-        $game1 = new Game();
-        $game1->setName("Friendly 1");
-        $game1->setFriendly(true);
-        $game1->setDescription("Friendly 1");
-        $game1->setDate($date1);
-        $game1->setPlayerLimit(10);
-        $game1->setLocation($team->getDefaultLocation());
-        $game1->setOpponent("Team Going To Die");
-        $game1->setSubscriptionType("test");
-        $game1->setTeam($team);
-        $game1->setSeason('2014-2015');
+            $this->addReference('friendlygame-'.$i, $game);
 
-        $game2 = new Game();
-        $game2->setName("Friendly 2");
-        $game2->setFriendly(true);
-        $game2->setDescription("Friendly 2");
-        $game2->setDate($date2);
-        $game2->setPlayerLimit(10);
-        $game2->setLocation($team->getDefaultLocation());
-        $game2->setOpponent("Team Going To Die");
-        $game2->setSubscriptionType("test");
-        $game2->setTeam($team);
-        $game2->setSeason('2014-2015');
-
-        $manager->persist($game1);
-        $manager->persist($game2);
-
-        $manager->flush();
-
-        $this->addReference('friendly-1', $game1);
-        $this->addReference('friendly-2', $game2);
-
-        static::$games = array($game1);
+            static::$games[] = $game;
+        }
     }
 
     /**
@@ -68,5 +47,36 @@ class LoadGameFriendlyData extends AbstractFixture implements OrderedFixtureInte
     public function getOrder()
     {
         return 4;
+    }
+
+    /**
+     * @param $id
+     * @param $team Team
+     * @param $season
+     * @return Game
+     */
+    private function buildGame($id, $team, $season)
+    {
+        $date = new \DateTime();
+        $date->setTime($id, 00, 00);
+        $game = new Game();
+
+        $expectedPlayers = $team->getPlayers();
+        $presentPlayers = $expectedPlayers->slice(0, 9);
+        $missingPlayers = $expectedPlayers->slice(10, 14);
+        $game->setExpectedPlayers($expectedPlayers);
+        $game->setPresentPlayers($presentPlayers);
+        $game->setMissingPlayers($missingPlayers);
+        $game->setFriendly(true);
+        $game->setName("FriendlyGame ".$id);
+        $game->setDescription("FriendlyGame ".$id);
+        $game->setDate($date);
+        $game->setPlayerLimit(10);
+        $game->setLocation($team->getDefaultLocation());
+        $game->setOpponent("Friendly Team Going To Die ".$id);
+        $game->setSubscriptionType("FriendlyGame ".$id);
+        $game->setTeam($team);
+        $game->setSeason($season);
+        return $game;
     }
 }

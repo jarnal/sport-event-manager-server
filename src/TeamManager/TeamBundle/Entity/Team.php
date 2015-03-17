@@ -4,6 +4,11 @@ namespace TeamManager\TeamBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\VirtualProperty;
 use Symfony\Component\Validator\Constraints as Assert;
 use TeamManager\ActionBundle\Entity\Goal;
 use TeamManager\CommonBundle\Entity\Location;
@@ -17,6 +22,8 @@ use TeamManager\PlayerBundle\Entity\Player;
  *
  * @ORM\Table(name="tm_team")
  * @ORM\Entity(repositoryClass="TeamManager\TeamBundle\Repository\TeamRepository")
+ *
+ * @ExclusionPolicy("all")
  */
 class Team
 {
@@ -26,6 +33,8 @@ class Team
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Expose
      */
     private $id;
 
@@ -35,6 +44,8 @@ class Team
      * @var string
      * @ORM\Column(name="name", type="string")
      * @Assert\NotBlank(message="form.team.name.blank")
+     *
+     * @Expose
      */
     private $name;
 
@@ -43,6 +54,8 @@ class Team
      *
      * @var string
      * @ORM\Column(name="description", type="string", nullable=true)
+     *
+     * @Expose
      */
     private $description;
 
@@ -51,6 +64,8 @@ class Team
      *
      * @var string
      * @ORM\Column(name="image_url", type="string", nullable=true)
+     *
+     * @Expose
      */
     private $image_url;
 
@@ -61,6 +76,8 @@ class Team
      * @ORM\ManyToOne(targetEntity="\TeamManager\CommonBundle\Entity\Location", cascade="persist")
      * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
      * @Assert\NotNull(message="form.team.location.null")
+     *
+     * @Expose
      */
     private $default_location;
 
@@ -71,6 +88,8 @@ class Team
      * @ORM\ManyToOne(targetEntity="\TeamManager\PlayerBundle\Entity\Player", inversedBy="managed_teams")
      * @ORM\JoinColumn(name="manager_id", referencedColumnName="id")
      * @Assert\NotNull(message="form.team.manager.null")
+     *
+     * @Expose
      */
     private $manager;
 

@@ -43,7 +43,7 @@ class GameRestController extends FOSRestController
      *  output={
      *      "class"="TeamManager\EventBundle\Entity\Game",
      *      "collection"=true,
-     *      "groups"={"Default"},
+     *      "groups"={"Default", "EventGlobal"},
      *      "parsers" = {
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
@@ -52,7 +52,7 @@ class GameRestController extends FOSRestController
      *  }
      * )
      *
-     * @View( serializerGroups={ "Default" } )
+     * @View( serializerGroups={"Default", "EventGlobal"} )
      *
      * @Get("/", name="get_all", options={ "method_prefix" = false })
      *
@@ -82,7 +82,7 @@ class GameRestController extends FOSRestController
      *      "parsers" = {
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser"
      *      },
-     *      "groups"={"Default"}
+     *      "groups"={"Default", "EventDetails"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when game exists",
@@ -90,7 +90,7 @@ class GameRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"Default"} )
+     * @View( serializerGroups={ "Default", "EventDetails"} )
      *
      * @Get("/{id}", name="get", options={ "method_prefix" = false })
      *
