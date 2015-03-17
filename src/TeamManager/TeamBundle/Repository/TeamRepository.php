@@ -39,7 +39,11 @@ class TeamRepository extends EntityRepository
             ->where('team.id = :teamID')
             ->setParameter('teamID', $id)
         ;
-        return $query->getQuery()->getResult()[0];
+        $result = $query->getQuery()->getResult();
+        if(isset($result[0])){
+            return $result[0];
+        }
+        return $query->getQuery()->getResult();
     }
 
 }

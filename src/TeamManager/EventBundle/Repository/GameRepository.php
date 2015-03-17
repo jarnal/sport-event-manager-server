@@ -42,7 +42,11 @@ class GameRepository extends EntityRepository
             ->where('game.id = :id')
             ->setParameter(':id', $id)
         ;
-        return $query->getQuery()->getResult()[0];
+        $result = $query->getQuery()->getResult();
+        if(isset($result[0])){
+            return $result[0];
+        }
+        return $query->getQuery()->getResult();
     }
 
     /**
