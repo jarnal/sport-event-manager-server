@@ -1,5 +1,5 @@
 <?php
-namespace TeamManager\TeamBundle\DataFixtures\ORM;
+namespace TeamManager\ActionBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;

@@ -26,6 +26,9 @@ class LoadTeamData extends AbstractFixture implements OrderedFixtureInterface
         $location->setLatitude(45.772502);
         $location->setLongitude(4.874019);
 
+        $manager->persist($location);
+        $manager->flush();
+
         $arrPlayers1 = array();
         for($i=1; $i<=15; $i++) {
             $arrPlayers1[] = $this->getReference('player-'.$i);

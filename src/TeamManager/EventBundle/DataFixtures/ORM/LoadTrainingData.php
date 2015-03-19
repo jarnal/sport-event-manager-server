@@ -10,7 +10,7 @@ use TeamManager\EventBundle\Entity\GameFriendly;
 use TeamManager\EventBundle\Entity\Training;
 use TeamManager\TeamBundle\Entity\Team;
 
-class LoadTrainingFriendlyData extends AbstractFixture implements OrderedFixtureInterface
+class LoadTrainingData extends AbstractFixture implements OrderedFixtureInterface
 {
     static public $trainings;
 

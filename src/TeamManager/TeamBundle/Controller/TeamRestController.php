@@ -329,7 +329,7 @@ class TeamRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"Default"} )
+     * @View( serializerGroups={"Default", "EventGlobal"} )
      *
      * @Get("/{id}/events", name="events", options={ "method_prefix" = false })
      *
@@ -369,7 +369,7 @@ class TeamRestController extends FOSRestController
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
      *      },
-     *      "groups"={"Default"}
+     *      "groups"={"Default", "EventGlobal"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when team exists",
@@ -377,7 +377,7 @@ class TeamRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"Default"} )
+     * @View( serializerGroups={"Default", "EventGlobal"} )
      *
      * @Get("/{teamID}/season/{season}/events", name="events_season", options={ "method_prefix" = false })
      *
@@ -412,7 +412,7 @@ class TeamRestController extends FOSRestController
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
      *      },
-     *      "groups"={"Default"}
+     *      "groups"={"Default", "EventGlobal"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when team exists",
@@ -420,7 +420,7 @@ class TeamRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"Default"} )
+     * @View( serializerGroups={"Default", "EventGlobal"} )
      *
      * @Get("/{id}/games", name="games", options={ "method_prefix" = false })
      *
@@ -460,7 +460,7 @@ class TeamRestController extends FOSRestController
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
      *      },
-     *      "groups"={"Default"}
+     *      "groups"={"Default", "EventGlobal"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when team exists",
@@ -468,7 +468,7 @@ class TeamRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"Default"} )
+     * @View( serializerGroups={"Default", "EventGlobal"} )
      *
      * @Get("/{teamID}/season/{season}/games", name="games_season", options={ "method_prefix" = false })
      *
@@ -503,7 +503,7 @@ class TeamRestController extends FOSRestController
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
      *      },
-     *      "groups"={"Default"}
+     *      "groups"={"Default", "EventGlobal"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when team exists",
@@ -511,7 +511,7 @@ class TeamRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"Default"} )
+     * @View( serializerGroups={"Default", "EventGlobal"} )
      *
      * @Get("/{id}/friendly_games", name="friendly_games", options={ "method_prefix" = false })
      *
@@ -551,7 +551,7 @@ class TeamRestController extends FOSRestController
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
      *      },
-     *      "groups"={"Default"}
+     *      "groups"={"Default", "EventGlobal"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when team exists",
@@ -559,7 +559,7 @@ class TeamRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"Default"} )
+     * @View( serializerGroups={"Default", "EventGlobal"} )
      *
      * @Get("/{teamID}/season/{season}/friendly_games", name="friendly_games_season", options={ "method_prefix" = false })
      *
@@ -594,7 +594,7 @@ class TeamRestController extends FOSRestController
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
      *      },
-     *      "groups"={"Default"}
+     *      "groups"={"Default", "EventGlobal"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when team exists",
@@ -602,7 +602,7 @@ class TeamRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"Default"} )
+     * @View( serializerGroups={"Default", "EventGlobal"} )
      *
      * @Get("/{id}/trainings", name="trainings", options={ "method_prefix" = false })
      *
@@ -642,7 +642,7 @@ class TeamRestController extends FOSRestController
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
      *      },
-     *      "groups"={"Default"}
+     *      "groups"={"Default", "EventGlobal"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when team exists",
@@ -650,7 +650,7 @@ class TeamRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"Default"} )
+     * @View( serializerGroups={"Default", "EventGlobal"} )
      *
      * @Get("/{teamID}/season/{season}/trainings", name="trainings_season", options={ "method_prefix" = false })
      *

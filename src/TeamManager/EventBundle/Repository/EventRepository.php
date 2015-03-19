@@ -3,6 +3,9 @@
 namespace TeamManager\EventBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NativeQuery;
+use Doctrine\ORM\Query\ResultSetMapping;
+use Doctrine\ORM\Query\ResultSetMappingBuilder;
 
 /**
  * EventRepository
@@ -21,15 +24,23 @@ class EventRepository extends EntityRepository
      */
     public function findEventsByPlayer($pPlayerID)
     {
-        $query = $this->createQueryBuilder('event');
-        $query->leftJoin('TeamManagerEventBundle:Game', 'game', 'WITH', $query->expr()->eq('game.id', 'event.id'))
-            ->leftJoin('TeamManagerEventBundle:Training', 'training', 'WITH', $query->expr()->eq('training.id', 'event.id'))
-            ->innerjoin('TeamManagerTeamBundle:Team', 'team', 'WITH', 'team = game.team OR team = training.team')
-            ->innerjoin('team.players', 'player', 'WITH', $query->expr()->eq('player.id', $pPlayerID))
-            ->join('event.location', 'location')
-            ->orderBy('event.date', 'DESC')
+        $sql = "
+            SELECT event.id AS id0, event.name AS name1, event.description AS description2, event.date AS date3, event.subscription_type AS subscription_type4, event.player_limit AS player_limit5, event.opponent AS opponent6, event.season AS season7, game.friendly AS friendly8, event.event_type AS event_type9,
+            location.id AS id10, location.name AS name11, location.address AS address12, location.longitude AS longitude13, location.latitude AS latitude14
+            FROM tm_event event
+            LEFT JOIN tm_training training ON event.id = training.id
+            LEFT JOIN tm_game game ON event.id = game.id
+            INNER JOIN tm_team team on team.id = training.team_id OR team.id = game.team_id
+            INNER JOIN tm_player_rel_team teamPlayer on teamPlayer.user_id = :playerID
+            INNER JOIN tm_location location on location.id = event.location_id
+            ORDER BY event.date DESC"
         ;
-        return $query->getQuery()->getResult();
+
+        $query = $this->getEventNativeQuery($sql);
+        $query->setParameter('playerID', $pPlayerID);
+        $results = $query->getResult();
+
+        return $results;
     }
 
     /**
@@ -40,37 +51,57 @@ class EventRepository extends EntityRepository
      */
     public function findEventsByPlayerForSeason($pPlayerID, $season)
     {
-        $query = $this->createQueryBuilder('event');
-        $query->leftJoin('TeamManagerEventBundle:Game', 'game', 'WITH', $query->expr()->eq('game.id', 'event.id'))
-            ->leftJoin('TeamManagerEventBundle:Training', 'training', 'WITH', $query->expr()->eq('training.id', 'event.id'))
-            ->innerjoin('TeamManagerTeamBundle:Team', 'team', 'WITH', 'team = game.team OR team = training.team')
-            ->innerjoin('team.players', 'player', 'WITH', $query->expr()->eq('player.id', $pPlayerID))
-            ->join('event.location', 'location')
-            ->where('event.season = :season')
-            ->setParameter('season', $season)
-            ->orderBy('event.date', 'DESC')
+        $sql = "
+            SELECT event.id AS id0, event.name AS name1, event.description AS description2, event.date AS date3, event.subscription_type AS subscription_type4, event.player_limit AS player_limit5, event.opponent AS opponent6, event.season AS season7, game.friendly AS friendly8, event.event_type AS event_type9,
+            location.id AS id10, location.name AS name11, location.address AS address12, location.longitude AS longitude13, location.latitude AS latitude14
+            FROM tm_event event
+            LEFT JOIN tm_training training ON event.id = training.id
+            LEFT JOIN tm_game game ON event.id = game.id
+            INNER JOIN tm_team team on team.id = training.team_id OR team.id = game.team_id
+            INNER JOIN tm_player_rel_team teamPlayer on teamPlayer.user_id = :playerID
+            INNER JOIN tm_location location on location.id = event.location_id
+            WHERE event.season = :season
+            ORDER BY event.date DESC"
         ;
-        return $query->getQuery()->getResult();
+
+        $query = $this->getEventNativeQuery($sql);
+        $query->setParameters( array(
+            'playerID'=>$pPlayerID,
+            'season'=>$season
+        ));
+        $results = $query->getResult();
+
+        return $results;
     }
 
     /**
      * Returns all events of a given team.
+     * Native query is used because the related team is owned by the games and training subclasses.
+     * Impossible with query builder to test a column of a subclass.
+     * This is done because each one is mapped by different names in teams and players (trainings, games, friendly_games)
      *
      * @param $teamID
      * @return array
      */
     public function findEventsByTeam($teamID)
     {
-        $query = $this->createQueryBuilder('event');
-        $query->leftJoin('TeamManagerEventBundle:Game', 'game', 'WITH', $query->expr()->eq('game.id', 'event.id'))
-            ->leftJoin('TeamManagerEventBundle:Training', 'training', 'WITH', $query->expr()->eq('training.id', 'event.id'))
-            ->innerjoin('TeamManagerTeamBundle:Team', 'team', 'WITH', 'team = game.team OR team = training.team')
-            ->where('team.id = :teamID')
-            ->setParameter('teamID', $teamID)
-            ->join('event.location', 'location')
-            ->orderBy('event.date', 'DESC')
+        $sql = "
+            SELECT event.id AS id0, event.name AS name1, event.description AS description2, event.date AS date3, event.subscription_type AS subscription_type4, event.player_limit AS player_limit5, event.opponent AS opponent6, event.season AS season7, game.friendly AS friendly8, event.event_type AS event_type9,
+            location.id AS id10, location.name AS name11, location.address AS address12, location.longitude AS longitude13, location.latitude AS latitude14
+            FROM tm_event event
+            LEFT JOIN tm_training training ON event.id = training.id
+            LEFT JOIN tm_game game ON event.id = game.id
+            INNER JOIN tm_team team on team.id = training.team_id OR team.id = game.team_id
+            INNER JOIN tm_location location on location.id = event.location_id
+            WHERE team.id = :teamID
+            ORDER BY event.date DESC"
         ;
-        return $query->getQuery()->getResult();
+
+        $query = $this->getEventNativeQuery($sql);
+        $query->setParameter('teamID', $teamID);
+        $results = $query->getResult();
+
+        return $results;
     }
 
     /**
@@ -81,18 +112,56 @@ class EventRepository extends EntityRepository
      */
     public function findEventsByTeamForSeason($teamID, $season)
     {
-        $query = $this->createQueryBuilder('event');
-        $query->leftJoin('TeamManagerEventBundle:Game', 'game', 'WITH', $query->expr()->eq('game.id', 'event.id'))
-            ->leftJoin('TeamManagerEventBundle:Training', 'training', 'WITH', $query->expr()->eq('training.id', 'event.id'))
-            ->innerjoin('TeamManagerTeamBundle:Team', 'team', 'WITH', 'team = game.team OR team = training.team')
-            ->where('team.id = :teamID')
-            ->setParameter('teamID', $teamID)
-            ->andWhere('event.season = :season')
-            ->setParameter('season', $season)
-            ->join('event.location', 'location')
-            ->orderBy('event.date', 'DESC')
+        $sql = "
+            SELECT event.id AS id0, event.name AS name1, event.description AS description2, event.date AS date3, event.subscription_type AS subscription_type4, event.player_limit AS player_limit5, event.opponent AS opponent6, event.season AS season7, game.friendly AS friendly8, event.event_type AS event_type9,
+            location.id AS id10, location.name AS name11, location.address AS address12, location.longitude AS longitude13, location.latitude AS latitude14
+            FROM tm_event event
+            LEFT JOIN tm_training training ON event.id = training.id
+            LEFT JOIN tm_game game ON event.id = game.id
+            INNER JOIN tm_team team on team.id = training.team_id OR team.id = game.team_id
+            INNER JOIN tm_location location on location.id = event.location_id
+            WHERE team.id = :teamID AND event.season = :season
+            ORDER BY event.date DESC"
         ;
-        return $query->getQuery()->getResult();
+
+        $query = $this->getEventNativeQuery($sql);
+        $query->setParameters( array(
+            'teamID'=>$teamID,
+            'season'=>$season
+        ));
+        $results = $query->getResult();
+
+        return $results;
+    }
+
+    /**
+     * @return NativeQuery
+     */
+    private function getEventNativeQuery($sql)
+    {
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+        $rsm->addEntityResult('TeamManagerEventBundle:Event', 'event');
+        $rsm->addFieldResult('event', 'id0', 'id');
+        $rsm->addFieldResult('event', 'name1', 'name');
+        $rsm->addFieldResult('event', 'description2', 'description');
+        $rsm->addFieldResult('event', 'date3', 'date');
+        $rsm->addFieldResult('event', 'subscription_type4', 'subscription_type');
+        $rsm->addFieldResult('event', 'player_limit5', 'player_limit');
+        $rsm->addFieldResult('event', 'opponent6', 'opponent');
+        $rsm->addFieldResult('event', 'season7', 'season');
+        $rsm->addMetaResult('event', 'event_type9', 'event_type');
+        $rsm->setDiscriminatorColumn('event', 'event_type9');
+
+        $rsm->addJoinedEntityResult('TeamManagerCommonBundle:Location', 'location', 'event', 'location');
+        $rsm->addFieldResult('location', 'id10', 'id');
+        $rsm->addFieldResult('location', 'name11', 'name');
+        $rsm->addFieldResult('location', 'address12', 'address');
+        $rsm->addFieldResult('location', 'longitude13', 'longitude');
+        $rsm->addFieldResult('location', 'latitude14', 'latitude');
+
+        $query = $em->createNativeQuery($sql , $rsm);
+        return $query;
     }
 
 }

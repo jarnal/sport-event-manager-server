@@ -1,5 +1,5 @@
 <?php
-namespace TeamManager\TeamBundle\DataFixtures\ORM;
+namespace TeamManager\ActionBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
@@ -19,16 +19,17 @@ class LoadCardData extends AbstractFixture implements OrderedFixtureInterface
     {
         $manager->clear();
 
-        $player1 = $this->getReference('player-1');
-        $player2 = $this->getReference('player-2');
-        $player3 = $this->getReference('player-3');
+        $team1 = $this->getReference('team-1');
+        $team2 = $this->getReference('team-2');
 
-        $game1 = $this->getReference('game-1');
-        $game2 = $this->getReference('game-2');
-        $game3 = $this->getReference('game-3');
+        $game1 = $team1->getGames()[0];
+        $game2 = $team2->getGames()[0];
+
+        $player1 = $team1->getPlayers()[0];
+        $player2 = $team2->getPlayers()[0];
 
         $card1 = $this->buildCard($player1, $game1, Card::YELLOW_CARD);
-        $card2 = $this->buildCard($player1, $game1, Card::RED_CARD);
+        $card2 = $this->buildCard($player2, $game2, Card::RED_CARD);
 
         $manager->persist($card1);
         $manager->persist($card2);

@@ -32,12 +32,15 @@ class LoadGameData extends AbstractFixture implements OrderedFixtureInterface
             $season = ($i%2>0||$i==0||$i==3)? $season1 : $season2;
             $game = $this->buildGame($i, $team, $season);
             $manager->persist($game);
-            $manager->flush();
 
             $this->addReference('game-'.$i, $game);
 
             static::$games[] = $game;
         }
+
+        $manager->persist($team1);
+        $manager->persist($team2);
+        $manager->flush();
     }
 
     /**
