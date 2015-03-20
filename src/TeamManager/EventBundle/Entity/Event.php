@@ -14,6 +14,7 @@ use TeamManager\CommonBundle\Entity\Location;
 use TeamManager\PlayerBundle\Entity\Player;
 use TeamManager\ResultBundle\Entity\Comment;
 use TeamManager\ResultBundle\Entity\Note;
+use TeamManager\TeamBundle\Entity\Team;
 
 /**
  * Event
@@ -117,6 +118,19 @@ class Event
      * @Expose
      */
     protected $season;
+
+    /**
+     * Team participating to the game.
+     *
+     * @var Team
+     * @ORM\ManyToOne(targetEntity="TeamManager\TeamBundle\Entity\Team", inversedBy="events")
+     * @ORM\JoinColumn(name="team_id", referencedColumnName="id", onDelete="CASCADE")
+     * @Assert\NotNull(message="form.event.team.blank")
+     *
+     * @Groups({"EventGlobal", "EventDetails"})
+     * @Expose
+     */
+    private $team;
 
     /**
      * Location where the event takes place.
@@ -366,6 +380,28 @@ class Event
     public function setSeason($season)
     {
         $this->season = $season;
+    }
+
+    /**
+     * Get team participating to the event.
+     *
+     * @return Team
+     */
+    public function getTeam()
+    {
+        return $this->team;
+    }
+
+    /**
+     * Set the team participating to the event.
+     *
+     * @param Team $pTeam
+     * @return Game
+     */
+    public function setTeam(Team $pTeam)
+    {
+        $this->team = $pTeam;
+        return $this;
     }
 
     /**

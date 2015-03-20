@@ -318,7 +318,7 @@ class PlayerRestController extends FOSRestController
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
      *      },
-     *      "groups"={"Default"}
+     *      "groups"={"Default", "EventGlobal", "TeamGlobal", "LocationGlobal"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when player exists",
@@ -326,7 +326,7 @@ class PlayerRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"Default"} )
+     * @View( serializerGroups={"Default", "EventGlobal", "TeamGlobal", "LocationGlobal"} )
      *
      * @Get("/{id}/events", name="events", options={ "method_prefix" = false })
      *
@@ -366,7 +366,7 @@ class PlayerRestController extends FOSRestController
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
      *      },
-     *      "groups"={"Default"}
+     *      "groups"={"Default", "EventGlobal", "TeamGlobal", "LocationGlobal"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when player exists",
@@ -374,7 +374,7 @@ class PlayerRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"Default"} )
+     * @View( serializerGroups={"Default", "EventGlobal", "TeamGlobal", "LocationGlobal"} )
      *
      * @Get("/{playerID}/season/{season}/events", name="events_season", options={ "method_prefix" = false })
      *
@@ -409,7 +409,7 @@ class PlayerRestController extends FOSRestController
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
      *      },
-     *      "groups"={"Default"}
+     *      "groups"={"Default", "EventGlobal"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when player exists",
@@ -417,7 +417,7 @@ class PlayerRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"Default"} )
+     * @View( serializerGroups={"Default", "EventGlobal", "TeamGlobal", "LocationGlobal"} )
      *
      * @Get("/{id}/games", name="games", options={ "method_prefix" = false })
      *
@@ -457,7 +457,7 @@ class PlayerRestController extends FOSRestController
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
      *      },
-     *      "groups"={"Default"}
+     *      "groups"={"Default", "EventGlobal", "TeamGlobal", "LocationGlobal"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when player exists",
@@ -465,7 +465,7 @@ class PlayerRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"Default"} )
+     * @View( serializerGroups={"Default", "EventGlobal", "TeamGlobal", "LocationGlobal"} )
      *
      * @Get("/{playerID}/season/{season}/games", name="games_season", options={ "method_prefix" = false })
      *
@@ -500,7 +500,7 @@ class PlayerRestController extends FOSRestController
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
      *      },
-     *      "groups"={"Default"}
+     *      "groups"={"Default", "EventGlobal", "TeamGlobal", "LocationGlobal"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when player exists",
@@ -508,7 +508,7 @@ class PlayerRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"Default"} )
+     * @View( serializerGroups={"Default", "EventGlobal", "TeamGlobal", "LocationGlobal"} )
      *
      * @Get("/{id}/friendly_games", name="friendly_games", options={ "method_prefix" = false })
      *
@@ -548,7 +548,7 @@ class PlayerRestController extends FOSRestController
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
      *      },
-     *      "groups"={"Default"}
+     *      "groups"={"Default", "EventGlobal", "TeamGlobal", "LocationGlobal"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when player exists",
@@ -556,7 +556,7 @@ class PlayerRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"Default"} )
+     * @View( serializerGroups={"Default", "EventGlobal", "TeamGlobal", "LocationGlobal"} )
      *
      * @Get("/{playerID}/season/{season}/friendly_games", name="friendly_games_season", options={ "method_prefix" = false })
      *
@@ -591,7 +591,7 @@ class PlayerRestController extends FOSRestController
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
      *      },
-     *      "groups"={"Default"}
+     *      "groups"={"Default", "EventGlobal", "TeamGlobal", "LocationGlobal"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when player exists",
@@ -599,7 +599,7 @@ class PlayerRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"Default"} )
+     * @View( serializerGroups={"Default", "EventGlobal", "TeamGlobal", "LocationGlobal"} )
      *
      * @Get("/{id}/trainings", name="trainings", options={ "method_prefix" = false })
      *
@@ -639,7 +639,7 @@ class PlayerRestController extends FOSRestController
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
      *      },
-     *      "groups"={"Default"}
+     *      "groups"={"Default", "EventGlobal", "TeamGlobal", "LocationGlobal"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when player exists",
@@ -647,7 +647,7 @@ class PlayerRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"Default"} )
+     * @View( serializerGroups={"Default", "EventGlobal", "TeamGlobal", "LocationGlobal"} )
      *
      * @Get("/{playerID}/season/{season}/trainings", name="trainings_season", options={ "method_prefix" = false })
      *
@@ -682,7 +682,7 @@ class PlayerRestController extends FOSRestController
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
      *      },
-     *      "groups"={"Default"}
+     *      "groups"={"Default", "CardPlayer"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when player exists",
@@ -690,7 +690,7 @@ class PlayerRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"Default"} )
+     * @View( serializerGroups={"Default", "CardPlayer"} )
      *
      * @Get("/{id}/cards", name="cards", options={ "method_prefix" = false })
      *
@@ -730,7 +730,7 @@ class PlayerRestController extends FOSRestController
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
      *      },
-     *      "groups"={"Default"}
+     *      "groups"={"Default", "CardPlayer"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when player exists",
@@ -738,7 +738,7 @@ class PlayerRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"Default"} )
+     * @View( serializerGroups={"Default", "CardPlayer"} )
      *
      * @Get("/{playerID}/season/{season}/cards", name="cards_season", options={ "method_prefix" = false })
      *
@@ -779,7 +779,7 @@ class PlayerRestController extends FOSRestController
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
      *      },
-     *      "groups"={"Default"}
+     *      "groups"={"Default", "CardPlayer"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when all related entities exists",
@@ -787,7 +787,7 @@ class PlayerRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"Default"} )
+     * @View( serializerGroups={"Default", "CardPlayer"} )
      *
      * @Get("/{playerID}/game/{gameID}/cards", name="game_cards", options={ "method_prefix" = false })
      *

@@ -22,8 +22,8 @@ class LoadCardData extends AbstractFixture implements OrderedFixtureInterface
         $team1 = $this->getReference('team-1');
         $team2 = $this->getReference('team-2');
 
-        $game1 = $team1->getGames()[0];
-        $game2 = $team2->getGames()[0];
+        $game1 = $this->getReference('game-1');
+        $game2 = $this->getReference('game-2');
 
         $player1 = $team1->getPlayers()[0];
         $player2 = $team2->getPlayers()[0];

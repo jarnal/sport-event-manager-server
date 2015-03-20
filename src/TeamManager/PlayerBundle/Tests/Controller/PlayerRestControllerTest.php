@@ -4,6 +4,7 @@ namespace TeamManager\PlayerBundle\Tests\Controller;
 use Doctrine\Common\Cache\Cache;
 use Liip\FunctionalTestBundle\Test\WebTestCase;
 use TeamManager\CommonBundle\Tests\EntityRestControllerTest;
+use TeamManager\EventBundle\DataFixtures\ORM\LoadGameData;
 use TeamManager\PlayerBundle\DataFixtures\ORM\LoadPlayerData;
 use TeamManager\PlayerBundle\Entity\PlayerInterface;
 use FOS\OAuthServerBundle\Entity\ClientManager;
@@ -213,12 +214,499 @@ class PlayerRestControllerTest extends EntityRestControllerTest {
     }
 
     /**
+     * Tests the api_team_events API method returning all events for a team.
+     */
+    public function testListEvents()
+    {
+        $accessToken = $this->initializeTest();
+        $player = $this->getPlayer();
+
+        $route = $this->buildGetRoute($player->getId(), $accessToken);
+        $this->client->request(
+            'GET',
+            $route,
+            array('ACCEPT' => 'application/json')
+        );
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode(), $this->client->getResponse()->getContent());
+
+        $route = $this->getUrl('api_player_events', array('access_token'=>$accessToken, 'id'=>$player->getId(), '_format'=>'json'));
+        $this->client->request('GET', $route, array('ACCEPT' => 'application/json'));
+
+        $response = $this->client->getResponse();
+        $content = $response->getContent();
+        $result = json_decode($content, true);
+
+        $this->assertJsonResponse($response, 200);
+        $this->assertTrue(count($result['events'])>0);
+        foreach($result['events'] as $event)
+        {
+            $this->assertTrue(isset($event['name']));
+            $this->assertTrue(isset($event['location']));
+            $this->assertTrue(isset($event['season']));
+            $this->assertTrue(isset($event['team']));
+        }
+    }
+
+    /**
+     * Tests the api_player_events_season API method returning all events for a team in a season.
+     */
+    public function testListEventsBySeason()
+    {
+        $accessToken = $this->initializeTest();
+        $player = $this->getPlayer();
+        $season = '2013-2014';
+
+        $route = $this->buildGetRoute($player->getId(), $accessToken);
+        $this->client->request(
+            'GET',
+            $route,
+            array('ACCEPT' => 'application/json')
+        );
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode(), $this->client->getResponse()->getContent());
+
+        $route = $this->getUrl('api_player_events_season', array(
+            'playerID'=>$player->getId(),
+            'season'=>$season,
+            'access_token'=>$accessToken,
+            '_format'=>'json'
+        ));
+        $this->client->request('GET', $route, array('ACCEPT' => 'application/json'));
+
+        $response = $this->client->getResponse();
+        $content = $response->getContent();
+        $result = json_decode($content, true);
+
+        $this->assertJsonResponse($response, 200);
+        $this->assertTrue(count($result['events'])>0);
+        foreach($result['events'] as $event)
+        {
+            $this->assertTrue(isset($event['name']));
+            $this->assertTrue(isset($event['location']));
+            $this->assertTrue(isset($event['season']));
+            $this->assertTrue(isset($event['team']));
+        }
+    }
+
+    /**
+     * Tests the api_player_games API method returning all games for a team.
+     */
+    public function testListGames()
+    {
+        $accessToken = $this->initializeTest();
+        $player = $this->getPlayer();
+
+        $route = $this->buildGetRoute($player->getId(), $accessToken);
+        $this->client->request(
+            'GET',
+            $route,
+            array('ACCEPT' => 'application/json')
+        );
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode(), $this->client->getResponse()->getContent());
+
+        $route = $this->getUrl('api_player_games', array('access_token'=>$accessToken, 'id'=>$player->getId(), '_format'=>'json'));
+        $this->client->request('GET', $route, array('ACCEPT' => 'application/json'));
+
+        $response = $this->client->getResponse();
+        $content = $response->getContent();
+        $result = json_decode($content, true);
+
+        $this->assertJsonResponse($response, 200);
+        $this->assertTrue(count($result['games'])>0);
+        foreach($result['games'] as $event)
+        {
+            $this->assertTrue(isset($event['name']));
+            $this->assertTrue(isset($event['location']));
+            $this->assertTrue($event['event_type'] == 'game');
+            $this->assertTrue($event['friendly'] === false);
+            $this->assertTrue(isset($event['team']));
+        }
+    }
+
+    /**
+     * Tests the api_player_games_season API method returning all games for a team in a season.
+     */
+    public function testListGamesBySeason()
+    {
+        $accessToken = $this->initializeTest();
+        $player = $this->getPlayer();
+        $season = '2013-2014';
+
+        $route = $this->buildGetRoute($player->getId(), $accessToken);
+        $this->client->request(
+            'GET',
+            $route,
+            array('ACCEPT' => 'application/json')
+        );
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode(), $this->client->getResponse()->getContent());
+
+        $route = $this->getUrl('api_player_games_season', array(
+            'playerID'=>$player->getId(),
+            'season'=>$season,
+            'access_token'=>$accessToken,
+            '_format'=>'json'
+        ));
+        $this->client->request('GET', $route, array('ACCEPT' => 'application/json'));
+
+        $response = $this->client->getResponse();
+        $content = $response->getContent();
+        $result = json_decode($content, true);
+
+        $this->assertJsonResponse($response, 200);
+        $this->assertTrue(count($result['games'])>0);
+        foreach($result['games'] as $event)
+        {
+            $this->assertTrue(isset($event['season']));
+            $this->assertTrue($event['season'] == $season);
+            $this->assertTrue($event['event_type'] == 'game');
+            $this->assertTrue($event['friendly'] === false);
+            $this->assertTrue(isset($event['team']));
+        }
+    }
+
+    /**
+     * Tests the api_player_friendly_games API method returning all friendly games for a team.
+     */
+    public function testListFriendlyGames()
+    {
+        $accessToken = $this->initializeTest();
+        $player = $this->getPlayer();
+
+        $route = $this->buildGetRoute($player->getId(), $accessToken);
+        $this->client->request(
+            'GET',
+            $route,
+            array('ACCEPT' => 'application/json')
+        );
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode(), $this->client->getResponse()->getContent());
+
+        $route = $this->getUrl('api_player_friendly_games', array('access_token'=>$accessToken, 'id'=>$player->getId(), '_format'=>'json'));
+        $this->client->request('GET', $route, array('ACCEPT' => 'application/json'));
+
+        $response = $this->client->getResponse();
+        $content = $response->getContent();
+        $result = json_decode($content, true);
+
+        $this->assertJsonResponse($response, 200);
+        $this->assertTrue(count($result['friendly_games'])>0);
+        foreach($result['friendly_games'] as $event)
+        {
+            $this->assertTrue(isset($event['name']));
+            $this->assertTrue(isset($event['location']));
+            $this->assertTrue($event['event_type'] == 'game');
+            $this->assertTrue($event['friendly'] === true);
+            $this->assertTrue(isset($event['team']));
+        }
+    }
+
+    /**
+     * Tests the api_player_friendly_games API method returning all friendly games for a team in a season.
+     */
+    public function testListFriendlyGamesBySeason()
+    {
+        $accessToken = $this->initializeTest();
+        $player = $this->getPlayer();
+        $season = '2013-2014';
+
+        $route = $this->buildGetRoute($player->getId(), $accessToken);
+        $this->client->request(
+            'GET',
+            $route,
+            array('ACCEPT' => 'application/json')
+        );
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode(), $this->client->getResponse()->getContent());
+
+        $route = $this->getUrl('api_player_friendly_games_season', array(
+            'playerID'=>$player->getId(),
+            'season'=>$season,
+            'access_token'=>$accessToken,
+            '_format'=>'json'
+        ));
+        $this->client->request('GET', $route, array('ACCEPT' => 'application/json'));
+
+        $response = $this->client->getResponse();
+        $content = $response->getContent();
+        $result = json_decode($content, true);
+
+        $this->assertJsonResponse($response, 200);
+        $this->assertTrue(count($result['friendly_games'])>0);
+        foreach($result['friendly_games'] as $event)
+        {
+            $this->assertTrue($event['season'] == $season);
+            $this->assertTrue($event['event_type'] == 'game');
+            $this->assertTrue($event['friendly'] === true);
+            $this->assertTrue(isset($event['team']));
+        }
+    }
+
+    /**
+     * Tests the api_player_trainings API method returning all trainings for a team.
+     */
+    public function testListTrainings()
+    {
+        $accessToken = $this->initializeTest();
+        $player = $this->getPlayer();
+
+        $route = $this->buildGetRoute($player->getId(), $accessToken);
+        $this->client->request(
+            'GET',
+            $route,
+            array('ACCEPT' => 'application/json')
+        );
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode(), $this->client->getResponse()->getContent());
+
+        $route = $this->getUrl('api_player_trainings', array('access_token'=>$accessToken, 'id'=>$player->getId(), '_format'=>'json'));
+        $this->client->request('GET', $route, array('ACCEPT' => 'application/json'));
+
+        $response = $this->client->getResponse();
+        $content = $response->getContent();
+        $result = json_decode($content, true);
+
+        $this->assertJsonResponse($response, 200);
+        $this->assertTrue(count($result["trainings"])>0);
+        foreach($result['trainings'] as $event)
+        {
+            $this->assertTrue(isset($event['name']));
+            $this->assertTrue(isset($event['location']));
+            $this->assertTrue($event['event_type'] == 'training');
+            $this->assertTrue(isset($event['team']));
+        }
+    }
+
+    /**
+     * Tests the api_player_trainings API method returning all trainings for a team in a season.
+     */
+    public function testListTrainingsBySeason()
+    {
+        $accessToken = $this->initializeTest();
+        $player = $this->getPlayer();
+        $season = '2013-2014';
+
+        $route = $this->buildGetRoute($player->getId(), $accessToken);
+        $this->client->request(
+            'GET',
+            $route,
+            array('ACCEPT' => 'application/json')
+        );
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode(), $this->client->getResponse()->getContent());
+
+        $route = $this->getUrl('api_player_trainings_season', array(
+            'playerID'=>$player->getId(),
+            'season'=>$season,
+            'access_token'=>$accessToken,
+            '_format'=>'json'
+        ));
+        $this->client->request('GET', $route, array('ACCEPT' => 'application/json'));
+
+        $response = $this->client->getResponse();
+        $content = $response->getContent();
+        $result = json_decode($content, true);
+
+        $this->assertJsonResponse($response, 200);
+        $this->assertTrue(count($result["trainings"])>0);
+        foreach($result['trainings'] as $event)
+        {
+            $this->assertTrue($event['season'] == $season);
+            $this->assertTrue($event['event_type'] == 'training');
+            $this->assertTrue(isset($event['team']));
+        }
+    }
+
+    /**
+     * Tests the api_player_cards API method returning all cards for a team.
+     */
+    public function testListCards()
+    {
+        $accessToken = $this->initializeTest();
+        $player = $this->getPlayer();
+
+        $route = $this->buildGetRoute($player->getId(), $accessToken);
+        $this->client->request(
+            'GET',
+            $route,
+            array('ACCEPT' => 'application/json')
+        );
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode(), $this->client->getResponse()->getContent());
+
+        $route = $this->getUrl('api_player_cards', array(
+            'id'=>$player->getId(),
+            'access_token'=>$accessToken,
+            '_format'=>'json'
+        ));
+        $this->client->request('GET', $route, array('ACCEPT' => 'application/json'));
+
+        $response = $this->client->getResponse();
+        $content = $response->getContent();
+        $result = json_decode($content, true);
+
+        $this->assertJsonResponse($response, 200);
+        $this->assertTrue(count($result["cards"])>0);
+        foreach($result['cards'] as $card)
+        {
+            $this->assertTrue(isset($card['type']));
+            $this->assertTrue(isset($card['game']));
+        }
+    }
+
+    /**
+     * Tests the api_player_cards_season API method returning all cards for a team in a season.
+     */
+    public function testListCardsBySeason()
+    {
+        $accessToken = $this->initializeTest();
+        $player = $this->getPlayer();
+        $season = '2013-2014';
+
+        $route = $this->buildGetRoute($player->getId(), $accessToken);
+        $this->client->request(
+            'GET',
+            $route,
+            array('ACCEPT' => 'application/json')
+        );
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode(), $this->client->getResponse()->getContent());
+
+        $route = $this->getUrl('api_player_cards_season', array(
+            'playerID'=>$player->getId(),
+            'season'=>$season,
+            'access_token'=>$accessToken,
+            '_format'=>'json'
+        ));
+        $this->client->request('GET', $route, array('ACCEPT' => 'application/json'));
+
+        $response = $this->client->getResponse();
+        $content = $response->getContent();
+        $result = json_decode($content, true);
+
+        $this->assertJsonResponse($response, 200);
+        $this->assertTrue(count($result["cards"])>0);
+        foreach($result['cards'] as $card)
+        {
+            $this->assertTrue(isset($card['type']));
+            $this->assertTrue(isset($card['game']));
+        }
+    }
+
+    /**
+     * Tests the api_player_game_cards API method returning all cards for a team in a specific game.
+     */
+    public function testListCardsForGame()
+    {
+        $accessToken = $this->initializeTest();
+        $player = $this->getPlayer();
+        $game = LoadGameData::$games[0];
+
+        $route = $this->buildGetRoute($player->getId(), $accessToken);
+        $this->client->request(
+            'GET',
+            $route,
+            array('ACCEPT' => 'application/json')
+        );
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode(), $this->client->getResponse()->getContent());
+
+        $route = $this->getUrl('api_player_game_cards', array(
+            'playerID'=>$player->getId(),
+            'gameID'=>$game->getId(),
+            'access_token'=>$accessToken,
+            '_format'=>'json'
+        ));
+        $this->client->request('GET', $route, array('ACCEPT' => 'application/json'));
+
+        $response = $this->client->getResponse();
+        $content = $response->getContent();
+        $result = json_decode($content, true);
+
+        $this->assertJsonResponse($response, 200);
+        $this->assertTrue(count($result["cards"])>0);
+        foreach($result['cards'] as $card)
+        {
+            $this->assertTrue(isset($card['type']));
+            $this->assertTrue(isset($card['game']));
+        }
+    }
+
+    /**
+     *
+     */
+    public function testListGoals()
+    {
+
+    }
+
+    /**
+     *
+     */
+    public function testListGoalsBySeason()
+    {
+
+    }
+
+    /**
+     *
+     */
+    public function testListGoalsForGame()
+    {
+
+    }
+
+    /**
+     *
+     */
+    public function testListInjuries()
+    {
+
+    }
+
+    /**
+     *
+     */
+    public function testListInjuriesBySeason()
+    {
+
+    }
+
+    /**
+     *
+     */
+    public function testListInjuriesForGame()
+    {
+
+    }
+
+    /**
+     *
+     */
+    public function testListPlayTimes()
+    {
+
+    }
+
+    /**
+     *
+     */
+    public function testListPlayTimesBySeason()
+    {
+
+    }
+
+    /**
+     *
+     */
+    public function testListPlayTimesForGame()
+    {
+
+    }
+
+    /**
      * Loads all needed fixtures.
      */
     protected function loadDataFixtures()
     {
         $fixtures = array(
-            'TeamManager\PlayerBundle\DataFixtures\ORM\LoadPlayerData'
+            'TeamManager\PlayerBundle\DataFixtures\ORM\LoadPlayerData',
+            'TeamManager\TeamBundle\DataFixtures\ORM\LoadTeamData',
+            'TeamManager\EventBundle\DataFixtures\ORM\LoadGameData',
+            'TeamManager\EventBundle\DataFixtures\ORM\LoadGameFriendlyData',
+            'TeamManager\EventBundle\DataFixtures\ORM\LoadTrainingData',
+            'TeamManager\ActionBundle\DataFixtures\ORM\LoadCardData'
         );
         $this->loadFixtures($fixtures);
     }

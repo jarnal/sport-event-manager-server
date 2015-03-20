@@ -733,7 +733,7 @@ class TeamRestController extends FOSRestController
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
      *      },
-     *      "groups"={"Default"}
+     *      "groups"={"Default", "Team"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when team exists",
@@ -741,7 +741,7 @@ class TeamRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"Default", "Teams"} )
+     * @View( serializerGroups={"Default", "Team"} )
      *
      * @Get("/{teamID}/season/{season}/cards", name="cards_season", options={ "method_prefix" = false })
      *
@@ -782,7 +782,7 @@ class TeamRestController extends FOSRestController
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
      *      },
-     *      "groups"={"Default", "Teams"}
+     *      "groups"={"Default", "Team"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when all related entities exists",
@@ -790,7 +790,7 @@ class TeamRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"Default", "Teams"} )
+     * @View( serializerGroups={"Default", "Team"} )
      *
      * @Get("/{teamID}/game/{gameID}/cards", name="game_cards", options={ "method_prefix" = false })
      *

@@ -150,7 +150,7 @@ class EntityRestControllerTest extends WebTestCase {
      */
     protected function getPlayer()
     {
-        return array_pop(LoadPlayerData::$players);
+        return LoadPlayerData::$players[0];
     }
 
     /**

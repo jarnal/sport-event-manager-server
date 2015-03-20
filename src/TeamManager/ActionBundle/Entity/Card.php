@@ -33,7 +33,7 @@ class Card
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @Expose
-     * @Groups({"Default", "Team", "Player"})
+     * @Groups({"CardTeam", "CardPlayer", "CardGame"})
      */
     private $id;
 
@@ -46,7 +46,7 @@ class Card
      * @Assert\NotBlank(message="form.card.type.blank")
      *
      * @Expose
-     * @Groups({"Default", "Team", "Player"})
+     * @Groups({"CardTeam", "CardPlayer", "CardGame"})
      */
     private $type;
 
@@ -57,7 +57,7 @@ class Card
      * @ORM\Column(name="time", type="datetime", nullable=true)
      *
      * @Expose
-     * @Groups({"Default", "Team", "Player"})
+     * @Groups({"CardTeam", "CardPlayer", "CardGame"})
      */
     private $time;
 
@@ -71,7 +71,7 @@ class Card
      * @Assert\NotNull(message="form.player.type.null")
      *
      * @Expose
-     * @Groups({"Team", "Game"})
+     * @Groups({"CardTeam", "CardGame"})
      */
     private $player;
 
@@ -85,7 +85,7 @@ class Card
      * @Assert\NotNull(message="form.game.type.null")
      *
      * @Expose
-     * @Groups({"Player"})
+     * @Groups({"CardTeam", "CardPlayer"})
      */
     private $game;
 

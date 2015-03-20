@@ -3,6 +3,7 @@
 namespace TeamManager\TeamBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
@@ -12,6 +13,7 @@ use JMS\Serializer\Annotation\VirtualProperty;
 use Symfony\Component\Validator\Constraints as Assert;
 use TeamManager\ActionBundle\Entity\Goal;
 use TeamManager\CommonBundle\Entity\Location;
+use TeamManager\EventBundle\Entity\Event;
 use TeamManager\EventBundle\Entity\Game;
 use TeamManager\EventBundle\Entity\GameFriendly;
 use TeamManager\EventBundle\Entity\Training;
@@ -35,6 +37,7 @@ class Team
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @Expose
+     * @Groups({"TeamGlobal", "TeamSpecific"})
      */
     private $id;
 
@@ -46,6 +49,7 @@ class Team
      * @Assert\NotBlank(message="form.team.name.blank")
      *
      * @Expose
+     * @Groups({"TeamGlobal", "TeamSpecific"})
      */
     private $name;
 
@@ -56,6 +60,7 @@ class Team
      * @ORM\Column(name="description", type="string", nullable=true)
      *
      * @Expose
+     * @Groups({"TeamSpecific"})
      */
     private $description;
 
@@ -66,6 +71,7 @@ class Team
      * @ORM\Column(name="image_url", type="string", nullable=true)
      *
      * @Expose
+     * @Groups({"TeamSpecific"})
      */
     private $image_url;
 
@@ -78,6 +84,7 @@ class Team
      * @Assert\NotNull(message="form.team.location.null")
      *
      * @Expose
+     * @Groups({"TeamSpecific"})
      */
     private $default_location;
 
@@ -90,6 +97,7 @@ class Team
      * @Assert\NotNull(message="form.team.manager.null")
      *
      * @Expose
+     * @Groups({"TeamSpecific"})
      */
     private $manager;
 
@@ -98,6 +106,9 @@ class Team
      *
      * @var ArrayCollection
      * @ORM\ManyToMany(targetEntity="\TeamManager\PlayerBundle\Entity\Player", cascade="persist", mappedBy="teams")
+     *
+     * @Expose
+     * @Groups({"TeamSpecific"})
      */
     private $players;
 
@@ -105,17 +116,9 @@ class Team
      * Trainings of the team.
      *
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="\TeamManager\EventBundle\Entity\Training", mappedBy="team")
+     * @ORM\OneToMany(targetEntity="\TeamManager\EventBundle\Entity\Event", mappedBy="team")
      */
-    private $trainings;
-
-    /**
-     * Games of the team.
-     *
-     * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="\TeamManager\EventBundle\Entity\Game", mappedBy="team")
-     */
-    private $games;
+    private $events;
 
     /**
      *
@@ -123,8 +126,7 @@ class Team
     public function __construct()
     {
         $this->players = new ArrayCollection();
-        $this->games = new ArrayCollection();
-        $this->games_friendly = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     /**
@@ -288,32 +290,32 @@ class Team
      *
      * @return ArrayCollection
      */
-    public function getTrainings()
+    public function getEvents()
     {
-        return $this->trainings;
+        return $this->events;
     }
 
     /**
      * Add training in team trainings list.
      *
-     * @param Training $pTraining
+     * @param Event $pEvent
      * @return Team
      */
-    public function addTraining(Training $pTraining)
+    public function addEvent(Event $pEvent)
     {
-        $this->trainings[] = $pTraining;
+        $this->events[] = $pEvent;
         return $this;
     }
 
     /**
      * Remove training from team trainings list.
      *
-     * @param Training $pTraining
+     * @param Event $pEvent
      * @return Team
      */
-    public function removeTraining(Training $pTraining)
+    public function removeEvent(Event $pEvent)
     {
-        $this->trainings->removeElement($pTraining);
+        $this->events->removeElement($pEvent);
         return $this;
     }
 
@@ -321,34 +323,61 @@ class Team
      * Get team games list.
      *
      * @return ArrayCollection
+     *
+     * @VirtualProperty
+     * @SerializedName( "games" )
+     * @Groups( {"TeamSpecific"} )
      */
     public function getGames()
     {
-        return $this->games;
+        $games = $this->events;
+        $criteria = Criteria::create();
+        $criteria->where(Criteria::expr()->eq("event_type", "game"))
+            ->andWhere(Criteria::expr()->eq("friendly", false))
+        ;
+        $match = $games->matching($criteria);
+
+        return $match;
     }
 
     /**
-     * Add game in team games list.
+     * Get team friendly games list.
      *
-     * @param Game $pGame
-     * @return Team
+     * @return ArrayCollection
+     *
+     * @VirtualProperty
+     * @SerializedName( "friendly_games" )
+     * @Groups( {"TeamSpecific"} )
      */
-    public function addGame(Game $pGame)
+    public function getFriendlyGames()
     {
-        $this->games[] = $pGame;
-        return $this;
+        $games = $this->events;
+        $criteria = Criteria::create();
+        $criteria->where(Criteria::expr()->eq("event_type", "game"))
+            ->andWhere(Criteria::expr()->eq("friendly", true))
+        ;
+        $match = $games->matching($criteria);
+
+        return $match;
     }
 
     /**
-     * Remove game from team games list.
+     * Get team training list.
      *
-     * @param Game $pGame
-     * @return Team
+     * @return ArrayCollection
+     *
+     * @VirtualProperty
+     * @SerializedName( "trainings" )
+     * @Groups( {"TeamSpecific"} )
      */
-    public function removeGame(Game $pGame)
+    public function getTrainings()
     {
-        $this->games->removeElement($pGame);
-        return $this;
+        $training = $this->events;
+        $criteria = Criteria::create();
+        $criteria->where(Criteria::expr()->eq("event_type", "training"));
+        $match = $training->matching($criteria);
+
+        return $match;
     }
 
 }

@@ -3,12 +3,19 @@
 namespace TeamManager\CommonBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\VirtualProperty;
 
 /**
  * Location
  *
  * @ORM\Table(name="tm_location")
  * @ORM\Entity(repositoryClass="TeamManager\CommonBundle\Repository\LocationRepository")
+ *
+ * @ExclusionPolicy("all")
  */
 class Location
 {
@@ -18,6 +25,9 @@ class Location
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Expose
+     * @Groups({"LocationGlobal", "LocationSpecific"})
      */
     private $id;
 
@@ -26,6 +36,9 @@ class Location
      *
      * @ORM\Column(name="name", type="string")
      * @var string
+     *
+     * @Expose
+     * @Groups({"LocationGlobal", "LocationSpecific"})
      */
     private $name;
 
@@ -34,6 +47,9 @@ class Location
      *
      * @ORM\Column(name="address", type="string")
      * @var string
+     *
+     * @Expose
+     * @Groups({"LocationGlobal", "LocationSpecific"})
      */
     private $address;
 
@@ -42,6 +58,9 @@ class Location
      *
      * @ORM\Column(name="latitude", type="integer")
      * @var integer
+     *
+     * @Expose
+     * @Groups({"LocationSpecific"})
      */
     private $latitude;
 
@@ -50,6 +69,9 @@ class Location
      *
      * @ORM\Column(name="longitude", type="integer")
      * @var integer
+     *
+     * @Expose
+     * @Groups({"LocationSpecific"})
      */
     private $longitude;
 

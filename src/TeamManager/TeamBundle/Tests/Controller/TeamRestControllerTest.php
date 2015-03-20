@@ -219,7 +219,7 @@ class TeamRestControllerTest extends EntityRestControllerTest {
     }
 
     /**
-     *
+     * Tests the api_team_events API method returning all events for a team.
      */
     public function testListEvents()
     {
@@ -246,7 +246,7 @@ class TeamRestControllerTest extends EntityRestControllerTest {
     }
 
     /**
-     *
+     * Tests the api_team_events_season API method returning all events for a team in a season.
      */
     public function testListEventsBySeason()
     {
@@ -284,7 +284,7 @@ class TeamRestControllerTest extends EntityRestControllerTest {
     }
 
     /**
-     *
+     * Tests the api_team_games API method returning all games for a team.
      */
     public function testListGames()
     {
@@ -317,7 +317,7 @@ class TeamRestControllerTest extends EntityRestControllerTest {
     }
 
     /**
-     *
+     * Tests the api_team_games_season API method returning all games for a team in a season.
      */
     public function testListGamesBySeason()
     {
@@ -356,7 +356,7 @@ class TeamRestControllerTest extends EntityRestControllerTest {
     }
 
     /**
-     *
+     * Tests the api_team_friendly_games API method returning all friendly games for a team.
      */
     public function testListFriendlyGames()
     {
@@ -389,7 +389,7 @@ class TeamRestControllerTest extends EntityRestControllerTest {
     }
 
     /**
-     *
+     * Tests the api_team_friendly_games API method returning all friendly games for a team in a season.
      */
     public function testListFriendlyGamesBySeason()
     {
@@ -427,7 +427,7 @@ class TeamRestControllerTest extends EntityRestControllerTest {
     }
 
     /**
-     *
+     * Tests the api_team_trainings API method returning all trainings for a team.
      */
     public function testListTrainings()
     {
@@ -459,7 +459,7 @@ class TeamRestControllerTest extends EntityRestControllerTest {
     }
 
     /**
-     *
+     * Tests the api_team_trainings API method returning all trainings for a team in a season.
      */
     public function testListTrainingsBySeason()
     {
@@ -496,7 +496,7 @@ class TeamRestControllerTest extends EntityRestControllerTest {
     }
 
     /**
-     *
+     * Tests the api_team_cards API method returning all cards for a team.
      */
     public function testListCards()
     {
@@ -531,7 +531,7 @@ class TeamRestControllerTest extends EntityRestControllerTest {
     }
 
     /**
-     *
+     * Tests the api_team_cards_season API method returning all cards for a team in a season.
      */
     public function testListCardsBySeason()
     {
@@ -568,7 +568,7 @@ class TeamRestControllerTest extends EntityRestControllerTest {
     }
 
     /**
-     *
+     * Tests the api_team_game_cards API method returning all cards for a team in a specific game.
      */
     public function testListCardsForGame()
     {
@@ -596,14 +596,84 @@ class TeamRestControllerTest extends EntityRestControllerTest {
         $content = $response->getContent();
         $result = json_decode($content, true);
 
-        var_dump($result);
-
         $this->assertJsonResponse($response, 200);
         foreach($result['cards'] as $card)
         {
             $this->assertTrue(isset($card['type']));
             $this->assertTrue(isset($card['player']));
         }
+    }
+
+    /**
+     *
+     */
+    public function testListGoals()
+    {
+
+    }
+
+    /**
+     *
+     */
+    public function testListGoalsBySeason()
+    {
+
+    }
+
+    /**
+     *
+     */
+    public function testListGoalsForGame()
+    {
+
+    }
+
+    /**
+     *
+     */
+    public function testListInjuries()
+    {
+
+    }
+
+    /**
+     *
+     */
+    public function testListInjuriesBySeason()
+    {
+
+    }
+
+    /**
+     *
+     */
+    public function testListInjuriesForGame()
+    {
+
+    }
+
+    /**
+     *
+     */
+    public function testListPlayTimes()
+    {
+
+    }
+
+    /**
+     *
+     */
+    public function testListPlayTimesBySeason()
+    {
+
+    }
+
+    /**
+     *
+     */
+    public function testListPlayTimesForGame()
+    {
+
     }
 
     /**
@@ -630,7 +700,6 @@ class TeamRestControllerTest extends EntityRestControllerTest {
     protected function getTeam()
     {
         return array_pop(LoadTeamData::$teams);
-        /*return LoadTeamData::$teams[0];*/
     }
 
 }

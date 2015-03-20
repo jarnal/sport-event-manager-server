@@ -33,18 +33,9 @@ class Game extends Event
      * @ORM\Column(name="friendly", type="boolean", )
      *
      * @Expose
+     * @Groups({"EventGlobal", "EventDetails"})
      */
     private $friendly = false;
-
-    /**
-     * Team participating to the game.
-     *
-     * @var Team
-     * @ORM\ManyToOne(targetEntity="TeamManager\TeamBundle\Entity\Team", inversedBy="games")
-     * @ORM\JoinColumn(name="team_id", referencedColumnName="id", onDelete="CASCADE")
-     * @Assert\NotNull(message="form.game.team.blank")
-     */
-    private $team;
 
     /**
      * Goals scored during the game.
@@ -79,28 +70,6 @@ class Game extends Event
         $this->goals = new ArrayCollection();
         $this->cards = new ArrayCollection();
         $this->injuries = new ArrayCollection();
-    }
-
-    /**
-     * Get team participating to the game.
-     *
-     * @return Team
-     */
-    public function getTeam()
-    {
-        return $this->team;
-    }
-
-    /**
-     * Set the team participating to the game.
-     *
-     * @param Team $pTeam
-     * @return Game
-     */
-    public function setTeam(Team $pTeam)
-    {
-        $this->team = $pTeam;
-        return $this;
     }
 
     /**
