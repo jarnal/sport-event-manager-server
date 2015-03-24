@@ -52,7 +52,7 @@ class GameRestController extends FOSRestController
      *  }
      * )
      *
-     * @View( serializerGroups={"Default", "EventGlobal"} )
+     * @View( serializerGroups={"EventTeam"} )
      *
      * @Get("/", name="get_all", options={ "method_prefix" = false })
      *

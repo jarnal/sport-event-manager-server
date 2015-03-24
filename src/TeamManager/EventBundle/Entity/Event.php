@@ -30,6 +30,10 @@ use TeamManager\TeamBundle\Entity\Team;
 class Event
 {
 
+    const GAME = "game";
+    const GAME_FRIENDLY = "game_friendly";
+    const TRAINING = "training";
+
     /**
      * @var integer
      *
@@ -37,7 +41,7 @@ class Event
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @Groups({"EventGlobal", "EventDetails"})
+     * @Groups({"EventMinimal", "EventPlayer", "EventTeam", "EventDetails"})
      * @Expose
      */
     protected $id;
@@ -49,7 +53,7 @@ class Event
      * @ORM\Column(name="name", type="string")
      * @Assert\NotBlank(message="form.event.name.blank")
      *
-     * @Groups({"EventGlobal", "EventDetails"})
+     * @Groups({"EventPlayer", "EventTeam", "EventDetails"})
      * @Expose
      */
     protected $name;
@@ -59,11 +63,21 @@ class Event
      *
      * @var string
      * @ORM\Column(name="description", type="string", nullable=true)
-     *
-     * @Groups({"EventGlobal", "EventDetails"})
-     * @Expose
      */
     protected $description;
+
+    /**
+     * Type of the event.
+     * There is already a discriminator column but it's not reachable outside de doctrine context.
+     * Can be training, game or game_friendly.
+     *
+     * @var string
+     * @ORM\Column(name="type", type="string")
+     *
+     * @Groups({"EventPlayer", "EventTeam", "EventDetails"})
+     * @Expose
+     */
+    protected $type;
 
     /**
      * Date of the event.
@@ -72,7 +86,7 @@ class Event
      * @ORM\Column(name="date", type="datetime")
      * @Assert\DateTime(message="form.event.date.blank")
      *
-     * @Groups({"EventGlobal", "EventDetails"})
+     * @Groups({"EventPlayer", "EventTeam", "EventDetails"})
      * @Expose
      */
     protected $date;
@@ -101,7 +115,7 @@ class Event
      * @ORM\Column(name="opponent", type="string", nullable=true)
      * @Assert\NotBlank(message="form.event.opponent.blank")
      *
-     * @Groups({"EventGlobal", "EventDetails"})
+     * @Groups({"EventMinimal", "EventPlayer", "EventTeam", "EventDetails"})
      * @Expose
      */
     protected $opponent;
@@ -114,7 +128,7 @@ class Event
      * @ORM\Column(name="season", type="string")
      * @Assert\NotBlank(message="form.event.season.blank")
      *
-     * @Groups({"EventGlobal", "EventDetails"})
+     * @Groups({"EventPlayer", "EventTeam", "EventDetails"})
      * @Expose
      */
     protected $season;
@@ -127,7 +141,7 @@ class Event
      * @ORM\JoinColumn(name="team_id", referencedColumnName="id", onDelete="CASCADE")
      * @Assert\NotNull(message="form.event.team.blank")
      *
-     * @Groups({"EventGlobal", "EventDetails"})
+     * @Groups({"EventPlayer", "EventDetails"})
      * @Expose
      */
     private $team;
@@ -140,7 +154,7 @@ class Event
      * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
      * @Assert\NotNull(message="form.event.location.blank")
      *
-     * @Groups({"EventGlobal", "EventDetails"})
+     * @Groups({"EventPlayer", "EventTeam", "EventDetails"})
      * @Expose
      */
     protected $location;
@@ -269,6 +283,28 @@ class Event
     public function setDescription($pDescription)
     {
         $this->description = $pDescription;
+        return $this;
+    }
+
+    /**
+     * Set event type.
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Get event type.
+     *
+     * @param string $type
+     * @return Event
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
         return $this;
     }
 
@@ -627,6 +663,16 @@ class Event
     {
         $this->present_players->removeElement($pPlayer);
         return $this;
+    }
+
+    /**
+     * @VirtualProperty
+     * @SerializedName( "at_home" )
+     * @Groups( {"EventPlayer", "EventTeam", "EventDetails"} )
+     */
+    public function getVersusName()
+    {
+        return $this->getTeam()->getDefaultLocation()->getId() == $this->getLocation()->getId();
     }
 
 }

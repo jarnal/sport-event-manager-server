@@ -58,8 +58,11 @@ class TrainingRepository extends EntityRepository
     public function findTrainingsByPlayer($playerID)
     {
         $query = $this->createQueryBuilder('training');
-        $query->innerjoin('training.team', 'team', 'WITH', 'team = training.team')
+        $query->innerjoin('training.team', 'team')
             ->innerjoin('team.players', 'player', 'WITH', $query->expr()->eq('player.id', $playerID))
+            ->addSelect("team")
+            ->innerJoin("training.location", "location")
+            ->addSelect("location")
             ->orderBy('training.date', 'DESC')
         ;
         return $query->getQuery()->getResult();
@@ -75,10 +78,13 @@ class TrainingRepository extends EntityRepository
     public function findTrainingsForPlayerBySeason($playerID, $season)
     {
         $query = $this->createQueryBuilder('training');
-        $query->innerjoin('training.team', 'team', 'WITH', 'team = training.team')
+        $query->innerjoin('training.team', 'team')
             ->innerjoin('team.players', 'player', 'WITH', $query->expr()->eq('player.id', $playerID))
-            ->andWhere('training.season = :season')
-            ->setParameter('season', $season)
+            ->addSelect("team")
+            ->innerJoin("training.location", "location")
+            ->addSelect("location")
+            ->where('training.season = :season')
+            ->setParameter("season", $season)
             ->orderBy('training.date', 'DESC')
         ;
         return $query->getQuery()->getResult();
@@ -94,6 +100,8 @@ class TrainingRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder('training');
         $query->innerjoin('training.team', 'team', 'WITH', $query->expr()->eq('team.id', $teamID))
+            ->innerJoin("training.location", "location")
+            ->addSelect("location")
             ->orderBy('training.date', 'DESC')
         ;
         return $query->getQuery()->getResult();
@@ -110,6 +118,8 @@ class TrainingRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder('training');
         $query->innerjoin('training.team', 'team', 'WITH', $query->expr()->eq('team.id', $teamID))
+            ->innerJoin("training.location", "location")
+            ->addSelect("location")
             ->andWhere('training.season = :season')
             ->setParameter('season', $season)
             ->orderBy('training.date', 'DESC')

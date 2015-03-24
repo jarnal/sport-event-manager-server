@@ -22,6 +22,17 @@ class GameService extends EntityRestService
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function processForm($entity, array $pParameters, $pMethod = "PUT")
+    {
+        $eventType = $entity->isFriendly()? "game_friendly" : "game";
+        $entity->setType($eventType);
+
+        return parent::processForm($entity, $pParameters, $pMethod);
+    }
+
+    /**
      *
      *
      * @param $playerID

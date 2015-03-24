@@ -38,7 +38,7 @@ class TeamRestControllerTest extends EntityRestControllerTest {
 
         $result = json_decode( $content, true );
         $this->assertJsonResponse($response, 200);
-        $this->assertTrue(isset($result[0]["default_location"]), $content);
+        $this->assertTrue(isset($result[0]["name"]));
     }
 
     /**
@@ -241,8 +241,15 @@ class TeamRestControllerTest extends EntityRestControllerTest {
         $content = $response->getContent();
         $result = json_decode($content, true);
 
+        //var_dump($result);
+
         $this->assertJsonResponse($response, 200);
-        $this->assertTrue(isset($result['events'][0]['name']), isset($result['events'][0]['location']));
+        foreach($result['events'] as $event)
+        {
+            $this->assertTrue(isset($event['name']));
+            $this->assertTrue(isset($event['location']));
+            $this->assertTrue(isset($event['season']));
+        }
     }
 
     /**
@@ -311,8 +318,7 @@ class TeamRestControllerTest extends EntityRestControllerTest {
         {
             $this->assertTrue(isset($event['name']));
             $this->assertTrue(isset($event['location']));
-            $this->assertTrue($event['event_type'] == 'game');
-            $this->assertTrue($event['friendly'] === false);
+            $this->assertTrue($event['type'] == 'game');
         }
     }
 
@@ -350,8 +356,7 @@ class TeamRestControllerTest extends EntityRestControllerTest {
         {
             $this->assertTrue(isset($event['season']));
             $this->assertTrue($event['season'] == $season);
-            $this->assertTrue($event['event_type'] == 'game');
-            $this->assertTrue($event['friendly'] === false);
+            $this->assertTrue($event['type'] == 'game');
         }
     }
 
@@ -383,8 +388,7 @@ class TeamRestControllerTest extends EntityRestControllerTest {
         {
             $this->assertTrue(isset($event['name']));
             $this->assertTrue(isset($event['location']));
-            $this->assertTrue($event['event_type'] == 'game');
-            $this->assertTrue($event['friendly'] === true);
+            $this->assertTrue($event['type'] == 'game_friendly');
         }
     }
 
@@ -420,9 +424,9 @@ class TeamRestControllerTest extends EntityRestControllerTest {
         $this->assertJsonResponse($response, 200);
         foreach($result['friendly_games'] as $event)
         {
+            $this->assertTrue(isset($event['name']));
             $this->assertTrue($event['season'] == $season);
-            $this->assertTrue($event['event_type'] == 'game');
-            $this->assertTrue($event['friendly'] === true);
+            $this->assertTrue($event['type'] == 'game_friendly');
         }
     }
 
@@ -454,7 +458,7 @@ class TeamRestControllerTest extends EntityRestControllerTest {
         {
             $this->assertTrue(isset($event['name']));
             $this->assertTrue(isset($event['location']));
-            $this->assertTrue($event['event_type'] == 'training');
+            $this->assertTrue($event['type'] == 'training');
         }
     }
 
@@ -491,7 +495,7 @@ class TeamRestControllerTest extends EntityRestControllerTest {
         foreach($result['trainings'] as $event)
         {
             $this->assertTrue($event['season'] == $season);
-            $this->assertTrue($event['event_type'] == 'training');
+            $this->assertTrue($event['type'] == 'training');
         }
     }
 

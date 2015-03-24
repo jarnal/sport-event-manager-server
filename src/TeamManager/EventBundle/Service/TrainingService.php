@@ -22,6 +22,15 @@ class TrainingService extends EntityRestService
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function processForm($entity, array $pParameters, $pMethod = "PUT")
+    {
+        $entity->setType("training");
+        return parent::processForm($entity, $pParameters, $pMethod);
+    }
+
+    /**
      *
      *
      * @param $playerID

@@ -71,7 +71,7 @@ class Team
      * @ORM\Column(name="image_url", type="string", nullable=true)
      *
      * @Expose
-     * @Groups({"TeamSpecific"})
+     * @Groups({"TeamGlobal", "TeamSpecific"})
      */
     private $image_url;
 
@@ -332,9 +332,7 @@ class Team
     {
         $games = $this->events;
         $criteria = Criteria::create();
-        $criteria->where(Criteria::expr()->eq("event_type", "game"))
-            ->andWhere(Criteria::expr()->eq("friendly", false))
-        ;
+        $criteria->where(Criteria::expr()->eq("type", "game"));
         $match = $games->matching($criteria);
 
         return $match;
@@ -353,9 +351,7 @@ class Team
     {
         $games = $this->events;
         $criteria = Criteria::create();
-        $criteria->where(Criteria::expr()->eq("event_type", "game"))
-            ->andWhere(Criteria::expr()->eq("friendly", true))
-        ;
+        $criteria->where(Criteria::expr()->eq("type", "game_friendly"));
         $match = $games->matching($criteria);
 
         return $match;
@@ -374,7 +370,7 @@ class Team
     {
         $training = $this->events;
         $criteria = Criteria::create();
-        $criteria->where(Criteria::expr()->eq("event_type", "training"));
+        $criteria->where(Criteria::expr()->eq("type", "training"));
         $match = $training->matching($criteria);
 
         return $match;

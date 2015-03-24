@@ -30,10 +30,7 @@ class Game extends Event
      * Defines if the game is friendly or not.
      *
      * @var boolean
-     * @ORM\Column(name="friendly", type="boolean", )
-     *
-     * @Expose
-     * @Groups({"EventGlobal", "EventDetails"})
+     * @ORM\Column(name="friendly", type="boolean")
      */
     private $friendly = false;
 

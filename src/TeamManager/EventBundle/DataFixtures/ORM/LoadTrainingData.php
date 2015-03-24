@@ -5,6 +5,7 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use TeamManager\CommonBundle\Entity\Location;
+use TeamManager\EventBundle\Entity\Event;
 use TeamManager\EventBundle\Entity\Game;
 use TeamManager\EventBundle\Entity\GameFriendly;
 use TeamManager\EventBundle\Entity\Training;
@@ -71,6 +72,7 @@ class LoadTrainingData extends AbstractFixture implements OrderedFixtureInterfac
 
         $training->setName("Training ".$id);
         $training->setDescription("Training ".$id);
+        $training->setType(Event::TRAINING);
         $training->setDate($date);
         $training->setPlayerLimit(10);
         $training->setLocation($team->getDefaultLocation());

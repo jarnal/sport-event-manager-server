@@ -37,6 +37,7 @@ class Player implements PlayerInterface, UserInterface, \Serializable
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
+     * @Groups({"PlayerGlobal","PlayerDetails"})
      * @Expose
      */
     private $id;
@@ -49,6 +50,7 @@ class Player implements PlayerInterface, UserInterface, \Serializable
      * @Assert\NotBlank( message="form.player.firstname.blank" )
      * @Assert\NotNull( message="form.player.firstname.null" )
      *
+     * @Groups({"PlayerGlobal","PlayerDetails"})
      * @Expose
      */
     private $firstname;
@@ -59,6 +61,7 @@ class Player implements PlayerInterface, UserInterface, \Serializable
      * @var string
      * @ORM\Column(name="lastname", type="string", nullable=true)
      *
+     * @Groups({"PlayerGlobal","PlayerDetails"})
      * @Expose
      */
     private $lastname;
@@ -90,6 +93,7 @@ class Player implements PlayerInterface, UserInterface, \Serializable
      * @Assert\Email( message="form.player.email.invalid" )
      *
      * @Expose
+     * @Groups({"PlayerDetails"})
      */
     private $email;
 
@@ -98,6 +102,9 @@ class Player implements PlayerInterface, UserInterface, \Serializable
      *
      * @var string
      * @ORM\Column(name="image_url", type="string", nullable=true)
+     *
+     * @Expose
+     * @Groups({"PlayerGlobal","PlayerDetails"})
      */
     private $image_url;
 
@@ -106,6 +113,9 @@ class Player implements PlayerInterface, UserInterface, \Serializable
      *
      * @var integer
      * @ORM\Column(name="jersey_number", type="integer", nullable=true)
+     *
+     * @Expose
+     * @Groups({"PlayerDetails"})
      */
     private $jersey_number;
 
@@ -114,6 +124,9 @@ class Player implements PlayerInterface, UserInterface, \Serializable
      *
      * @var integer
      * @ORM\Column(name="level", type="integer", nullable=true)
+     *
+     * @Expose
+     * @Groups({"PlayerDetails"})
      */
     private $level;
 

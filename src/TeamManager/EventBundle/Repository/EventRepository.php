@@ -71,23 +71,15 @@ class EventRepository extends EntityRepository
      */
     public function findEventsByTeam($teamID)
     {
-        $sql = "
-            SELECT event.id AS id0, event.name AS name1, event.description AS description2, event.date AS date3, event.subscription_type AS subscription_type4, event.player_limit AS player_limit5, event.opponent AS opponent6, event.season AS season7, game.friendly AS friendly8, event.event_type AS event_type9,
-            location.id AS id10, location.name AS name11, location.address AS address12, location.longitude AS longitude13, location.latitude AS latitude14
-            FROM tm_event event
-            LEFT JOIN tm_training training ON event.id = training.id
-            LEFT JOIN tm_game game ON event.id = game.id
-            INNER JOIN tm_team team on team.id = training.team_id OR team.id = game.team_id
-            INNER JOIN tm_location location on location.id = event.location_id
-            WHERE team.id = :teamID
-            ORDER BY event.date DESC"
+        $query = $this->createQueryBuilder('event');
+        $query->join('event.location', 'location')
+            ->addSelect('location')
+            ->join('event.team', 'team', 'WITH', 'team.id = :teamID')
+            ->addSelect('team')
+            ->setParameter(':teamID', $teamID)
+            ->orderBy('event.date')
         ;
-
-        $query = $this->getEventNativeQuery($sql);
-        $query->setParameter('teamID', $teamID);
-        $results = $query->getResult();
-
-        return $results;
+        return $query->getQuery()->getResult();
     }
 
     /**
@@ -98,56 +90,19 @@ class EventRepository extends EntityRepository
      */
     public function findEventsByTeamForSeason($teamID, $season)
     {
-        $sql = "
-            SELECT event.id AS id0, event.name AS name1, event.description AS description2, event.date AS date3, event.subscription_type AS subscription_type4, event.player_limit AS player_limit5, event.opponent AS opponent6, event.season AS season7, game.friendly AS friendly8, event.event_type AS event_type9,
-            location.id AS id10, location.name AS name11, location.address AS address12, location.longitude AS longitude13, location.latitude AS latitude14
-            FROM tm_event event
-            LEFT JOIN tm_training training ON event.id = training.id
-            LEFT JOIN tm_game game ON event.id = game.id
-            INNER JOIN tm_team team on team.id = training.team_id OR team.id = game.team_id
-            INNER JOIN tm_location location on location.id = event.location_id
-            WHERE team.id = :teamID AND event.season = :season
-            ORDER BY event.date DESC"
+        $query = $this->createQueryBuilder('event');
+        $query->join('event.location', 'location')
+            ->addSelect('location')
+            ->join('event.team', 'team', 'WITH', 'team.id = :teamID')
+            ->addSelect('team')
+            ->where('event.season = :season')
+            ->setParameters(array(
+                'teamID'=>$teamID,
+                'season'=>$season
+            ))
+            ->orderBy('event.date')
         ;
-
-        $query = $this->getEventNativeQuery($sql);
-        $query->setParameters( array(
-            'teamID'=>$teamID,
-            'season'=>$season
-        ));
-        $results = $query->getResult();
-
-        return $results;
-    }
-
-    /**
-     * @return NativeQuery
-     */
-    private function getEventNativeQuery($sql)
-    {
-        $em = $this->_em;
-        $rsm = new ResultSetMapping();
-        $rsm->addEntityResult('TeamManagerEventBundle:Event', 'event');
-        $rsm->addFieldResult('event', 'id0', 'id');
-        $rsm->addFieldResult('event', 'name1', 'name');
-        $rsm->addFieldResult('event', 'description2', 'description');
-        $rsm->addFieldResult('event', 'date3', 'date');
-        $rsm->addFieldResult('event', 'subscription_type4', 'subscription_type');
-        $rsm->addFieldResult('event', 'player_limit5', 'player_limit');
-        $rsm->addFieldResult('event', 'opponent6', 'opponent');
-        $rsm->addFieldResult('event', 'season7', 'season');
-        $rsm->addMetaResult('event', 'event_type9', 'event_type');
-        $rsm->setDiscriminatorColumn('event', 'event_type9');
-
-        $rsm->addJoinedEntityResult('TeamManagerCommonBundle:Location', 'location', 'event', 'location');
-        $rsm->addFieldResult('location', 'id10', 'id');
-        $rsm->addFieldResult('location', 'name11', 'name');
-        $rsm->addFieldResult('location', 'address12', 'address');
-        $rsm->addFieldResult('location', 'longitude13', 'longitude');
-        $rsm->addFieldResult('location', 'latitude14', 'latitude');
-
-        $query = $em->createNativeQuery($sql , $rsm);
-        return $query;
+        return $query->getQuery()->getResult();
     }
 
 }

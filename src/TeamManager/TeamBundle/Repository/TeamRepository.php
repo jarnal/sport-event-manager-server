@@ -29,16 +29,24 @@ class TeamRepository extends EntityRepository
     /**
      * @param $id
      */
-    public function findOneById($id)
+    public function findOneById($id, $fullObject=true)
     {
         $query = $this->createQueryBuilder('team');
-        $query->join('team.default_location', 'location')
-            ->addSelect('location')
-            ->join('team.manager', 'manager')
-            ->addSelect('manager')
-            ->where('team.id = :teamID')
+        $query->where('team.id = :teamID')
             ->setParameter('teamID', $id)
         ;
+
+        if($fullObject){
+            $query->join('team.default_location', 'location')
+                ->addSelect('location')
+                ->join('team.manager', 'manager')
+                ->addSelect('manager')
+                ->join('team.events', 'events')
+                ->addSelect('events')
+                ->join('team.players', 'players')
+                ->addSelect('players')
+            ;
+        }
         $result = $query->getQuery()->getResult();
         if(isset($result[0])){
             return $result[0];

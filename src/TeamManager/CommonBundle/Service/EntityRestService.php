@@ -58,7 +58,7 @@ abstract class EntityRestService implements EntityServiceInterface
      */
     public function get($id)
     {
-        return $this->repository->findOneById($id);
+        return $this->repository->findOneById($id, false);
     }
 
     /**

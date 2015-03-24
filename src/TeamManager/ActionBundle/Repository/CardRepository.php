@@ -23,6 +23,8 @@ class CardRepository extends EntityRepository
         $query = $this->createQueryBuilder('card');
         $query->innerJoin('card.player', 'player', 'WITH', 'player.id = :playerID')
             ->setParameter('playerID', $playerID)
+            ->join('card.game', 'game')
+            ->addSelect('game')
         ;
 
         return $query->getQuery()->getResult();
@@ -39,6 +41,7 @@ class CardRepository extends EntityRepository
         $query = $this->createQueryBuilder('card');
         $query->innerJoin('card.player', 'player', 'WITH', 'player.id = :playerID')
             ->join('card.game', 'game')
+            ->addSelect('game')
             ->where('game.season = :season')
             ->setParameters( array(
                 'playerID'=>$playerID,
@@ -77,7 +80,9 @@ class CardRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder('card');
         $query->join('card.player', 'player')
+            ->addSelect('player')
             ->join('card.game', 'game')
+            ->addSelect('game')
             ->join('game.team', 'team', 'WITH', 'team.id = :teamID')
             ->setParameter('teamID', $teamID)
         ;
@@ -95,6 +100,7 @@ class CardRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder('card');
         $query->join('card.player', 'player')
+            ->addSelect('player')
             ->join('card.game', 'game')
             ->join('game.team', 'team', 'WITH', 'team.id = :teamID')
             ->where('game.season = :season')
@@ -117,6 +123,7 @@ class CardRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder('card');
         $query->join('card.player', 'player')
+            ->addSelect('player')
             ->join('card.game', 'game')
             ->innerjoin('game.team', 'team', 'WITH', 'team.id = :teamID')
             ->setParameter('teamID', $teamID)

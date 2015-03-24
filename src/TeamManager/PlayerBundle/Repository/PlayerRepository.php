@@ -14,6 +14,26 @@ class PlayerRepository extends EntityRepository
 {
 
     /**
+     * @param $id
+     */
+    public function findOneById($id, $fullObject=true)
+    {
+        $query = $this->createQueryBuilder('player');
+        $query->where('player.id = :playerID')
+            ->setParameter('playerID', $id)
+        ;
+
+        if($fullObject){
+            //?
+        }
+        $result = $query->getQuery()->getResult();
+        if(isset($result[0])){
+            return $result[0];
+        }
+        return $query->getQuery()->getResult();
+    }
+
+    /**
      * Returns all trainings of a given player.
      *
      * @param $pPlayerID

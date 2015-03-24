@@ -5,6 +5,7 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use TeamManager\CommonBundle\Entity\Location;
+use TeamManager\EventBundle\Entity\Event;
 use TeamManager\EventBundle\Entity\Game;
 use TeamManager\EventBundle\Entity\GameFriendly;
 use TeamManager\TeamBundle\Entity\Team;
@@ -69,6 +70,7 @@ class LoadGameFriendlyData extends AbstractFixture implements OrderedFixtureInte
         $game->setMissingPlayers($missingPlayers);
         $game->setFriendly(true);
         $game->setName("FriendlyGame ".$id);
+        $game->setType(Event::GAME_FRIENDLY);
         $game->setDescription("FriendlyGame ".$id);
         $game->setDate($date);
         $game->setPlayerLimit(10);

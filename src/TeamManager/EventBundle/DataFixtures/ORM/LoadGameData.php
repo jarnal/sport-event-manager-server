@@ -5,6 +5,7 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use TeamManager\CommonBundle\Entity\Location;
+use TeamManager\EventBundle\Entity\Event;
 use TeamManager\EventBundle\Entity\Game;
 use TeamManager\TeamBundle\Entity\Team;
 
@@ -72,6 +73,7 @@ class LoadGameData extends AbstractFixture implements OrderedFixtureInterface
 
         $game->setName("Game ".$id);
         $game->setDescription("Game ".$id);
+        $game->setType(Event::GAME);
         $game->setDate($date);
         $game->setPlayerLimit(10);
         $game->setLocation($team->getDefaultLocation());
