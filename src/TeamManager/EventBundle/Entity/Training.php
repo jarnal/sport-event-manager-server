@@ -21,5 +21,4 @@ use TeamManager\TeamBundle\Entity\Team;
 class Training extends Event
 {
 
-
 }

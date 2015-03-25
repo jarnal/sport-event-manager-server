@@ -39,7 +39,7 @@ class TrainingRestController extends FOSRestController
      *  output={
      *      "class"="TeamManager\EventBundle\Entity\Training",
      *      "collection"=true,
-     *      "groups"={"Default", "EventGlobal"},
+     *      "groups"={"EventTeam"},
      *      "parsers" = {
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
@@ -48,7 +48,7 @@ class TrainingRestController extends FOSRestController
      *  }
      * )
      *
-     * @View( serializerGroups={"Default", "EventGlobal"} )
+     * @View( serializerGroups={"EventTeam"} )
      *
      * @Get("/", name="get_all", options={ "method_prefix" = false })
      *
@@ -78,7 +78,7 @@ class TrainingRestController extends FOSRestController
      *      "parsers" = {
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser"
      *      },
-     *      "groups"={"Default", "EventDetails"}
+     *      "groups"={"EventDetails", "LocationGlobal"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when training exists",
@@ -86,7 +86,7 @@ class TrainingRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"Default", "EventDetails"} )
+     * @View( serializerGroups={"EventTeam", "LocationGlobal"} )
      *
      * @Get("/{id}", name="get", options={ "method_prefix" = false })
      *
@@ -167,7 +167,7 @@ class TrainingRestController extends FOSRestController
      *      templateVar = "form"
      * )
      *
-     * @Get("/new/{teamID}", name="new", options={ "method_prefix" = false })
+     * @Get("/team/{teamID}/new", name="new", options={ "method_prefix" = false })
      *
      * @return FormTypeInterface
      */
@@ -222,7 +222,9 @@ class TrainingRestController extends FOSRestController
         $service = $this->getService();
         try {
             $form = new TrainingType();
-            if (!($training = $service->get($id))) {
+            $training = $service->get($id);
+            if (!$training) {
+
                 $training = $service->post(
                     $request->request->get($form->getName())
                 );
@@ -234,7 +236,8 @@ class TrainingRestController extends FOSRestController
 
                 return $this->routeRedirectView('api_training_get', $routeOptions, Codes::HTTP_CREATED);
             } else {
-                $training = $service->put(
+//                var_dump($training->getTeam()->getName());
+                $service->put(
                     $training,
                     $request->request->get($form->getName())
                 );

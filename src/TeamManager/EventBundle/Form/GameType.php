@@ -17,13 +17,11 @@ class GameType extends EventType
     {
         parent::buildForm($builder, $options);
         $builder
+            ->add('opponent')
             ->add('type', 'choice', array(
                 'choices' => array(Event::GAME => 'event.type.game', Event::GAME_FRIENDLY => 'event.type.game_friendly'),
                 'preferred_choices' => array('game'),
             ))
-            ->add('team', 'hidden_entity', array(
-                "class" => "TeamManager\\TeamBundle\\Entity\\Team"
-            ));
         ;
     }
 

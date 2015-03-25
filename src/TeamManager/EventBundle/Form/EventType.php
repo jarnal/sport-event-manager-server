@@ -20,9 +20,11 @@ class EventType extends AbstractType
             ->add('date', 'datetime')
             ->add('subscription_type')
             ->add('player_limit')
-            ->add('opponent')
             ->add('location')
             ->add('season')
+            ->add('team', 'entity', array(
+                "class" => "TeamManager\\TeamBundle\\Entity\\Team"
+            ));
         ;
     }
 

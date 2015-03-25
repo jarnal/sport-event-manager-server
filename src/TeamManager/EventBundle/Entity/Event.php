@@ -73,6 +73,7 @@ class Event
      *
      * @var string
      * @ORM\Column(name="type", type="string")
+     * @Assert\NotBlank(message="form.event.type.blank")
      *
      * @Groups({"EventPlayer", "EventTeam", "EventDetails"})
      * @Expose
@@ -107,18 +108,6 @@ class Event
      * @ORM\Column(name="player_limit", type="integer", nullable=true)
      */
     protected $player_limit;
-
-    /**
-     * Name of the opponent.
-     *
-     * @var string
-     * @ORM\Column(name="opponent", type="string", nullable=true)
-     * @Assert\NotBlank(message="form.event.opponent.blank")
-     *
-     * @Groups({"EventMinimal", "EventPlayer", "EventTeam", "EventDetails"})
-     * @Expose
-     */
-    protected $opponent;
 
     /**
      * Season in which the event takes place.
@@ -371,30 +360,6 @@ class Event
     public function setPlayerLimit($pLimit)
     {
         $this->player_limit = $pLimit;
-        return $this;
-    }
-
-    /**
-     * Get opponent of the team for this event.
-     * Existing only for a game and and friendly game.
-     *
-     * @return string
-     */
-    public function getOpponent()
-    {
-        return $this->opponent;
-    }
-
-    /**
-     * Set opponent of the team for this event.
-     * Existing only for a game and and friendly game.
-     *
-     * @param string $pOpponent
-     * @return Event
-     */
-    public function setOpponent($pOpponent)
-    {
-        $this->opponent = $pOpponent;
         return $this;
     }
 

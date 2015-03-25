@@ -35,6 +35,18 @@ class Game extends Event
     private $friendly = false;
 
     /**
+     * Name of the opponent.
+     *
+     * @var string
+     * @ORM\Column(name="opponent", type="string", nullable=true)
+     * @Assert\NotBlank(message="form.event.opponent.blank")
+     *
+     * @Groups({"EventMinimal", "EventPlayer", "EventTeam", "EventDetails"})
+     * @Expose
+     */
+    protected $opponent;
+
+    /**
      * Goals scored during the game.
      *
      * @var ArrayCollection
@@ -67,6 +79,30 @@ class Game extends Event
         $this->goals = new ArrayCollection();
         $this->cards = new ArrayCollection();
         $this->injuries = new ArrayCollection();
+    }
+
+    /**
+     * Get opponent of the team for this event.
+     * Existing only for a game and and friendly game.
+     *
+     * @return string
+     */
+    public function getOpponent()
+    {
+        return $this->opponent;
+    }
+
+    /**
+     * Set opponent of the team for this event.
+     * Existing only for a game and and friendly game.
+     *
+     * @param string $pOpponent
+     * @return Event
+     */
+    public function setOpponent($pOpponent)
+    {
+        $this->opponent = $pOpponent;
+        return $this;
     }
 
     /**

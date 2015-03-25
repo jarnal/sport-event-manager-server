@@ -15,11 +15,11 @@ class TrainingType extends EventType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
-        $builder
-            ->add('team', 'hidden_entity', array(
-                "class" => "TeamManager\\TeamBundle\\Entity\\Team"
-            ));
-        ;
+//        $builder
+//            ->add('type', 'hidden', array(
+//                'data' => 'training'
+//            ))
+//        ;
     }
 
     /**
@@ -29,8 +29,8 @@ class TrainingType extends EventType
     {
         $resolver->setDefaults(array(
             'data_class' => 'TeamManager\EventBundle\Entity\Training',
-            'csrf_protection' => false,
-            'validation_groups' => array($this->getName())
+            'csrf_protection' => false/*,
+            'validation_groups' => array($this->getName())*/
         ));
     }
 

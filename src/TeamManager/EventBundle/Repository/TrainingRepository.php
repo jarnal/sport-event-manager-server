@@ -35,6 +35,8 @@ class TrainingRepository extends EntityRepository
             ->leftJoin('training.missing_players', 'missing_players')
             ->leftJoin('training.present_players', 'present_players')
             ->join('training.location', 'location')
+            ->join('training.team', 'team')
+            ->addSelect('team')
             ->addSelect('expected_players')
             ->addSelect('missing_players')
             ->addSelect('present_players')

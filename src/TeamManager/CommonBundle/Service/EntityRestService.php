@@ -128,7 +128,7 @@ abstract class EntityRestService implements EntityServiceInterface
     protected function processForm($entity, array $pParameters, $pMethod = "PUT")
     {
         $form = $this->formFactory->create(new $this->formType(), $entity, array('method' => $pMethod));
-        $form->submit($pParameters);
+        $form->submit($pParameters, false);
 
         if ($form->isValid()) {
 

@@ -82,7 +82,7 @@ class GameRestController extends FOSRestController
      *      "parsers" = {
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser"
      *      },
-     *      "groups"={"Default", "EventDetails"}
+     *      "groups"={"EventDetails", "LocationGlobal"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when game exists",
@@ -90,9 +90,9 @@ class GameRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={ "Default", "EventDetails"} )
+     * @View( serializerGroups={"EventDetails", "LocationGlobal"} )
      *
-     * @Get("/{id}", name="get", options={ "method_prefix" = false })
+     * @Get("/{id}", name="get", options={"method_prefix" = false}, requirements={"id"="\d+"})
      *
      * @return Game
      */
@@ -171,7 +171,7 @@ class GameRestController extends FOSRestController
      *      templateVar = "form"
      * )
      *
-     * @Get("/new/{teamID}", name="new", options={ "method_prefix" = false })
+     * @Get("/team/{teamID}/new", name="new", options={ "method_prefix" = false })
      *
      * @return FormTypeInterface
      */
