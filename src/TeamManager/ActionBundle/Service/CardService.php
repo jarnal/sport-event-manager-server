@@ -4,7 +4,9 @@ namespace TeamManager\ActionBundle\Service;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use TeamManager\CommonBundle\Service\EntityRestService;
 
 class CardService extends EntityRestService
@@ -25,7 +27,33 @@ class CardService extends EntityRestService
     }
 
     /**
+     * {@inheritdoc}
+     * In the case of a card, the player has to be in the related game to allow card to be valid.
+     * Impossible to add a card for a player that is not in the passed game.
+     *
+     * @param FormInterface $form
+     */
+    protected function isFormValid(FormInterface $form)
+    {
+        if(!$form->isValid()) return false;
+
+        $entity = $form->getData();
+        $game = $entity->getGame();
+        $player = $entity->getPlayer();
+        if($game->getExpectedPlayers()->contains($player)){
+            return true;
+        } else {
+            $form->get('player')->addError(new FormError("card.form.player.incorrect.game"));
+        }
+        return false;
+    }
+
+
+    /**
      * Retrieves all cards for a given player.
+     *
+     * @param $id
+     * @return ArrayCollection
      */
     public function getPlayerCards($id)
     {
@@ -33,7 +61,11 @@ class CardService extends EntityRestService
     }
 
     /**
+     * Retrieves all cards for a given player and for a given season.
      *
+     * @param $playerID
+     * @param $season
+     * @return ArrayCollection
      */
     public function getPlayerCardsForSeason($playerID, $season)
     {
@@ -41,6 +73,8 @@ class CardService extends EntityRestService
     }
 
     /**
+     * Retrieves all cards for a given player and for a given game.
+     *
      * @param $playerID
      * @param $gameID
      * @return ArrayCollection
@@ -52,6 +86,9 @@ class CardService extends EntityRestService
 
     /**
      * Retrieves all cards for a given team.
+     *
+     * @param $id
+     * @return ArrayCollection
      */
     public function getTeamCards($id)
     {
@@ -59,15 +96,23 @@ class CardService extends EntityRestService
     }
 
     /**
+     * Retrieves all cards for a given team and for a given season.
      *
+     * @param $teamID
+     * @param $season
+     * @return ArrayCollection
      */
     public function getTeamCardsForSeason($teamID, $season)
     {
         return $this->repository->getCardsByTeamForSeason($teamID, $season);
     }
 
-    /*
+    /**
+     * Retrieves all cards for a given team and for a given game.
      *
+     * @param $teamID
+     * @param $gameID
+     * @return ArrayCollection
      */
     public function getTeamCardsForGame($teamID, $gameID)
     {

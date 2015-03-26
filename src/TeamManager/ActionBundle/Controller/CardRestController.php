@@ -31,7 +31,7 @@ class CardRestController extends FOSRestController
      *  output={
      *      "class"="TeamManager\ActionBundle\Entity\Card",
      *      "collection"=true,
-     *      "groups"={"Default"},
+     *      "groups"={"CardSpecific", "PlayerGlobal", "EventMinimal"},
      *      "parsers" = {
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
@@ -40,7 +40,7 @@ class CardRestController extends FOSRestController
      *  }
      * )
      *
-     * @View( serializerGroups={ "Default" } )
+     * @View(serializerGroups={"CardSpecific", "PlayerGlobal", "EventMinimal"})
      *
      * @Get("/", name="get_all", options={ "method_prefix" = false })
      *
@@ -70,7 +70,7 @@ class CardRestController extends FOSRestController
      *      "parsers" = {
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser"
      *      },
-     *      "groups"={"Default"}
+     *      "groups"={"CardSpecific", "PlayerGlobal", "EventMinimal"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when card exists",
@@ -78,7 +78,7 @@ class CardRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"Default"} )
+     * @View(serializerGroups={"CardSpecific", "PlayerGlobal", "EventMinimal"})
      *
      * @Get("/{id}", name="get", options={ "method_prefix" = false })
      *

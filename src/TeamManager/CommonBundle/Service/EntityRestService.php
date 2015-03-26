@@ -5,6 +5,7 @@ namespace TeamManager\CommonBundle\Service;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Mapping\Entity;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use TeamManager\EventBundle\Exception\InvalidGameFormException;
@@ -127,12 +128,10 @@ abstract class EntityRestService implements EntityServiceInterface
      */
     protected function processForm($entity, array $pParameters, $pMethod = "PUT")
     {
-        //var_dump($entity);
-
         $form = $this->formFactory->create(new $this->formType(), $entity, array('method' => $pMethod));
         $form->submit($pParameters, 'PUT'!=$pMethod);
 
-        if ($form->isValid()) {
+        if ($this->isFormValid($form)) {
 
             $entity = $form->getData();
             $this->em->persist($entity);
@@ -142,6 +141,17 @@ abstract class EntityRestService implements EntityServiceInterface
         }
 
         throw new $this->formException('Invalid submitted data', $form);
+    }
+
+    /**
+     * This method returns if the form is correct and the entity can be persisted.
+     *
+     * @param FormInterface $form
+     * @return bool
+     */
+    protected function isFormValid(FormInterface $form)
+    {
+        return $form->isValid();
     }
 
     /**
