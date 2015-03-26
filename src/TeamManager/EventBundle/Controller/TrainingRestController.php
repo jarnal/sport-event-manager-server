@@ -44,7 +44,7 @@ class TrainingRestController extends FOSRestController
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
      *      },
-     *      "collectionName" = "training"
+     *      "collectionName" = "trainings"
      *  }
      * )
      *
@@ -56,7 +56,7 @@ class TrainingRestController extends FOSRestController
      */
     public function getAllAction()
     {
-        return $this->getService()->getAll();
+        return array("trainings"=>$this->getService()->getAll());
     }
 
     /**
@@ -224,7 +224,6 @@ class TrainingRestController extends FOSRestController
             $form = new TrainingType();
             $training = $service->get($id);
             if (!$training) {
-
                 $training = $service->post(
                     $request->request->get($form->getName())
                 );
@@ -236,7 +235,6 @@ class TrainingRestController extends FOSRestController
 
                 return $this->routeRedirectView('api_training_get', $routeOptions, Codes::HTTP_CREATED);
             } else {
-//                var_dump($training->getTeam()->getName());
                 $service->put(
                     $training,
                     $request->request->get($form->getName())

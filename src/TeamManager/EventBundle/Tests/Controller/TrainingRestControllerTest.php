@@ -39,8 +39,10 @@ class TrainingGameRestControllerTest extends EntityRestControllerTest {
 
         $result = json_decode( $content, true );
         $this->assertJsonResponse($response, 200);
-        $this->assertTrue(isset($result[0]["name"]), $content);
-        $this->assertTrue(isset($result[0]["at_home"]), $content);
+        foreach($result['trainings'] as $training){
+            $this->assertTrue(isset($training["name"]), $content);
+            $this->assertTrue(isset($training["at_home"]), $content);
+        }
     }
 
     /**
@@ -161,7 +163,7 @@ class TrainingGameRestControllerTest extends EntityRestControllerTest {
             array(),
             array(),
             array('CONTENT_TYPE' => 'application/json'),
-            '{"game":{"name":"TheGame","location":1,"type":"game","team":'.$team->getId().',"opponent":"test","date":'.$this->getJSONDate().',"season":"2014-2015"}}'
+            '{"training":{"name":"TheTraining","location":1,"type":"training","team":'.$team->getId().',"date":'.$this->getJSONDate().',"season":"2014-2015"}}'
         );
 
         $this->assertJsonResponse($this->client->getResponse(), 201, false);
@@ -172,10 +174,10 @@ class TrainingGameRestControllerTest extends EntityRestControllerTest {
      */
     public function testDeletePageActionShouldDelete()
     {
-        /*$accessToken = $this->initializeTest();
-        $game = $this->getGame();
+        $accessToken = $this->initializeTest();
+        $training = $this->getTraining();
 
-        $route = $this->buildGetRoute($game->getId(), $accessToken);
+        $route = $this->buildGetRoute($training->getId(), $accessToken);
         $this->client->request(
             'GET',
             $route,
@@ -183,7 +185,7 @@ class TrainingGameRestControllerTest extends EntityRestControllerTest {
         );
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode(), $this->client->getResponse()->getContent());
 
-        $route = $this->buildDeleteRoute($game->getId(), $accessToken);
+        $route = $this->buildDeleteRoute($training->getId(), $accessToken);
         $this->client->request(
             'DELETE',
             $route,
@@ -193,7 +195,7 @@ class TrainingGameRestControllerTest extends EntityRestControllerTest {
         );
 
         $response = $this->client->getResponse();
-        $this->assertJsonResponse($response, 200);*/
+        $this->assertJsonResponse($response, 200);
     }
 
     /**
@@ -201,7 +203,7 @@ class TrainingGameRestControllerTest extends EntityRestControllerTest {
      */
     public function testDeletePageActionShouldNotDelete()
     {
-        /*$accessToken = $this->initializeTest();
+        $accessToken = $this->initializeTest();
 
         $id = 0;
         $route = $this->buildGetRoute($id, $accessToken);
@@ -222,7 +224,7 @@ class TrainingGameRestControllerTest extends EntityRestControllerTest {
         );
 
         $response = $this->client->getResponse();
-        $this->assertJsonResponse($response, 404);*/
+        $this->assertJsonResponse($response, 404);
     }
 
     /**

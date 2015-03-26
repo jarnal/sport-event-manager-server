@@ -15,11 +15,11 @@ class TrainingType extends EventType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
-//        $builder
-//            ->add('type', 'hidden', array(
-//                'data' => 'training'
-//            ))
-//        ;
+        $builder
+            ->add('type', 'hidden', array(
+                'data' => 'training'
+            ))
+        ;
     }
 
     /**

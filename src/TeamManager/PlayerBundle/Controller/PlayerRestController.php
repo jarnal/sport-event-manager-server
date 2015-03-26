@@ -59,7 +59,7 @@ class PlayerRestController extends FOSRestController
     public function getAllAction()
     {
         if( $this->getUser() ){
-            return $this->get("player_bundle.player.service")->getAll();
+            return array("players"=>$this->getService()->getAll());
         }
     }
 
@@ -214,7 +214,7 @@ class PlayerRestController extends FOSRestController
                 return $this->routeRedirectView('api_player_get', $routeOptions, Codes::HTTP_CREATED);
             } else {
                 $player = $service->put(
-                    $id,
+                    $player,
                     $request->request->get($form->getName())
                 );
 

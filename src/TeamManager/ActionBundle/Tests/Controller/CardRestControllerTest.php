@@ -1,5 +1,5 @@
 <?php
-namespace TeamManager\EventBundle\Tests\Controller;
+namespace TeamManager\ActionBundle\Tests\Controller;
 
 use Doctrine\Common\Cache\Cache;
 use Liip\FunctionalTestBundle\Test\WebTestCase;
@@ -19,7 +19,7 @@ class GameRestControllerTest extends EntityRestControllerTest {
      */
     public function __construct()
     {
-        $this->entityName = "game";
+        $this->entityName = "card";
     }
 
     /**
@@ -38,9 +38,9 @@ class GameRestControllerTest extends EntityRestControllerTest {
 
         $result = json_decode( $content, true );
         $this->assertJsonResponse($response, 200);
-        foreach($result['games'] as $games){
-            $this->assertTrue(isset($games["name"]), $content);
-            $this->assertTrue(isset($games["opponent"]), $content);
+        foreach($result['cards'] as $cards){
+            $this->assertTrue(isset($cards["type"]), $content);
+            $this->assertTrue(isset($cards["player"]), $content);
         }
     }
 
@@ -232,7 +232,8 @@ class GameRestControllerTest extends EntityRestControllerTest {
         $fixtures = array(
             'TeamManager\PlayerBundle\DataFixtures\ORM\LoadPlayerData',
             'TeamManager\TeamBundle\DataFixtures\ORM\LoadTeamData',
-            'TeamManager\EventBundle\DataFixtures\ORM\LoadGameData'
+            'TeamManager\EventBundle\DataFixtures\ORM\LoadGameData',
+            'TeamManager\ActionBundle\DataFixtures\ORM\LoadCardData'
         );
         $this->loadFixtures($fixtures);
     }

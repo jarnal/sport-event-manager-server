@@ -48,7 +48,7 @@ class CardRestController extends FOSRestController
      */
     public function getAllAction()
     {
-        return $this->getService()->getAll();
+        return array("cards"=>$this->getService()->getAll());
     }
 
     /**

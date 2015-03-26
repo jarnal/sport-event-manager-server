@@ -22,7 +22,7 @@ class EventType extends AbstractType
             ->add('player_limit')
             ->add('location')
             ->add('season')
-            ->add('team', 'entity', array(
+            ->add('team', 'hidden_entity', array(
                 "class" => "TeamManager\\TeamBundle\\Entity\\Team"
             ));
         ;

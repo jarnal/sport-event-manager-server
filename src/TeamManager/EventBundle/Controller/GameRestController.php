@@ -48,7 +48,7 @@ class GameRestController extends FOSRestController
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
      *      },
-     *      "collectionName" = "game"
+     *      "collectionName" = "games"
      *  }
      * )
      *
@@ -60,7 +60,7 @@ class GameRestController extends FOSRestController
      */
     public function getAllAction()
     {
-        return $this->getService()->getAll();
+        return array("games"=>$this->getService()->getAll());
     }
 
     /**

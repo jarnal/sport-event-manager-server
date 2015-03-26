@@ -38,7 +38,9 @@ class TeamRestControllerTest extends EntityRestControllerTest {
 
         $result = json_decode( $content, true );
         $this->assertJsonResponse($response, 200);
-        $this->assertTrue(isset($result[0]["name"]));
+        foreach($result['teams'] as $team){
+            $this->assertTrue(isset($team["name"]), $content);
+        }
     }
 
     /**
@@ -128,6 +130,9 @@ class TeamRestControllerTest extends EntityRestControllerTest {
             array('CONTENT_TYPE' => 'application/json'),
             '{"team":{"name":"LaTeamChanged"}}'
         );
+        $response = $this->client->getResponse();
+
+        $this->assertTrue($response->getStatusCode() == 204);
     }
 
     /**
@@ -240,8 +245,6 @@ class TeamRestControllerTest extends EntityRestControllerTest {
         $response = $this->client->getResponse();
         $content = $response->getContent();
         $result = json_decode($content, true);
-
-        //var_dump($result);
 
         $this->assertJsonResponse($response, 200);
         foreach($result['events'] as $event)

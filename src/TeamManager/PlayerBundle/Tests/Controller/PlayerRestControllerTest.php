@@ -36,7 +36,10 @@ class PlayerRestControllerTest extends EntityRestControllerTest {
         $result = json_decode( $content, true );
 
         $this->assertJsonResponse($response, 200);
-        $this->assertTrue(isset($result[0]["firstname"]), $content);
+        foreach($result['players'] as $player){
+            $this->assertTrue(isset($player["firstname"]), $content);
+            $this->assertTrue(isset($player["lastname"]), $content);
+        }
     }
 
     /**
@@ -122,8 +125,11 @@ class PlayerRestControllerTest extends EntityRestControllerTest {
             array(),
             array(),
             array('CONTENT_TYPE' => 'application/json'),
-            '{"player":{"firstname":"firstname", "username":"foo", "email": "foo@example.org", "password":"hahaha"}}'
+            '{"player":{"firstname":"firstname"}}'
         );
+        $response = $this->client->getResponse();
+
+        $this->assertTrue($response->getStatusCode() == 204);
     }
 
     /**

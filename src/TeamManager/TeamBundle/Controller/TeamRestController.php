@@ -39,7 +39,7 @@ class TeamRestController extends FOSRestController
      *  output={
      *      "class"="TeamManager\TeamBundle\Entity\Team",
      *      "collection"=true,
-     *      "collectionName"="team",
+     *      "collectionName"="teams",
      *      "groups"={"TeamGlobal"},
      *      "parsers" = {
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
@@ -56,7 +56,7 @@ class TeamRestController extends FOSRestController
      */
     public function getAllAction()
     {
-        return $this->getService()->getAll();
+        return array("teams"=>$this->getService()->getAll());
     }
 
     /**
