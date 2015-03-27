@@ -4,7 +4,7 @@ namespace TeamManager\ActionBundle\Tests\Controller;
 use Doctrine\Common\Cache\Cache;
 use Liip\FunctionalTestBundle\Test\WebTestCase;
 use TeamManager\ActionBundle\DataFixtures\ORM\LoadCardData;
-use TeamManager\ActionBundle\DataFixtures\ORM\LoadGoalData;
+use TeamManager\ActionBundle\DataFixtures\ORM\LoadInjuryData;
 use TeamManager\CommonBundle\Tests\EntityRestControllerTest;
 use TeamManager\EventBundle\DataFixtures\ORM\LoadGameData;
 use TeamManager\EventBundle\Entity\Game;
@@ -25,7 +25,7 @@ class InjuryRestControllerTest extends EntityRestControllerTest {
     }
 
     /**
-     * Tests api_card_get_all API method returning all teams.
+     * Tests api_injury_get_all API method returning all teams.
      *
      */
     public function testGetAllAction()
@@ -40,22 +40,22 @@ class InjuryRestControllerTest extends EntityRestControllerTest {
 
         $result = json_decode( $content, true );
         $this->assertJsonResponse($response, 200);
-        foreach($result['goals'] as $goals){
-            $this->assertTrue(isset($goals["type"]), $content);
-            $this->assertTrue(isset($goals["player"]), $content);
-            $this->assertTrue(isset($goals["game"]), $content);
+        foreach($result['injuries'] as $injuries){
+            $this->assertTrue(isset($injuries["type"]), $content);
+            $this->assertTrue(isset($injuries["player"]), $content);
+            $this->assertTrue(isset($injuries["game"]), $content);
         }
     }
 
     /**
-     * Tests api_goal_get API method returning a specific team.
+     * Tests api_injury_get API method returning a specific team.
      */
     public function testGetAction()
     {
         $access_token = $this->initializeTest();
-        $goal = $this->getGoal();
+        $injury = $this->getInjury();
 
-        $route = $this->buildGetRoute($goal->getId(), $access_token);
+        $route = $this->buildGetRoute($injury->getId(), $access_token);
         $this->client->request('GET', $route, array('ACCEPT' => 'application/json'));
         $response = $this->client->getResponse();
         $content = $response->getContent();
@@ -69,7 +69,7 @@ class InjuryRestControllerTest extends EntityRestControllerTest {
     }
 
     /**
-     * Tests api_goal_post API with a complete POST team.
+     * Tests api_injury_post API with a complete POST team.
      */
     public function testPostAction()
     {
@@ -82,7 +82,7 @@ class InjuryRestControllerTest extends EntityRestControllerTest {
             array(),
             array(),
             array('CONTENT_TYPE' => 'application/json'),
-            '{"goal":{"type":"Goal.AUTOGOAL", "player":'.$this->getPlayer()->getId().', "game":'.$this->getGame()->getId().'}}'
+            '{"injury":{"type":"Injury.NORMAL", "player":'.$this->getPlayer()->getId().', "game":'.$this->getGame()->getId().'}}'
         );
         $response = $this->client->getResponse();
 
@@ -90,7 +90,7 @@ class InjuryRestControllerTest extends EntityRestControllerTest {
     }
 
     /**
-     * Tests api_goal_post API with an incomplete POST team.
+     * Tests api_injury_post API with an incomplete POST team.
      */
     public function testIncompletePostAction()
     {
@@ -103,7 +103,7 @@ class InjuryRestControllerTest extends EntityRestControllerTest {
             array(),
             array(),
             array('CONTENT_TYPE' => 'application/json'),
-            '{"goal":{"type":"Pouet"}}'
+            '{"injury":{"type":"Pouet"}}'
         );
         $response = $this->client->getResponse();
 
@@ -111,7 +111,7 @@ class InjuryRestControllerTest extends EntityRestControllerTest {
     }
 
     /**
-     * Tests api_goal_post API with an user not expected or present in the game related to the goal.
+     * Tests api_injury_post API with an user not expected or present in the game related to the injury.
      */
     public function testIncorrectPlayerPostAction()
     {
@@ -126,7 +126,7 @@ class InjuryRestControllerTest extends EntityRestControllerTest {
             array(),
             array(),
             array('CONTENT_TYPE' => 'application/json'),
-            '{"goal":{"type":"Goal.AUTOGOAL", "player":'.$player->getId().', "game":'.$this->getGame()->getId().'}}'
+            '{"injury":{"type":"Injury.NORMAL", "player":'.$player->getId().', "game":'.$this->getGame()->getId().'}}'
         );
         $response = $this->client->getResponse();
 
@@ -134,14 +134,14 @@ class InjuryRestControllerTest extends EntityRestControllerTest {
     }
 
     /**
-     * Tests the api_goal_put with an existing team and complete team data.
+     * Tests the api_injury_put with an existing team and complete team data.
      */
     public function testJsonPutPageActionShouldModify()
     {
         $accessToken = $this->initializeTest();
-        $goal = $this->getGoal();
+        $injury = $this->getInjury();
 
-        $route = $this->buildGetRoute($goal->getId(), $accessToken);
+        $route = $this->buildGetRoute($injury->getId(), $accessToken);
         $this->client->request(
             'GET',
             $route,
@@ -149,14 +149,14 @@ class InjuryRestControllerTest extends EntityRestControllerTest {
         );
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode(), $this->client->getResponse()->getContent());
 
-        $route = $this->buildPutRoute($goal->getId(), $accessToken);
+        $route = $this->buildPutRoute($injury->getId(), $accessToken);
         $this->client->request(
             'PUT',
             $route,
             array(),
             array(),
             array('CONTENT_TYPE' => 'application/json'),
-            '{"goal":{"type":"Goal.AUTOGOAL"}}'
+            '{"injury":{"type":"Injury.NORMAL"}}'
         );
         $response = $this->client->getResponse();
 
@@ -164,7 +164,7 @@ class InjuryRestControllerTest extends EntityRestControllerTest {
     }
 
     /**
-     * Tests the api_goal_put API method with a blank team and complete team data.
+     * Tests the api_injury_put API method with a blank team and complete team data.
      */
     public function testJsonPutPageActionShouldCreate()
     {
@@ -186,21 +186,21 @@ class InjuryRestControllerTest extends EntityRestControllerTest {
             array(),
             array(),
             array('CONTENT_TYPE' => 'application/json'),
-            '{"goal":{"type":"Goal.AUTOGOAL", "player":'.$this->getPlayer()->getId().', "game":'.$this->getGame()->getId().'}}'
+            '{"injury":{"type":"Injury.NORMAL", "player":'.$this->getPlayer()->getId().', "game":'.$this->getGame()->getId().'}}'
         );
 
         $this->assertJsonResponse($this->client->getResponse(), 201, false);
     }
 
     /**
-     * Tests the api_goal_delete API method with an existing team.
+     * Tests the api_injury_delete API method with an existing team.
      */
     public function testDeletePageActionShouldDelete()
     {
         $accessToken = $this->initializeTest();
-        $goal = $this->getGoal();
+        $injury = $this->getInjury();
 
-        $route = $this->buildGetRoute($goal->getId(), $accessToken);
+        $route = $this->buildGetRoute($injury->getId(), $accessToken);
         $this->client->request(
             'GET',
             $route,
@@ -208,7 +208,7 @@ class InjuryRestControllerTest extends EntityRestControllerTest {
         );
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode(), $this->client->getResponse()->getContent());
 
-        $route = $this->buildDeleteRoute($goal->getId(), $accessToken);
+        $route = $this->buildDeleteRoute($injury->getId(), $accessToken);
         $this->client->request(
             'DELETE',
             $route,
@@ -222,7 +222,7 @@ class InjuryRestControllerTest extends EntityRestControllerTest {
     }
 
     /**
-     * Tests the api_goal_delete API method with an invalid team.
+     * Tests the api_injury_delete API method with an invalid team.
      */
     public function testDeletePageActionShouldNotDelete()
     {
@@ -259,7 +259,7 @@ class InjuryRestControllerTest extends EntityRestControllerTest {
             'TeamManager\PlayerBundle\DataFixtures\ORM\LoadPlayerData',
             'TeamManager\TeamBundle\DataFixtures\ORM\LoadTeamData',
             'TeamManager\EventBundle\DataFixtures\ORM\LoadGameData',
-            'TeamManager\ActionBundle\DataFixtures\ORM\LoadGoalData'
+            'TeamManager\ActionBundle\DataFixtures\ORM\LoadInjuryData'
         );
         $this->loadFixtures($fixtures);
     }
@@ -269,9 +269,9 @@ class InjuryRestControllerTest extends EntityRestControllerTest {
      *
      * @return Game
      */
-    protected function getGoal()
+    protected function getInjury()
     {
-        return LoadGoalData::$goals[0];
+        return LoadInjuryData::$injuries[0];
     }
 
     /**
