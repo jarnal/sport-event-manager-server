@@ -12,4 +12,29 @@ use Doctrine\ORM\EntityRepository;
  */
 class InjuryRepository extends EntityRepository
 {
+
+    /**
+     * @param $id
+     */
+    public function findOneById($id, $fullObject=true)
+    {
+        $query = $this->createQueryBuilder('injury');
+        $query->where('injury.id = :id')
+            ->setParameter(':id', $id)
+        ;
+        if($fullObject){
+            $query->join('injury.player', 'player')
+                ->addSelect('player')
+                ->join('injury.game', 'game')
+                ->addSelect('game')
+            ;
+        }
+
+        $result = $query->getQuery()->getResult();
+        if(isset($result[0])){
+            return $result[0];
+        }
+        return $query->getQuery()->getResult();
+    }
+
 }

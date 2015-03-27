@@ -150,7 +150,7 @@ class CardRestController extends FOSRestController
      *  templateVar = "form"
      * )
      *
-     * @Get("/new/player/{playerID}/game/{gameID}", name="new", options={ "method_prefix" = false })
+     * @Get("/player/{playerID}/game/{gameID}/new", name="new", options={ "method_prefix" = false })
      *
      * @return FormTypeInterface
      */
@@ -249,7 +249,7 @@ class CardRestController extends FOSRestController
      *  templateVar = "form"
      * )
      *
-     * @Get("/edit/{id}", name="edit", options={ "method_prefix" = false })
+     * @Get("/{id}/edit", name="edit", options={ "method_prefix" = false })
      *
      * @return FormTypeInterface
      */
@@ -257,7 +257,7 @@ class CardRestController extends FOSRestController
     {
         $card = $this->getService()->getOr404($id);
         return $this->createForm(new CardType(), $card, array(
-            "action" => $this->generateUrl( 'api_card_put' , ['id'=>$id] ),
+            "action" => $this->generateUrl('api_card_put', array('id'=>$id, "access_token"=>$_GET["access_token"])),
             "method" => "PUT"
         ));
     }

@@ -3,7 +3,10 @@
 namespace TeamManager\ActionBundle\Service;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\Test\FormInterface;
 use TeamManager\ActionBundle\Entity\Goal;
 use TeamManager\CommonBundle\Service\EntityRestService;
 
@@ -24,27 +27,24 @@ class GoalService extends EntityRestService
 
     /**
      * {@inheritdoc}
+     * In the case of a card, the player has to be in the related game to allow card to be valid.
+     * Impossible to add a card for a player that is not in the passed game.
+     *
+     * @param FormInterface $form
      */
-    /*protected function processForm($entity, array $pParameters, $pMethod = "PUT")
+    protected function isFormValid(Form $form)
     {
-        $form = $this->formFactory->create(new $this->formType(), $entity, array('method' => $pMethod));
-        $form->submit($pParameters);
+        if(!$form->isValid()) return false;
 
-        if ($form->isValid()) {
-
-
-            $entity = $form->getData();
-
-            $player = $entity->getPlayer();
-            $game = $entity->getGame();
-            if($entity->
-            $this->em->persist($entity);
-            $this->em->flush($entity);
-
-            return $entity;
+        $entity = $form->getData();
+        $game = $entity->getGame();
+        $player = $entity->getPlayer();
+        if($game->getExpectedPlayers()->contains($player)){
+            return true;
+        } else {
+            $form->get('player')->addError(new FormError("goal.form.player.incorrect.game"));
         }
-
-        throw new $this->formException('Invalid submitted data', $form);
-    }*/
+        return false;
+    }
 
 }

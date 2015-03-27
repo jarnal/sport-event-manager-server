@@ -261,7 +261,7 @@ class TeamRestController extends FOSRestController
     {
         $team = $this->getService()->getOr404($id);
         return $this->createForm(new TeamType($this->getUser()), $team, array(
-            "action" => $this->generateUrl( 'api_team_put' , ['id'=>$id] ),
+            "action" => $this->generateUrl('api_team_put', array('id'=>$id, "access_token"=>$_GET["access_token"])),
             "method" => "PUT"
         ));
     }

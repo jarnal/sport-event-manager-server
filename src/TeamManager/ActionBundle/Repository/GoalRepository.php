@@ -12,4 +12,29 @@ use Doctrine\ORM\EntityRepository;
  */
 class GoalRepository extends EntityRepository
 {
+
+    /**
+     * @param $id
+     */
+    public function findOneById($id, $fullObject=true)
+    {
+        $query = $this->createQueryBuilder('goal');
+        $query->where('goal.id = :id')
+            ->setParameter(':id', $id)
+        ;
+        if($fullObject){
+            $query->join('goal.player', 'player')
+                ->addSelect('player')
+                ->join('goal.game', 'game')
+                ->addSelect('game')
+            ;
+        }
+
+        $result = $query->getQuery()->getResult();
+        if(isset($result[0])){
+            return $result[0];
+        }
+        return $query->getQuery()->getResult();
+    }
+
 }

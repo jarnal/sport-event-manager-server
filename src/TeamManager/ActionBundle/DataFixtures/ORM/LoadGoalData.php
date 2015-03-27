@@ -5,6 +5,7 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use TeamManager\ActionBundle\Entity\Card;
+use TeamManager\ActionBundle\Entity\Goal;
 use TeamManager\CommonBundle\Entity\Location;
 use TeamManager\TeamBundle\Entity\Team;
 
@@ -17,23 +18,23 @@ class LoadGoalData extends AbstractFixture implements OrderedFixtureInterface
      */
     public function load(ObjectManager $manager)
     {
-        /*$manager->clear();
+        $manager->clear();
 
         $player = $this->getReference('player-1');
         $game = $this->getReference('game-1');
 
-        $card1 = $this->buildCard($player, $game, Card::YELLOW_CARD);
-        $card2 = $this->buildCard($player, $game, Card::RED_CARD);
+        $goal1 = $this->buildGoal($player, $game, Goal::NORMAL);
+        $goal2 = $this->buildGoal($player, $game, Goal::SPECIAL);
 
-        $manager->persist($card1);
-        $manager->persist($card2);
+        $manager->persist($goal1);
+        $manager->persist($goal2);
 
         $manager->flush();
 
-        $this->addReference('card-1', $card1);
-        $this->addReference('card-2', $card2);
+        $this->addReference('goal-1', $goal1);
+        $this->addReference('goal-2', $goal2);
 
-        static::$goals = array($card1, $card2);*/
+        static::$goals = array($goal1, $goal2);
     }
 
     /**
@@ -45,17 +46,21 @@ class LoadGoalData extends AbstractFixture implements OrderedFixtureInterface
     }
 
     /**
+     * Builds a new goal.
+     *
      * @param $player
      * @param $game
      * @param $type
+     *
+     * return Goal
      */
-    private function buildCard($player, $game, $type)
+    private function buildGoal($player, $game, $type)
     {
-        /*$card = new Card();
-        $card->setPlayer($player)
+        $goal = new Goal();
+        $goal->setPlayer($player)
             ->setGame($game)
             ->setType($type)
         ;
-        return $card;*/
+        return $goal;
     }
 }

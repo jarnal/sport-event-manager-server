@@ -33,6 +33,9 @@ class Injury
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Expose
+     * @Groups({"InjuryTeam", "InjuryPlayer", "InjuryGame", "InjurySpecific"})
      */
     private $id;
 
@@ -43,6 +46,9 @@ class Injury
      * @ORM\Column(name="type", type="string")
      *
      * @Assert\NotBlank(message="form.injury.type.blank")
+     *
+     * @Expose
+     * @Groups({"InjuryTeam", "InjuryPlayer", "InjuryGame", "InjurySpecific"})
      */
     private $type;
 
@@ -54,6 +60,9 @@ class Injury
      * @ORM\JoinColumn(name="player_id", referencedColumnName="id", onDelete="CASCADE")
      *
      * @Assert\NotNull(message="form.injury.player.null")
+     *
+     * @Expose
+     * @Groups({"InjuryTeam", "InjuryGame", "InjurySpecific"})
      */
     private $player;
 
@@ -65,6 +74,9 @@ class Injury
      * @ORM\JoinColumn(name="game_id", referencedColumnName="id", onDelete="CASCADE")
      *
      * @Assert\NotNull(message="form.injury.game.null")
+     *
+     * @Expose
+     * @Groups({"InjuryTeam", "InjuryPlayer", "InjurySpecific"})
      */
     private $game;
 

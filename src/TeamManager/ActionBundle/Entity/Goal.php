@@ -35,16 +35,22 @@ class Goal
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Expose
+     * @Groups({"GoalTeam", "GoalPlayer", "GoalGame", "GoalSpecific"})
      */
     private $id;
 
     /**
-     * Goal type. Can be : AUTOGOAL, HEADER, VOLLEY, NORMAL, SPECIAL.
+     * Goal type. Can be: AUTOGOAL, HEADER, VOLLEY, NORMAL, SPECIAL.
      *
      * @var string
      * @ORM\Column(name="type", type="string")
      *
      * @Assert\NotBlank(message="form.goal.type.blank")
+     *
+     * @Expose
+     * @Groups({"GoalTeam", "GoalPlayer", "GoalGame", "GoalSpecific"})
      */
     private $type;
 
@@ -53,6 +59,9 @@ class Goal
      *
      * @var \DateTime
      * @ORM\Column(name="time", type="datetime", nullable=true)
+     *
+     * @Expose
+     * @Groups({"GoalSpecific"})
      */
     private $time;
 
@@ -64,6 +73,9 @@ class Goal
      * @ORM\JoinColumn(name="player_id", referencedColumnName="id", onDelete="CASCADE")
      *
      * @Assert\NotNull(message="form.goal.player.null")
+     *
+     * @Expose
+     * @Groups({"GoalTeam", "GoalGame", "GoalSpecific"})
      */
     private $player;
 
@@ -75,6 +87,9 @@ class Goal
      * @ORM\JoinColumn(name="game_id", referencedColumnName="id", onDelete="CASCADE")
      *
      * @Assert\NotNull(message="form.goal.game.null")
+     *
+     * @Expose
+     * @Groups({"GoalTeam", "GoalPlayer", "GoalSpecific"})
      */
     private $game;
 
@@ -116,7 +131,7 @@ class Goal
      * @param \DateTime $pTime
      * @return Goal
      */
-    public function setTime(\DateTime $pTime)
+    public function setTime($pTime)
     {
         $this->time = $pTime;
         return $this;

@@ -272,7 +272,7 @@ class TrainingRestController extends FOSRestController
      *      templateVar = "form"
      * )
      *
-     * @Get("/edit/{id}", name="edit", options={ "method_prefix" = false })
+     * @Get("/{id}/edit", name="edit", options={ "method_prefix" = false })
      *
      * @return FormTypeInterface
      */

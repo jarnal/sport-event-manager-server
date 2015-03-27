@@ -258,7 +258,7 @@ class PlayerRestController extends FOSRestController
     {
         $player = $this->getService()->getOr404($id);
         return $this->createForm(new PlayerType(), $player, array(
-            "action" => $this->generateUrl( 'api_player_put' , ['id'=>$id] ),
+            "action" => $this->generateUrl('api_player_put', array('id'=>$id, "access_token"=>$_GET["access_token"])),
             "method" => "PUT"
         ));
     }

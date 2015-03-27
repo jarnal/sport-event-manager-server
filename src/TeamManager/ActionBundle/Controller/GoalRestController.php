@@ -16,8 +16,8 @@ use Symfony\Component\HttpFoundation\Request;
 use TeamManager\ActionBundle\Entity\Goal;
 use TeamManager\ActionBundle\Exception\InvalidGoalFormException;
 use TeamManager\ActionBundle\Form\GoalType;
+use TeamManager\ActionBundle\Service\GoalService;
 use TeamManager\CommonBundle\Service\EntityServiceInterface;
-use TeamManager\PlayerBundle\Entity\Player;
 
 class GoalRestController extends FOSRestController
 {
@@ -31,7 +31,7 @@ class GoalRestController extends FOSRestController
      *  output={
      *      "class"="TeamManager\ActionBundle\Entity\Goal",
      *      "collection"=true,
-     *      "groups"={"Default"},
+     *      "groups"={"GoalSpecific", "PlayerGlobal", "EventMinimal"},
      *      "parsers" = {
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
@@ -40,15 +40,15 @@ class GoalRestController extends FOSRestController
      *  }
      * )
      *
-     * @View( serializerGroups={ "Default" } )
+     * @View(serializerGroups={"GoalSpecific", "PlayerGlobal", "EventMinimal"})
      *
-     * @Get("/", name="get_all", options={ "method_prefix" = false })
+     * @Get("/", name="get_all", options={"method_prefix" = false})
      *
      * @return JsonResponse
      */
     public function getAllAction()
     {
-        return $this->getService()->getAll();
+        return array("goals"=>$this->getService()->getAll());
     }
 
     /**
@@ -70,7 +70,7 @@ class GoalRestController extends FOSRestController
      *      "parsers" = {
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser"
      *      },
-     *      "groups"={"Default"}
+     *      "groups"={"GoalSpecific", "PlayerGlobal", "EventMinimal"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when goal exists",
@@ -78,9 +78,9 @@ class GoalRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"Default"} )
+     * @View(serializerGroups={"GoalSpecific", "PlayerGlobal", "EventMinimal"})
      *
-     * @Get("/{id}", name="get", options={ "method_prefix" = false })
+     * @Get("/{id}", name="get", options={"method_prefix" = false}, requirements={"id"="\d+"})
      *
      * @return Goal
      */
@@ -109,7 +109,7 @@ class GoalRestController extends FOSRestController
      *  templateVar = "form"
      * )
      *
-     * @Post("/" , name="post", options={ "method_prefix" = false })
+     * @Post("/" , name="post", options={"method_prefix" = false})
      *
      * @return FormTypeInterface|View
      *
@@ -138,11 +138,25 @@ class GoalRestController extends FOSRestController
      * Builds the form to use to create a new goal.
      *
      * @ApiDoc(
-     *   resource = true,
-     *   section="Goal API",
-     *   statusCodes = {
-     *     200 = "Returned when successful"
-     *   }
+     *  resource = true,
+     *  section="Goal API",
+     *  statusCodes = {
+     *      200 = "Returned when successful"
+     *  },
+     *  requirements={
+     *      {
+     *          "name"="playerID",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="Related player id"
+     *      },
+     *      {
+     *          "name"="gameID",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="Related goal id"
+     *      }
+     *  }
      * )
      *
      * @View(
@@ -150,7 +164,7 @@ class GoalRestController extends FOSRestController
      *  templateVar = "form"
      * )
      *
-     * @Get("/new/player/{playerID}/game/{gameID}", name="new", options={ "method_prefix" = false })
+     * @Get("/player/{playerID}/game/{gameID}/new", name="new", options={ "method_prefix" = false }, requirements={"playerID"="\d+", "gameID"="\d+"})
      *
      * @return FormTypeInterface
      */
@@ -176,14 +190,22 @@ class GoalRestController extends FOSRestController
      * Update existing goal from the submitted data or create a new goal with a specific id.
      *
      * @ApiDoc(
-     *   resource = true,
-     *   section="Goal API",
-     *   input="TeamManager\ActionBundle\Form\GoalType",
-     *   statusCodes = {
-     *     201 = "Returned when a new goal is created",
-     *     204 = "Returned when goal has been updated successfully",
-     *     400 = "Returned when the form has errors"
-     *   }
+     *  resource = true,
+     *  section="Goal API",
+     *  input="TeamManager\ActionBundle\Form\GoalType",
+     *  statusCodes = {
+     *      201 = "Returned when a new goal is created",
+     *      204 = "Returned when goal has been updated successfully",
+     *      400 = "Returned when the form has errors"
+     *  },
+     *  requirements={
+     *      {
+     *          "name"="id",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="Goal id"
+     *      }
+     *  }
      * )
      *
      * @View(
@@ -191,7 +213,7 @@ class GoalRestController extends FOSRestController
      *  template="TeamManagerActionBundle:Goal:goalEditForm.html.twig",
      * )
      *
-     * @Put("/{id}", name="put", options={ "method_prefix" = false })
+     * @Put("/{id}", name="put", options={"method_prefix" = false}, requirements={"id"="\d+"})
      *
      * @return FormTypeInterface|View
      */
@@ -249,7 +271,7 @@ class GoalRestController extends FOSRestController
      *  templateVar = "form"
      * )
      *
-     * @Get("/edit/{id}", name="edit", options={ "method_prefix" = false })
+     * @Get("/{id}/edit", name="edit", options={"method_prefix" = false}, requirements={"id"="\d+"})
      *
      * @return FormTypeInterface
      */
@@ -257,7 +279,7 @@ class GoalRestController extends FOSRestController
     {
         $goal = $this->getService()->getOr404($id);
         return $this->createForm(new GoalType(), $goal, array(
-            "action" => $this->generateUrl( 'api_goal_put' , ['id'=>$id] ),
+            "action" => $this->generateUrl('api_goal_put', array('id'=>$id, "access_token"=>$_GET["access_token"])),
             "method" => "PUT"
         ));
     }
@@ -282,7 +304,7 @@ class GoalRestController extends FOSRestController
      *  }
      * )
      *
-     * @Delete("/{id}", name="delete", options={ "method_prefix" = false })
+     * @Delete("/{id}", name="delete", options={"method_prefix" = false}, requirements={"id"="\d+"})
      *
      * @param $id
      */
@@ -298,11 +320,11 @@ class GoalRestController extends FOSRestController
     /**
      * Returns the appropriate service to handle related entity.
      *
-     * @return CardService
+     * @return GoalService
      */
     protected function getService()
     {
         return $this->container->get('action_bundle.goal.service');
     }
-    
+
 }

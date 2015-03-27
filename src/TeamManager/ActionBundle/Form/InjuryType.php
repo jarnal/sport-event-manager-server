@@ -5,6 +5,7 @@ namespace TeamManager\ActionBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use TeamManager\ActionBundle\Entity\Injury;
 
 class InjuryType extends ActionType
 {
@@ -15,7 +16,14 @@ class InjuryType extends ActionType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('type')
+            ->add('type', 'choice', array(
+                'choices' => array(
+                    Injury::NORMAL => 'injury.normal.label',
+                    Injury::SERIOUS => 'injury.serious.label',
+                    Injury::LIGHT => 'injury.light.label'
+                ),
+                'preferred_choices' => array(Injury::NORMAL),
+            ))
         ;
         parent::buildForm($builder, $options);
     }
