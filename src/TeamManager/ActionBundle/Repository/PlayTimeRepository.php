@@ -37,4 +37,140 @@ class PlayTimeRepository extends EntityRepository
         return $query->getQuery()->getResult();
     }
 
+    /**
+     * Retrieves all playtimes for a given player.
+     *
+     * @param $id
+     */
+    public function getPlayTimesByPlayer($playerID)
+    {
+        $query = $this->createQueryBuilder('playtime');
+        $query->innerJoin('playtime.player', 'player', 'WITH', 'player.id = :playerID')
+            ->setParameter('playerID', $playerID)
+            ->join('playtime.game', 'game')
+            ->addSelect('game')
+        ;
+
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Retrieves all playtimes of a specific season for a given player.
+     *
+     * @param $playerID
+     * @param $seasonID
+     */
+    public function getPlayTimesByPlayerForSeason($playerID, $season)
+    {
+        $query = $this->createQueryBuilder('playtime');
+        $query->innerJoin('playtime.player', 'player', 'WITH', 'player.id = :playerID')
+            ->join('playtime.game', 'game')
+            ->addSelect('game')
+            ->where('game.season = :season')
+            ->setParameters( array(
+                'playerID'=>$playerID,
+                'season'=>$season
+            ))
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Retrieves all playtimes of a specific game for a given player.
+     *
+     * @param $playerID
+     * @param $gameID
+     */
+    public function getPlayTimesByPlayerForGame($playerID, $gameID)
+    {
+        $query = $this->createQueryBuilder('playtime');
+        $query->join('playtime.player', 'player')
+            ->join('playtime.game', 'game')
+            ->where('game.id = :gameID')
+            ->andWhere('player.id = :playerID')
+            ->setParameter('gameID', $gameID)
+            ->setParameter('playerID', $playerID)
+        ;
+
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Retrieves all playtimes for a given team.
+     *
+     * @param $id
+     */
+    public function getPlayTimesByTeam($teamID)
+    {
+        $query = $this->createQueryBuilder('playtime');
+        $query->join('playtime.player', 'player')
+            ->addSelect('player')
+            ->join('playtime.game', 'game')
+            ->addSelect('game')
+            ->join('game.team', 'team', 'WITH', 'team.id = :teamID')
+            ->setParameter('teamID', $teamID)
+        ;
+
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Retrieves all playtimes of a specific season for a given team.
+     *
+     * @param $playerID
+     * @param $seasonID
+     */
+    public function getPlayTimesByTeamForSeason($teamID, $season)
+    {
+        $query = $this->createQueryBuilder('playtime');
+        $query->join('playtime.player', 'player')
+            ->addSelect('player')
+            ->join('playtime.game', 'game')
+            ->join('game.team', 'team', 'WITH', 'team.id = :teamID')
+            ->where('game.season = :season')
+            ->setParameters( array(
+                'teamID'=> $teamID,
+                'season'=>$season
+            ))
+        ;
+
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Retrieves all playtimes of a specific game for a given team.
+     *
+     * @param $playerID
+     * @param $gameID
+     */
+    public function getPlayTimesByTeamForGame($teamID, $gameID)
+    {
+        $query = $this->createQueryBuilder('playtime');
+        $query->join('playtime.player', 'player')
+            ->addSelect('player')
+            ->join('playtime.game', 'game')
+            ->innerjoin('game.team', 'team', 'WITH', 'team.id = :teamID')
+            ->setParameter('teamID', $teamID)
+            ->where('game.id = :gameID')
+            ->setParameter('gameID', $gameID)
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Retrieves all playtimes for a given game.
+     *
+     * @param $id
+     */
+    public function getPlayTimesByGame($gameID)
+    {
+        $query = $this->createQueryBuilder('playtime');
+        $query->join('playtime.player', 'player')
+            ->join('playtime.game', 'game')
+            ->where('game.id = :gameID')
+            ->setParameter('gameID', $gameID)
+        ;
+        return $query->getQuery()->getResult();
+    }
+
 }

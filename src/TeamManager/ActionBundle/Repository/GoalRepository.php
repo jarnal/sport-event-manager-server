@@ -37,4 +37,140 @@ class GoalRepository extends EntityRepository
         return $query->getQuery()->getResult();
     }
 
+    /**
+     * Retrieves all goals for a given player.
+     *
+     * @param $id
+     */
+    public function getGoalsByPlayer($playerID)
+    {
+        $query = $this->createQueryBuilder('goal');
+        $query->innerJoin('goal.player', 'player', 'WITH', 'player.id = :playerID')
+            ->setParameter('playerID', $playerID)
+            ->join('goal.game', 'game')
+            ->addSelect('game')
+        ;
+
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Retrieves all goals of a specific season for a given player.
+     *
+     * @param $playerID
+     * @param $seasonID
+     */
+    public function getGoalsByPlayerForSeason($playerID, $season)
+    {
+        $query = $this->createQueryBuilder('goal');
+        $query->innerJoin('goal.player', 'player', 'WITH', 'player.id = :playerID')
+            ->join('goal.game', 'game')
+            ->addSelect('game')
+            ->where('game.season = :season')
+            ->setParameters( array(
+                'playerID'=>$playerID,
+                'season'=>$season
+            ))
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Retrieves all goals of a specific game for a given player.
+     *
+     * @param $playerID
+     * @param $gameID
+     */
+    public function getGoalsByPlayerForGame($playerID, $gameID)
+    {
+        $query = $this->createQueryBuilder('goal');
+        $query->join('goal.player', 'player')
+            ->join('goal.game', 'game')
+            ->where('game.id = :gameID')
+            ->andWhere('player.id = :playerID')
+            ->setParameter('gameID', $gameID)
+            ->setParameter('playerID', $playerID)
+        ;
+
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Retrieves all goals for a given team.
+     *
+     * @param $id
+     */
+    public function getGoalsByTeam($teamID)
+    {
+        $query = $this->createQueryBuilder('goal');
+        $query->join('goal.player', 'player')
+            ->addSelect('player')
+            ->join('goal.game', 'game')
+            ->addSelect('game')
+            ->join('game.team', 'team', 'WITH', 'team.id = :teamID')
+            ->setParameter('teamID', $teamID)
+        ;
+
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Retrieves all goals of a specific season for a given team.
+     *
+     * @param $playerID
+     * @param $seasonID
+     */
+    public function getGoalsByTeamForSeason($teamID, $season)
+    {
+        $query = $this->createQueryBuilder('goal');
+        $query->join('goal.player', 'player')
+            ->addSelect('player')
+            ->join('goal.game', 'game')
+            ->join('game.team', 'team', 'WITH', 'team.id = :teamID')
+            ->where('game.season = :season')
+            ->setParameters( array(
+                'teamID'=> $teamID,
+                'season'=>$season
+            ))
+        ;
+
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Retrieves all goals of a specific game for a given team.
+     *
+     * @param $playerID
+     * @param $gameID
+     */
+    public function getGoalsByTeamForGame($teamID, $gameID)
+    {
+        $query = $this->createQueryBuilder('goal');
+        $query->join('goal.player', 'player')
+            ->addSelect('player')
+            ->join('goal.game', 'game')
+            ->innerjoin('game.team', 'team', 'WITH', 'team.id = :teamID')
+            ->setParameter('teamID', $teamID)
+            ->where('game.id = :gameID')
+            ->setParameter('gameID', $gameID)
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Retrieves all goals for a given game.
+     *
+     * @param $id
+     */
+    public function getGoalsByGame($gameID)
+    {
+        $query = $this->createQueryBuilder('goal');
+        $query->join('goal.player', 'player')
+            ->join('goal.game', 'game')
+            ->where('game.id = :gameID')
+            ->setParameter('gameID', $gameID)
+        ;
+        return $query->getQuery()->getResult();
+    }
+
 }

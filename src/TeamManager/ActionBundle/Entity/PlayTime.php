@@ -29,6 +29,9 @@ class PlayTime
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Expose
+     * @Groups({"PlayTimeTeam", "PlayTimePlayer", "PlayTimeGame", "PlayTimeSpecific"})
      */
     private $id;
 
@@ -39,6 +42,9 @@ class PlayTime
      * @ORM\Column(name="duration", type="integer")
      *
      * @Assert\NotBlank(message="form.play_time.duration.blank")
+     *
+     * @Expose
+     * @Groups({"PlayTimeTeam", "PlayTimePlayer", "PlayTimeGame", "PlayTimeSpecific"})
      */
     private $duration;
 
@@ -50,6 +56,9 @@ class PlayTime
      * @ORM\JoinColumn(name="player_id", referencedColumnName="id", onDelete="CASCADE")
      *
      * @Assert\NotNull(message="form.play_time.player.null")
+     *
+     * @Expose
+     * @Groups({"PlayTimeTeam", "PlayTimeGame", "PlayTimeSpecific"})
      */
     private $player;
 
@@ -61,6 +70,9 @@ class PlayTime
      * @ORM\JoinColumn(name="game_id", referencedColumnName="id", onDelete="CASCADE")
      *
      * @Assert\NotNull(message="form.play_time.game.null")
+     *
+     * @Expose
+     * @Groups({"PlayTimeTeam", "PlayTimePlayer", "PlayTimeSpecific"})
      */
     private $game;
 
@@ -75,7 +87,7 @@ class PlayTime
     }
 
     /**
-     * Set play time duration.
+     * Set play time duration (minutes).
      *
      * @param integer $pDuration
      * @return PlayTime

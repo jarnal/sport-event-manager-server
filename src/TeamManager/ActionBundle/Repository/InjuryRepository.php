@@ -37,4 +37,140 @@ class InjuryRepository extends EntityRepository
         return $query->getQuery()->getResult();
     }
 
+    /**
+     * Retrieves all injuries for a given player.
+     *
+     * @param $id
+     */
+    public function getInjuriesByPlayer($playerID)
+    {
+        $query = $this->createQueryBuilder('injury');
+        $query->innerJoin('injury.player', 'player', 'WITH', 'player.id = :playerID')
+            ->setParameter('playerID', $playerID)
+            ->join('injury.game', 'game')
+            ->addSelect('game')
+        ;
+
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Retrieves all injuries of a specific season for a given player.
+     *
+     * @param $playerID
+     * @param $seasonID
+     */
+    public function getInjuriesByPlayerForSeason($playerID, $season)
+    {
+        $query = $this->createQueryBuilder('injury');
+        $query->innerJoin('injury.player', 'player', 'WITH', 'player.id = :playerID')
+            ->join('injury.game', 'game')
+            ->addSelect('game')
+            ->where('game.season = :season')
+            ->setParameters( array(
+                'playerID'=>$playerID,
+                'season'=>$season
+            ))
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Retrieves all injuries of a specific game for a given player.
+     *
+     * @param $playerID
+     * @param $gameID
+     */
+    public function getInjuriesByPlayerForGame($playerID, $gameID)
+    {
+        $query = $this->createQueryBuilder('injury');
+        $query->join('injury.player', 'player')
+            ->join('injury.game', 'game')
+            ->where('game.id = :gameID')
+            ->andWhere('player.id = :playerID')
+            ->setParameter('gameID', $gameID)
+            ->setParameter('playerID', $playerID)
+        ;
+
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Retrieves all injuries for a given team.
+     *
+     * @param $id
+     */
+    public function getInjuriesByTeam($teamID)
+    {
+        $query = $this->createQueryBuilder('injury');
+        $query->join('injury.player', 'player')
+            ->addSelect('player')
+            ->join('injury.game', 'game')
+            ->addSelect('game')
+            ->join('game.team', 'team', 'WITH', 'team.id = :teamID')
+            ->setParameter('teamID', $teamID)
+        ;
+
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Retrieves all injuries of a specific season for a given team.
+     *
+     * @param $playerID
+     * @param $seasonID
+     */
+    public function getInjuriesByTeamForSeason($teamID, $season)
+    {
+        $query = $this->createQueryBuilder('injury');
+        $query->join('injury.player', 'player')
+            ->addSelect('player')
+            ->join('injury.game', 'game')
+            ->join('game.team', 'team', 'WITH', 'team.id = :teamID')
+            ->where('game.season = :season')
+            ->setParameters( array(
+                'teamID'=> $teamID,
+                'season'=>$season
+            ))
+        ;
+
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Retrieves all injuries of a specific game for a given team.
+     *
+     * @param $playerID
+     * @param $gameID
+     */
+    public function getInjuriesByTeamForGame($teamID, $gameID)
+    {
+        $query = $this->createQueryBuilder('injury');
+        $query->join('injury.player', 'player')
+            ->addSelect('player')
+            ->join('injury.game', 'game')
+            ->innerjoin('game.team', 'team', 'WITH', 'team.id = :teamID')
+            ->setParameter('teamID', $teamID)
+            ->where('game.id = :gameID')
+            ->setParameter('gameID', $gameID)
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Retrieves all injuries for a given game.
+     *
+     * @param $id
+     */
+    public function getInjuriesByGame($gameID)
+    {
+        $query = $this->createQueryBuilder('injury');
+        $query->join('injury.player', 'player')
+            ->join('injury.game', 'game')
+            ->where('game.id = :gameID')
+            ->setParameter('gameID', $gameID)
+        ;
+        return $query->getQuery()->getResult();
+    }
+
 }

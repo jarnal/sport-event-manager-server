@@ -4,6 +4,7 @@ namespace TeamManager\CommonBundle\Service;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Mapping\Entity;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormTypeInterface;
@@ -149,7 +150,7 @@ abstract class EntityRestService implements EntityServiceInterface
      * @param FormInterface $form
      * @return bool
      */
-    protected function isFormValid(FormInterface $form)
+    protected function isFormValid(Form $form)
     {
         return $form->isValid();
     }

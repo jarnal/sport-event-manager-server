@@ -685,7 +685,7 @@ class TeamRestController extends FOSRestController
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
      *      },
-     *      "groups"={"CardTeam", "PlayerGlobal", "EventMinimal"}
+     *      "groups"={"CardTeam", "PlayerGlobal", "EventMinimal", "PlayerGlobal"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when team exists",
@@ -693,7 +693,7 @@ class TeamRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"CardTeam", "PlayerGlobal", "EventMinimal"} )
+     * @View( serializerGroups={"CardTeam", "PlayerGlobal", "EventMinimal", "PlayerGlobal"} )
      *
      * @Get("/{id}/cards", name="cards", options={ "method_prefix" = false })
      *
@@ -733,7 +733,7 @@ class TeamRestController extends FOSRestController
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
      *      },
-     *      "groups"={"CardTeam", "PlayerGlobal", "EventMinimal"}
+     *      "groups"={"CardTeam", "PlayerGlobal", "EventMinimal", "PlayerGlobal"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when team exists",
@@ -741,7 +741,7 @@ class TeamRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"CardTeam", "PlayerGlobal", "EventMinimal"} )
+     * @View( serializerGroups={"CardTeam", "PlayerGlobal", "EventMinimal", "PlayerGlobal"} )
      *
      * @Get("/{teamID}/season/{season}/cards", name="cards_season", options={ "method_prefix" = false })
      *
@@ -782,7 +782,7 @@ class TeamRestController extends FOSRestController
      *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
      *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
      *      },
-     *      "groups"={"CardTeam", "PlayerGlobal", "EventMinimal"}
+     *      "groups"={"CardTeam", "PlayerGlobal", "EventMinimal", "PlayerGlobal"}
      *  },
      *  statusCodes = {
      *     200 = "Returned when all related entities exists",
@@ -790,7 +790,7 @@ class TeamRestController extends FOSRestController
      *   }
      * )
      *
-     * @View( serializerGroups={"CardTeam", "PlayerGlobal", "EventMinimal"} )
+     * @View( serializerGroups={"CardTeam", "PlayerGlobal", "EventMinimal", "PlayerGlobal"} )
      *
      * @Get("/{teamID}/game/{gameID}/cards", name="game_cards", options={ "method_prefix" = false })
      *
@@ -803,6 +803,432 @@ class TeamRestController extends FOSRestController
 
         $cards = $this->get('action_bundle.card.service')->getTeamCardsForGame($teamID, $gameID);
         return array("cards"=>$cards);
+    }
+
+    /**
+     * Returns all goals for a given team.
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  section="Team API",
+     *  requirements={
+     *      {
+     *          "name"="id",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="Team id"
+     *      }
+     *  },
+     *  output={
+     *      "class"="\TeamManager\ActionBundle\Entity\Goal",
+     *      "collection"=true,
+     *      "collectionName"="goals",
+     *      "parsers" = {
+     *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
+     *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
+     *      },
+     *      "groups"={"GoalTeam", "TeamGlobal", "EventMinimal", "PlayerGlobal"}
+     *  },
+     *  statusCodes = {
+     *     200 = "Returned when team exists",
+     *     404 = "Returned when the team is not found"
+     *   }
+     * )
+     *
+     * @View( serializerGroups={"GoalTeam", "TeamGlobal", "EventMinimal", "PlayerGlobal"} )
+     *
+     * @Get("/{id}/goals", name="goals", options={"method_prefix" = false})
+     *
+     * @return array
+     */
+    public function listGoalsAction($id)
+    {
+        $this->getService()->getOr404($id);
+        $goals = $this->get('action_bundle.goal.service')->getTeamGoals($id);
+        return array("goals"=>$goals);
+    }
+
+    /**
+     * Returns all goals for a given team and for a specific season.
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  section="Team API",
+     *  requirements={
+     *      {
+     *          "name"="teamID",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="Team id"
+     *      },
+     *      {
+     *          "name"="season",
+     *          "dataType"="string",
+     *          "description"="Season name (2014-2015 format)"
+     *      }
+     *  },
+     *  output={
+     *      "class"="\TeamManager\ActionBundle\Entity\Goal",
+     *      "collection"=true,
+     *      "collectionName" = "goals",
+     *      "parsers" = {
+     *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
+     *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
+     *      },
+     *      "groups"={"GoalTeam", "TeamGlobal", "EventMinimal", "PlayerGlobal"}
+     *  },
+     *  statusCodes = {
+     *     200 = "Returned when team exists",
+     *     404 = "Returned when the team is not found"
+     *   }
+     * )
+     *
+     * @View( serializerGroups={"GoalTeam", "TeamGlobal", "EventMinimal", "PlayerGlobal"} )
+     *
+     * @Get("/{teamID}/season/{season}/goals", name="goals_season", options={ "method_prefix" = false })
+     *
+     * @return array
+     */
+    public function listGoalsBySeasonAction($teamID, $season)
+    {
+        $this->getService()->getOr404($teamID);
+        $goals = $this->get('action_bundle.goal.service')->getTeamGoalsForSeason($teamID, $season);
+        return array("goals"=>$goals);
+    }
+
+    /**
+     * Returns all goals for a given team in a specific game.
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  section="Team API",
+     *  requirements={
+     *      {
+     *          "name"="teamID",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="Team id"
+     *      },
+     *      {
+     *          "name"="gameID",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="Game id"
+     *      }
+     *  },
+     *  output={
+     *      "class"="\TeamManager\ActionBundle\Entity\Goal",
+     *      "collection"=true,
+     *      "collectionName"="goals",
+     *      "parsers" = {
+     *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
+     *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
+     *      },
+     *      "groups"={"GoalTeam", "TeamGlobal", "EventMinimal", "PlayerGlobal"}
+     *  },
+     *  statusCodes = {
+     *     200 = "Returned when all related entities exists",
+     *     404 = "Returned when at least one of the related entities are not found"
+     *   }
+     * )
+     *
+     * @View( serializerGroups={"GoalTeam", "TeamGlobal", "EventMinimal", "PlayerGlobal"} )
+     *
+     * @Get("/{teamID}/game/{gameID}/goals", name="game_goals", options={ "method_prefix" = false })
+     *
+     * @return array
+     */
+    public function listGoalsForGameAction($teamID, $gameID)
+    {
+        $this->getService()->getOr404($teamID);
+        $this->get('event_bundle.game.service')->getOr404($gameID);
+
+        $goals = $this->get('action_bundle.goal.service')->getTeamGoalsForGame($teamID, $gameID);
+        return array("goals"=>$goals);
+    }
+
+    /**
+     * Returns all injuries for a given team.
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  section="Team API",
+     *  requirements={
+     *      {
+     *          "name"="id",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="Team id"
+     *      }
+     *  },
+     *  output={
+     *      "class"="\TeamManager\ActionBundle\Entity\Goal",
+     *      "collection"=true,
+     *      "collectionName"="injuries",
+     *      "parsers" = {
+     *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
+     *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
+     *      },
+     *      "groups"={"InjuryTeam", "TeamGlobal", "EventMinimal", "PlayerGlobal"}
+     *  },
+     *  statusCodes = {
+     *     200 = "Returned when team exists",
+     *     404 = "Returned when the team is not found"
+     *   }
+     * )
+     *
+     * @View( serializerGroups={"InjuryTeam", "TeamGlobal", "EventMinimal", "PlayerGlobal"} )
+     *
+     * @Get("/{id}/injuries", name="injuries", options={"method_prefix" = false})
+     *
+     * @return array
+     */
+    public function listInjuriesAction($id)
+    {
+        $this->getService()->getOr404($id);
+        $injuries = $this->get('action_bundle.injury.service')->getTeamInjuries($id);
+        return array("injuries"=>$injuries);
+    }
+
+    /**
+     * Returns all injuries for a given team and for a specific season.
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  section="Team API",
+     *  requirements={
+     *      {
+     *          "name"="teamID",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="Team id"
+     *      },
+     *      {
+     *          "name"="season",
+     *          "dataType"="string",
+     *          "description"="Season name (2014-2015 format)"
+     *      }
+     *  },
+     *  output={
+     *      "class"="\TeamManager\ActionBundle\Entity\Goal",
+     *      "collection"=true,
+     *      "collectionName" = "injuries",
+     *      "parsers" = {
+     *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
+     *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
+     *      },
+     *      "groups"={"InjuryTeam", "TeamGlobal", "EventMinimal", "PlayerGlobal"}
+     *  },
+     *  statusCodes = {
+     *     200 = "Returned when team exists",
+     *     404 = "Returned when the team is not found"
+     *   }
+     * )
+     *
+     * @View( serializerGroups={"InjuryTeam", "TeamGlobal", "EventMinimal", "PlayerGlobal"} )
+     *
+     * @Get("/{teamID}/season/{season}/injuries", name="injuries_season", options={ "method_prefix" = false })
+     *
+     * @return array
+     */
+    public function listInjuriesBySeasonAction($teamID, $season)
+    {
+        $this->getService()->getOr404($teamID);
+        $injuries = $this->get('action_bundle.injury.service')->getTeamInjuriesForSeason($teamID, $season);
+        return array("injuries"=>$injuries);
+    }
+
+    /**
+     * Returns all injuries for a given team in a specific game.
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  section="Team API",
+     *  requirements={
+     *      {
+     *          "name"="teamID",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="Team id"
+     *      },
+     *      {
+     *          "name"="gameID",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="Game id"
+     *      }
+     *  },
+     *  output={
+     *      "class"="\TeamManager\ActionBundle\Entity\Goal",
+     *      "collection"=true,
+     *      "collectionName"="injuries",
+     *      "parsers" = {
+     *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
+     *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
+     *      },
+     *      "groups"={"InjuryTeam", "TeamGlobal", "EventMinimal", "PlayerGlobal"}
+     *  },
+     *  statusCodes = {
+     *     200 = "Returned when all related entities exists",
+     *     404 = "Returned when at least one of the related entities are not found"
+     *   }
+     * )
+     *
+     * @View( serializerGroups={"InjuryTeam", "TeamGlobal", "EventMinimal", "PlayerGlobal"} )
+     *
+     * @Get("/{teamID}/game/{gameID}/injuries", name="game_injuries", options={ "method_prefix" = false })
+     *
+     * @return array
+     */
+    public function listInjuriesForGameAction($teamID, $gameID)
+    {
+        $this->getService()->getOr404($teamID);
+        $this->get('event_bundle.game.service')->getOr404($gameID);
+
+        $injuries = $this->get('action_bundle.injury.service')->getTeamInjuriesForGame($teamID, $gameID);
+        return array("injuries"=>$injuries);
+    }
+
+    /**
+     * Returns all playtimes for a given team.
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  section="Team API",
+     *  requirements={
+     *      {
+     *          "name"="id",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="Team id"
+     *      }
+     *  },
+     *  output={
+     *      "class"="\TeamManager\ActionBundle\Entity\Goal",
+     *      "collection"=true,
+     *      "collectionName"="play_times",
+     *      "parsers" = {
+     *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
+     *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
+     *      },
+     *      "groups"={"PlayTimeTeam", "TeamGlobal", "EventMinimal", "PlayerGlobal"}
+     *  },
+     *  statusCodes = {
+     *     200 = "Returned when team exists",
+     *     404 = "Returned when the team is not found"
+     *   }
+     * )
+     *
+     * @View( serializerGroups={"PlayTimeTeam", "TeamGlobal", "EventMinimal", "PlayerGlobal"} )
+     *
+     * @Get("/{id}/play_times", name="play_times", options={"method_prefix" = false})
+     *
+     * @return array
+     */
+    public function listPlayTimesAction($id)
+    {
+        $this->getService()->getOr404($id);
+        $playtimes = $this->get('action_bundle.play_time.service')->getTeamPlayTimes($id);
+        return array("play_times"=>$playtimes);
+    }
+
+    /**
+     * Returns all playtimes for a given team and for a specific season.
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  section="Team API",
+     *  requirements={
+     *      {
+     *          "name"="teamID",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="Team id"
+     *      },
+     *      {
+     *          "name"="season",
+     *          "dataType"="string",
+     *          "description"="Season name (2014-2015 format)"
+     *      }
+     *  },
+     *  output={
+     *      "class"="\TeamManager\ActionBundle\Entity\Goal",
+     *      "collection"=true,
+     *      "collectionName" = "play_times",
+     *      "parsers" = {
+     *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
+     *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
+     *      },
+     *      "groups"={"PlayTimeTeam", "TeamGlobal", "EventMinimal", "PlayerGlobal"}
+     *  },
+     *  statusCodes = {
+     *     200 = "Returned when team exists",
+     *     404 = "Returned when the team is not found"
+     *   }
+     * )
+     *
+     * @View( serializerGroups={"PlayTimeTeam", "TeamGlobal", "EventMinimal", "PlayerGlobal"} )
+     *
+     * @Get("/{teamID}/season/{season}/play_times", name="play_times_season", options={ "method_prefix" = false })
+     *
+     * @return array
+     */
+    public function listPlayTimesBySeasonAction($teamID, $season)
+    {
+        $this->getService()->getOr404($teamID);
+        $playtimes = $this->get('action_bundle.play_time.service')->getTeamPlayTimesForSeason($teamID, $season);
+        return array("play_times"=>$playtimes);
+    }
+
+    /**
+     * Returns all playtimes for a given team in a specific game.
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  section="Team API",
+     *  requirements={
+     *      {
+     *          "name"="teamID",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="Team id"
+     *      },
+     *      {
+     *          "name"="gameID",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="Game id"
+     *      }
+     *  },
+     *  output={
+     *      "class"="\TeamManager\ActionBundle\Entity\Goal",
+     *      "collection"=true,
+     *      "collectionName"="play_times",
+     *      "parsers" = {
+     *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
+     *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
+     *      },
+     *      "groups"={"PlayTimeTeam", "TeamGlobal", "EventMinimal", "PlayerGlobal"}
+     *  },
+     *  statusCodes = {
+     *     200 = "Returned when all related entities exists",
+     *     404 = "Returned when at least one of the related entities are not found"
+     *   }
+     * )
+     *
+     * @View( serializerGroups={"PlayTimeTeam", "TeamGlobal", "EventMinimal", "PlayerGlobal"} )
+     *
+     * @Get("/{teamID}/game/{gameID}/play_times", name="game_play_times", options={ "method_prefix" = false })
+     *
+     * @return array
+     */
+    public function listPlayTimesForGameAction($teamID, $gameID)
+    {
+        $this->getService()->getOr404($teamID);
+        $this->get('event_bundle.game.service')->getOr404($gameID);
+
+        $playtimes = $this->get('action_bundle.play_time.service')->getTeamPlayTimesForGame($teamID, $gameID);
+        return array("play_times"=>$playtimes);
     }
 
     /**

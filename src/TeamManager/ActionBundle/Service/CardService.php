@@ -4,6 +4,7 @@ namespace TeamManager\ActionBundle\Service;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -33,7 +34,7 @@ class CardService extends EntityRestService
      *
      * @param FormInterface $form
      */
-    protected function isFormValid(FormInterface $form)
+    protected function isFormValid(Form $form)
     {
         if(!$form->isValid()) return false;
 
