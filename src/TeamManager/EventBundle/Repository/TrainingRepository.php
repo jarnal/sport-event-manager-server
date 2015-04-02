@@ -28,22 +28,27 @@ class TrainingRepository extends EntityRepository
     /**
      * @param $id
      */
-    public function findOneById($id)
+    public function findOneById($id, $fullObject=true)
     {
         $query = $this->createQueryBuilder('training');
-        $query->leftJoin('training.expected_players', 'expected_players')
-            ->leftJoin('training.missing_players', 'missing_players')
-            ->leftJoin('training.present_players', 'present_players')
-            ->join('training.location', 'location')
-            ->join('training.team', 'team')
-            ->addSelect('team')
-            ->addSelect('expected_players')
-            ->addSelect('missing_players')
-            ->addSelect('present_players')
-            ->addSelect('location')
-            ->where('training.id = :id')
+        $query->where('training.id = :id')
             ->setParameter(':id', $id)
         ;
+
+        if($fullObject){
+            $query->leftJoin('training.expected_players', 'expected_players')
+                ->leftJoin('training.missing_players', 'missing_players')
+                ->leftJoin('training.present_players', 'present_players')
+                ->join('training.location', 'location')
+                ->join('training.team', 'team')
+                ->addSelect('team')
+                ->addSelect('expected_players')
+                ->addSelect('missing_players')
+                ->addSelect('present_players')
+                ->addSelect('location')
+            ;
+        }
+
         $result = $query->getQuery()->getResult();
         if(isset($result[0])){
             return $result[0];

@@ -12,4 +12,47 @@ use Doctrine\ORM\EntityRepository;
  */
 class CommentRepository extends EntityRepository
 {
+
+    /**
+     * @return array
+     */
+    public function findAll()
+    {
+        $query = $this->createQueryBuilder('comment');
+        $query->join('comment.event', 'event')
+            ->addSelect('event')
+            ->join('comment.player_receiver', 'receiver')
+            ->addSelect('receiver')
+            ->join('comment.player_sender', 'sender')
+            ->addSelect('sender')
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * @param $id
+     */
+    public function findOneById($id, $fullObject=true)
+    {
+        $query = $this->createQueryBuilder('comment');
+        $query->where('comment.id = :id')
+            ->setParameter(':id', $id)
+        ;
+        if($fullObject){
+            $query->join('comment.event', 'event')
+                ->addSelect('event')
+                ->join('comment.player_receiver', 'receiver')
+                ->addSelect('receiver')
+                ->join('comment.player_sender', 'sender')
+                ->addSelect('sender')
+            ;
+        }
+
+        $result = $query->getQuery()->getResult();
+        if(isset($result[0])){
+            return $result[0];
+        }
+        return $query->getQuery()->getResult();
+    }
+
 }

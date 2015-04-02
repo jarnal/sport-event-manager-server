@@ -17,6 +17,35 @@ class EventRepository extends EntityRepository
 {
 
     /**
+     * @param $id
+     */
+    public function findOneById($id, $fullObject=true)
+    {
+        $query = $this->createQueryBuilder('event');
+        $query->where('event.id = :id')
+            ->setParameter(':id', $id)
+        ;
+
+        if($fullObject){
+            $query->leftJoin('event.expected_players', 'expected_players')
+                ->leftJoin('event.missing_players', 'missing_players')
+                ->leftJoin('event.present_players', 'present_players')
+                ->join('event.location', 'location')
+                ->addSelect('expected_players')
+                ->addSelect('missing_players')
+                ->addSelect('present_players')
+                ->addSelect('location')
+            ;
+        }
+
+        $result = $query->getQuery()->getResult();
+        if(isset($result[0])){
+            return $result[0];
+        }
+        return $query->getQuery()->getResult();
+    }
+
+    /**
      * Returns all events of a given player.
      *
      * @param $pPlayerID

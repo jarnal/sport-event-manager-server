@@ -156,8 +156,8 @@ class CardRestController extends FOSRestController
      */
     public function newAction(Request $request, $playerID, $gameID)
     {
-        $player = $this-> get('player_bundle.player.service')->getOr404($playerID);
-        $game = $this->get('event_bundle.game.service')->getOr404($gameID);
+        $player = $this-> get('player_bundle.player.service')->getOr404($playerID, false);
+        $game = $this->get('event_bundle.game.service')->getOr404($gameID, false);
 
         $card = new Card();
         $card->setPlayer($player);

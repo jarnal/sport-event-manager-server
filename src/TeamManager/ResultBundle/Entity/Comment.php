@@ -3,6 +3,12 @@
 namespace TeamManager\ResultBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\VirtualProperty;
+use Symfony\Component\Validator\Constraints as Assert;
 use TeamManager\EventBundle\Entity\Game;
 use TeamManager\PlayerBundle\Entity\Player;
 
@@ -11,6 +17,8 @@ use TeamManager\PlayerBundle\Entity\Player;
  *
  * @ORM\Table(name="tm_comment")
  * @ORM\Entity(repositoryClass="TeamManager\ResultBundle\Repository\CommentRepository")
+ *
+ * @ExclusionPolicy("all")
  */
 class Comment
 {
@@ -20,6 +28,9 @@ class Comment
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Expose
+     * @Groups({"CommentSender", "CommentReceiver", "CommentGame", "CommentSpecific"})
      */
     private $id;
 
@@ -28,6 +39,11 @@ class Comment
      *
      * @var string
      * @ORM\Column(name="content", type="string")
+     *
+     * @Assert\NotBlank(message="form.comment.content.blank")
+     *
+     * @Expose
+     * @Groups({"CommentSender", "CommentReceiver", "CommentGame", "CommentSpecific"})
      */
     private $content;
 
@@ -37,6 +53,11 @@ class Comment
      * @var Game
      * @ORM\ManyToOne(targetEntity="\TeamManager\EventBundle\Entity\Event", inversedBy="comments")
      * @ORM\JoinColumn(name="event_id", referencedColumnName="id", onDelete="CASCADE")
+     *
+     * @Assert\NotNull(message="form.comment.event.null")
+     *
+     * @Expose
+     * @Groups({"CommentSender", "CommentReceiver", "CommentSpecific"})
      */
     private $event;
 
@@ -46,6 +67,11 @@ class Comment
      * @var Player
      * @ORM\ManyToOne(targetEntity="\TeamManager\PlayerBundle\Entity\Player", inversedBy="comments_received")
      * @ORM\JoinColumn(name="receiver_id", referencedColumnName="id", onDelete="CASCADE")
+     *
+     * @Assert\NotNull(message="form.comment.receiver.null")
+     *
+     * @Expose
+     * @Groups({"CommentSender", "CommentGame", "CommentSpecific"})
      */
     private $player_receiver;
 
@@ -55,6 +81,11 @@ class Comment
      * @var Player
      * @ORM\ManyToOne(targetEntity="\TeamManager\PlayerBundle\Entity\Player", inversedBy="comments_sent")
      * @ORM\JoinColumn(name="sender_id", referencedColumnName="id")
+     *
+     * @Assert\NotNull(message="form.comment.sender.null")
+     *
+     * @Expose
+     * @Groups({"CommentReceiver", "CommentGame", "CommentSpecific"})
      */
     private $player_sender;
 
@@ -70,7 +101,7 @@ class Comment
     }
 
     /**
-     * Get card related game.
+     * Set comment content.
      *
      * @param string $pContent
      * @return Comment
@@ -82,7 +113,7 @@ class Comment
     }
 
     /**
-     * Get card related game.
+     * Get comment content.
      *
      * @return string
      */
@@ -92,7 +123,7 @@ class Comment
     }
 
     /**
-     * Get card related game.
+     * Get comment related event.
      *
      * @param Game $pGame
      * @return Comment
@@ -104,7 +135,7 @@ class Comment
     }
 
     /**
-     * Get card related game.
+     * Get comment related event.
      *
      * @return Game
      */

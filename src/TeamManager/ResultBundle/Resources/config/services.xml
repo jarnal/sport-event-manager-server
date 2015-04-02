@@ -4,13 +4,32 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <!--
+    <parameters>
+        <parameter key="result_bundle.comment.service.class">TeamManager\ResultBundle\Service\CommentService</parameter>
+        <parameter key="result_bundle.comment.class">TeamManager\ResultBundle\Entity\Comment</parameter>
+        <parameter key="result_bundle.comment.form.class">TeamManager\ResultBundle\Form\CommentType</parameter>
+        <parameter key="result_bundle.comment.form.exception.class">TeamManager\ResultBundle\Exception\InvalidCommentFormException</parameter>
+
+        <parameter key="result_bundle.note.service.class">TeamManager\ResultBundle\Service\NoteService</parameter>
+        <parameter key="result_bundle.note.class">TeamManager\ResultBundle\Entity\Note</parameter>
+        <parameter key="result_bundle.note.form.class">TeamManager\ResultBundle\Form\NoteType</parameter>
+        <parameter key="result_bundle.note.form.exception.class">TeamManager\ResultBundle\Exception\InvalidNoteFormException</parameter>
+    </parameters>
+
     <services>
-        <service id="team_manager_result.example" class="TeamManager\ResultBundle\Example">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
+        <service id="result_bundle.comment.service" class="%result_bundle.comment.service.class%">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="form.factory"></argument>
+            <argument>%result_bundle.comment.class%</argument>
+            <argument>%result_bundle.comment.form.class%</argument>
+            <argument>%result_bundle.comment.form.exception.class%</argument>
+        </service>
+        <service id="result_bundle.note.service" class="%result_bundle.note.service.class%">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="form.factory"></argument>
+            <argument>%result_bundle.note.class%</argument>
+            <argument>%result_bundle.note.form.class%</argument>
+            <argument>%result_bundle.note.form.exception.class%</argument>
         </service>
     </services>
-    -->
 </container>

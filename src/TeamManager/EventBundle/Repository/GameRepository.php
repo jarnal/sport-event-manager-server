@@ -28,20 +28,25 @@ class GameRepository extends EntityRepository
     /**
      * @param $id
      */
-    public function findOneById($id)
+    public function findOneById($id, $fullObject=true)
     {
         $query = $this->createQueryBuilder('game');
-        $query->leftJoin('game.expected_players', 'expected_players')
-            ->leftJoin('game.missing_players', 'missing_players')
-            ->leftJoin('game.present_players', 'present_players')
-            ->join('game.location', 'location')
-            ->addSelect('expected_players')
-            ->addSelect('missing_players')
-            ->addSelect('present_players')
-            ->addSelect('location')
-            ->where('game.id = :id')
+        $query->where('game.id = :id')
             ->setParameter(':id', $id)
         ;
+
+        if($fullObject){
+            $query->leftJoin('game.expected_players', 'expected_players')
+                ->leftJoin('game.missing_players', 'missing_players')
+                ->leftJoin('game.present_players', 'present_players')
+                ->join('game.location', 'location')
+                ->addSelect('expected_players')
+                ->addSelect('missing_players')
+                ->addSelect('present_players')
+                ->addSelect('location')
+            ;
+        }
+
         $result = $query->getQuery()->getResult();
         if(isset($result[0])){
             return $result[0];

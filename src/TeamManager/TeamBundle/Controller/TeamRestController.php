@@ -337,7 +337,7 @@ class TeamRestController extends FOSRestController
      */
     public function listEventsAction($id)
     {
-        $this->getService()->getOr404($id);
+        $this->getService()->getOr404($id, false);
         $events = $this->get('event_bundle.event.service')->getTeamEvents($id);
         return array("events"=>$events);
     }
@@ -385,7 +385,7 @@ class TeamRestController extends FOSRestController
      */
     public function listEventsBySeasonAction($teamID, $season)
     {
-        $this->getService()->getOr404($teamID);
+        $this->getService()->getOr404($teamID, false);
         $events = $this->get('event_bundle.event.service')->getTeamEventsForSeason($teamID, $season);
         return array("events"=>$events);
     }
@@ -428,7 +428,7 @@ class TeamRestController extends FOSRestController
      */
     public function listGamesAction($id)
     {
-        $this->getService()->getOr404($id);
+        $this->getService()->getOr404($id, false);
         $games = $this->get('event_bundle.game.service')->getTeamGames($id);
         return array("games"=>$games);
     }
@@ -476,7 +476,7 @@ class TeamRestController extends FOSRestController
      */
     public function listGamesBySeasonAction($teamID, $season)
     {
-        $this->getService()->getOr404($teamID);
+        $this->getService()->getOr404($teamID, false);
         $games = $this->get('event_bundle.game.service')->getTeamGamesForSeason($teamID, $season);
         return array("games"=>$games);
     }
@@ -519,7 +519,7 @@ class TeamRestController extends FOSRestController
      */
     public function listFriendlyGamesAction($id)
     {
-        $this->getService()->getOr404($id);
+        $this->getService()->getOr404($id, false);
         $games = $this->get('event_bundle.game.service')->getTeamFriendlyGames($id);
         return array("friendly_games"=>$games);
     }
@@ -567,7 +567,7 @@ class TeamRestController extends FOSRestController
      */
     public function listFriendlyGamesBySeasonAction($teamID, $season)
     {
-        $this->getService()->getOr404($teamID);
+        $this->getService()->getOr404($teamID, false);
         $games = $this->get('event_bundle.game.service')->getTeamFriendlyGamesForSeason($teamID, $season);
         return array("friendly_games"=>$games);
     }
@@ -610,7 +610,7 @@ class TeamRestController extends FOSRestController
      */
     public function listTrainingsAction($id)
     {
-        $this->getService()->getOr404($id);
+        $this->getService()->getOr404($id, false);
         $trainings = $this->get('event_bundle.training.service')->getTeamTrainings($id);
         return array("trainings"=>$trainings);
     }
@@ -658,7 +658,7 @@ class TeamRestController extends FOSRestController
      */
     public function listTrainingsBySeasonAction($teamID, $season)
     {
-        $this->getService()->getOr404($teamID);
+        $this->getService()->getOr404($teamID, false);
         $trainings = $this->get('event_bundle.training.service')->getTeamTrainingsForSeason($teamID, $season);
         return array("trainings"=>$trainings);
     }
@@ -701,7 +701,7 @@ class TeamRestController extends FOSRestController
      */
     public function listCardsAction($id)
     {
-        $this->getService()->getOr404($id);
+        $this->getService()->getOr404($id, false);
         $cards = $this->get('action_bundle.card.service')->getTeamCards($id);
         return array("cards"=>$cards);
     }
@@ -749,7 +749,7 @@ class TeamRestController extends FOSRestController
      */
     public function listCardsBySeasonAction($teamID, $season)
     {
-        $this->getService()->getOr404($teamID);
+        $this->getService()->getOr404($teamID, false);
         $cards = $this->get('action_bundle.card.service')->getTeamCardsForSeason($teamID, $season);
         return array("cards"=>$cards);
     }
@@ -798,7 +798,7 @@ class TeamRestController extends FOSRestController
      */
     public function listCardsForGameAction($teamID, $gameID)
     {
-        $this->getService()->getOr404($teamID);
+        $this->getService()->getOr404($teamID, false);
         $this->get('event_bundle.game.service')->getOr404($gameID);
 
         $cards = $this->get('action_bundle.card.service')->getTeamCardsForGame($teamID, $gameID);
@@ -843,7 +843,7 @@ class TeamRestController extends FOSRestController
      */
     public function listGoalsAction($id)
     {
-        $this->getService()->getOr404($id);
+        $this->getService()->getOr404($id, false);
         $goals = $this->get('action_bundle.goal.service')->getTeamGoals($id);
         return array("goals"=>$goals);
     }
@@ -891,7 +891,7 @@ class TeamRestController extends FOSRestController
      */
     public function listGoalsBySeasonAction($teamID, $season)
     {
-        $this->getService()->getOr404($teamID);
+        $this->getService()->getOr404($teamID, false);
         $goals = $this->get('action_bundle.goal.service')->getTeamGoalsForSeason($teamID, $season);
         return array("goals"=>$goals);
     }
@@ -940,7 +940,7 @@ class TeamRestController extends FOSRestController
      */
     public function listGoalsForGameAction($teamID, $gameID)
     {
-        $this->getService()->getOr404($teamID);
+        $this->getService()->getOr404($teamID, false);
         $this->get('event_bundle.game.service')->getOr404($gameID);
 
         $goals = $this->get('action_bundle.goal.service')->getTeamGoalsForGame($teamID, $gameID);
@@ -985,7 +985,7 @@ class TeamRestController extends FOSRestController
      */
     public function listInjuriesAction($id)
     {
-        $this->getService()->getOr404($id);
+        $this->getService()->getOr404($id, false);
         $injuries = $this->get('action_bundle.injury.service')->getTeamInjuries($id);
         return array("injuries"=>$injuries);
     }
@@ -1033,7 +1033,7 @@ class TeamRestController extends FOSRestController
      */
     public function listInjuriesBySeasonAction($teamID, $season)
     {
-        $this->getService()->getOr404($teamID);
+        $this->getService()->getOr404($teamID, false);
         $injuries = $this->get('action_bundle.injury.service')->getTeamInjuriesForSeason($teamID, $season);
         return array("injuries"=>$injuries);
     }
@@ -1082,7 +1082,7 @@ class TeamRestController extends FOSRestController
      */
     public function listInjuriesForGameAction($teamID, $gameID)
     {
-        $this->getService()->getOr404($teamID);
+        $this->getService()->getOr404($teamID, false);
         $this->get('event_bundle.game.service')->getOr404($gameID);
 
         $injuries = $this->get('action_bundle.injury.service')->getTeamInjuriesForGame($teamID, $gameID);
@@ -1127,7 +1127,7 @@ class TeamRestController extends FOSRestController
      */
     public function listPlayTimesAction($id)
     {
-        $this->getService()->getOr404($id);
+        $this->getService()->getOr404($id, false);
         $playtimes = $this->get('action_bundle.play_time.service')->getTeamPlayTimes($id);
         return array("play_times"=>$playtimes);
     }
@@ -1175,7 +1175,7 @@ class TeamRestController extends FOSRestController
      */
     public function listPlayTimesBySeasonAction($teamID, $season)
     {
-        $this->getService()->getOr404($teamID);
+        $this->getService()->getOr404($teamID, false);
         $playtimes = $this->get('action_bundle.play_time.service')->getTeamPlayTimesForSeason($teamID, $season);
         return array("play_times"=>$playtimes);
     }
@@ -1224,7 +1224,7 @@ class TeamRestController extends FOSRestController
      */
     public function listPlayTimesForGameAction($teamID, $gameID)
     {
-        $this->getService()->getOr404($teamID);
+        $this->getService()->getOr404($teamID, false);
         $this->get('event_bundle.game.service')->getOr404($gameID);
 
         $playtimes = $this->get('action_bundle.play_time.service')->getTeamPlayTimesForGame($teamID, $gameID);

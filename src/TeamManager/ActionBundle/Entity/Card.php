@@ -68,7 +68,7 @@ class Card
      * @ORM\ManyToOne(targetEntity="\TeamManager\PlayerBundle\Entity\Player", inversedBy="cards")
      * @ORM\JoinColumn(name="player_id", referencedColumnName="id", onDelete="CASCADE")
      *
-     * @Assert\NotNull(message="form.player.type.null")
+     * @Assert\NotNull(message="form.card.player.null")
      *
      * @Expose
      * @Groups({"CardTeam", "CardGame", "CardSpecific"})
@@ -82,7 +82,7 @@ class Card
      * @ORM\ManyToOne(targetEntity="\TeamManager\EventBundle\Entity\Game", inversedBy="cards")
      * @ORM\JoinColumn(name="game_id", referencedColumnName="id", onDelete="CASCADE")
      *
-     * @Assert\NotNull(message="form.game.type.null")
+     * @Assert\NotNull(message="form.card.game.null")
      *
      * @Expose
      * @Groups({"CardTeam", "CardPlayer", "CardSpecific"})

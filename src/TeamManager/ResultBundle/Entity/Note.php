@@ -3,6 +3,12 @@
 namespace TeamManager\ResultBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\VirtualProperty;
+use Symfony\Component\Validator\Constraints as Assert;
 use TeamManager\EventBundle\Entity\Game;
 use TeamManager\PlayerBundle\Entity\Player;
 
@@ -20,6 +26,9 @@ class Note
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Expose
+     * @Groups({"NoteSender", "NoteReceiver", "NoteGame", "NoteSpecific"})
      */
     private $id;
 
@@ -28,6 +37,12 @@ class Note
      *
      * @var integer
      * @ORM\Column(name="content", type="integer")
+     *
+     * @Assert\GreaterThan(message="form.note.content.invalid", value=0)
+     * @Assert\LessThan(message="form.note.content.invalid", value=20)
+     *
+     * @Expose
+     * @Groups({"NoteSender", "NoteReceiver", "NoteGame", "NoteSpecific"})
      */
     private $content;
 
@@ -37,6 +52,11 @@ class Note
      * @var Game
      * @ORM\ManyToOne(targetEntity="\TeamManager\EventBundle\Entity\Event", inversedBy="notes")
      * @ORM\JoinColumn(name="event_id", referencedColumnName="id", onDelete="CASCADE")
+     *
+     * @Assert\NotNull(message="form.note.event.null")
+     *
+     * @Expose
+     * @Groups({"NoteSender", "NoteReceiver", "NoteSpecific"})
      */
     private $event;
 
@@ -46,6 +66,11 @@ class Note
      * @var Player
      * @ORM\ManyToOne(targetEntity="\TeamManager\PlayerBundle\Entity\Player", inversedBy="notes_received")
      * @ORM\JoinColumn(name="receiver_id", referencedColumnName="id", onDelete="CASCADE")
+     *
+     * @Assert\NotNull(message="form.note.receiver.null")
+     *
+     * @Expose
+     * @Groups({"NoteSender", "NoteGame", "NoteSpecific"})
      */
     private $player_receiver;
 
@@ -55,6 +80,11 @@ class Note
      * @var Player
      * @ORM\ManyToOne(targetEntity="\TeamManager\PlayerBundle\Entity\Player", inversedBy="notes_sent")
      * @ORM\JoinColumn(name="sender_id", referencedColumnName="id")
+     *
+     * @Assert\NotNull(message="form.note.sender.null")
+     *
+     * @Expose
+     * @Groups({"NoteReceiver", "NoteGame", "NoteSpecific"})
      */
     private $player_sender;
 
@@ -70,10 +100,10 @@ class Note
     }
 
     /**
-     * Get card related game.
+     * Get note related game.
      *
      * @param integer $pContent
-     * @return Comment
+     * @return Note
      */
     public function setContent($pContent)
     {
@@ -82,7 +112,7 @@ class Note
     }
 
     /**
-     * Get card related game.
+     * Get note related game.
      *
      * @return integer
      */
@@ -92,10 +122,10 @@ class Note
     }
 
     /**
-     * Get card related game.
+     * Get note related event.
      *
      * @param Game $pGame
-     * @return Comment
+     * @return Note
      */
     public function setEvent(Game $pGame)
     {
@@ -104,7 +134,7 @@ class Note
     }
 
     /**
-     * Get card related game.
+     * Get note related event.
      *
      * @return Game
      */
@@ -123,7 +153,7 @@ class Note
 
     /**
      * @param Player $pPlayerReceiver
-     * @return Comment
+     * @return Note
      */
     public function setPlayerReceiver(Player $pPlayerReceiver)
     {
@@ -141,7 +171,7 @@ class Note
 
     /**
      * @param Player $pPlayerSender
-     * @return Comment
+     * @return Note
      */
     public function setPlayerSender(Player $pPlayerSender)
     {

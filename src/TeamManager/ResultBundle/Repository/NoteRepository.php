@@ -12,4 +12,47 @@ use Doctrine\ORM\EntityRepository;
  */
 class NoteRepository extends EntityRepository
 {
+
+    /**
+     * @return array
+     */
+    public function findAll()
+    {
+        $query = $this->createQueryBuilder('note');
+        $query->join('note.event', 'event')
+            ->addSelect('event')
+            ->join('note.player_receiver', 'receiver')
+            ->addSelect('receiver')
+            ->join('note.player_sender', 'sender')
+            ->addSelect('sender')
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * @param $id
+     */
+    public function findOneById($id, $fullObject=true)
+    {
+        $query = $this->createQueryBuilder('note');
+        $query->where('note.id = :id')
+            ->setParameter(':id', $id)
+        ;
+        if($fullObject){
+            $query->join('note.event', 'event')
+                ->addSelect('event')
+                ->join('note.player_receiver', 'receiver')
+                ->addSelect('receiver')
+                ->join('note.player_sender', 'sender')
+                ->addSelect('sender')
+            ;
+        }
+
+        $result = $query->getQuery()->getResult();
+        if(isset($result[0])){
+            return $result[0];
+        }
+        return $query->getQuery()->getResult();
+    }
+
 }

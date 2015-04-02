@@ -14,14 +14,14 @@ interface EntityServiceInterface
      *
      * @param int $id The entity id to retrieve.
      */
-    public function get($id);
+    public function get($id, $fullObject=true);
 
     /**
      * Get an entity with the given id and throws an HTTPNotFound error if it doesn't exists.
      *
      * @param int $id The entity id to retrieve.
      */
-    public function getOr404($id);
+    public function getOr404($id, $fullObject=true);
 
     /**
      * Post an entity form, creates a new entity.

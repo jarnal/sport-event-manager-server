@@ -58,17 +58,17 @@ abstract class EntityRestService implements EntityServiceInterface
      *
      * @param $id
      */
-    public function get($id)
+    public function get($id, $fullObject=true)
     {
-        return $this->repository->findOneById($id, false);
+        return $this->repository->findOneById($id, $fullObject);
     }
 
     /**
      * @param $id
      */
-    public function getOr404($id)
+    public function getOr404($id, $fullObject=true)
     {
-        if (!($entity = $this->get($id))) {
+        if (!($entity = $this->get($id, $fullObject))) {
             throw new NotFoundHttpException(sprintf('The resource \'%s\' was not found.',$id));
         }
 

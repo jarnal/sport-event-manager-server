@@ -334,7 +334,7 @@ class PlayerRestController extends FOSRestController
      */
     public function listEventsAction($id)
     {
-        $this->getService()->getOr404($id);
+        $this->getService()->getOr404($id, false);
         $events = $this->get('event_bundle.event.service')->getPlayerEvents($id);
         return array("events"=>$events);
     }
@@ -382,7 +382,7 @@ class PlayerRestController extends FOSRestController
      */
     public function listEventsBySeasonAction($playerID, $season)
     {
-        $this->getService()->getOr404($playerID);
+        $this->getService()->getOr404($playerID, false);
         $events = $this->get('event_bundle.event.service')->getPlayerEventsForSeason($playerID, $season);
         return array("events"=>$events);
     }
@@ -425,7 +425,7 @@ class PlayerRestController extends FOSRestController
      */
     public function listGamesAction($id)
     {
-        $this->getService()->getOr404($id);
+        $this->getService()->getOr404($id, false);
         $games = $this->get('event_bundle.game.service')->getPlayerGames($id);
         return array("games"=>$games);
     }
@@ -473,7 +473,7 @@ class PlayerRestController extends FOSRestController
      */
     public function listGamesBySeasonAction($playerID, $season)
     {
-        $this->getService()->getOr404($playerID);
+        $this->getService()->getOr404($playerID, false);
         $games = $this->get('event_bundle.game.service')->getPlayerGamesForSeason($playerID, $season);
         return array("games"=>$games);
     }
@@ -516,7 +516,7 @@ class PlayerRestController extends FOSRestController
      */
     public function listFriendlyGamesAction($id)
     {
-        $this->getService()->getOr404($id);
+        $this->getService()->getOr404($id, false);
         $games = $this->get('event_bundle.game.service')->getPlayerFriendlyGames($id);
         return array("friendly_games"=>$games);
     }
@@ -564,7 +564,7 @@ class PlayerRestController extends FOSRestController
      */
     public function listFriendlyGamesBySeasonAction($playerID, $season)
     {
-        $this->getService()->getOr404($playerID);
+        $this->getService()->getOr404($playerID, false);
         $games = $this->get('event_bundle.game.service')->getPlayerFriendlyGamesForSeason($playerID, $season);
         return array("friendly_games"=>$games);
     }
@@ -607,7 +607,7 @@ class PlayerRestController extends FOSRestController
      */
     public function listTrainingsAction($id)
     {
-        $this->getService()->getOr404($id);
+        $this->getService()->getOr404($id, false);
         $trainings = $this->get('event_bundle.training.service')->getPlayerTrainings($id);
         return array("trainings"=>$trainings);
     }
@@ -655,7 +655,7 @@ class PlayerRestController extends FOSRestController
      */
     public function listTrainingsBySeasonAction($playerID, $season)
     {
-        $this->getService()->getOr404($playerID);
+        $this->getService()->getOr404($playerID, false);
         $trainings = $this->get('event_bundle.training.service')->getPlayerTrainingsForSeason($playerID, $season);
         return array("trainings"=>$trainings);
     }
@@ -698,7 +698,7 @@ class PlayerRestController extends FOSRestController
      */
     public function listCardsAction($id)
     {
-        $this->getService()->getOr404($id);
+        $this->getService()->getOr404($id, false);
         $cards = $this->get('action_bundle.card.service')->getPlayerCards($id);
         return array("cards"=>$cards);
     }
@@ -746,7 +746,7 @@ class PlayerRestController extends FOSRestController
      */
     public function listCardsBySeasonAction($playerID, $season)
     {
-        $this->getService()->getOr404($playerID);
+        $this->getService()->getOr404($playerID, false);
         $cards = $this->get('action_bundle.card.service')->getPlayerCardsForSeason($playerID, $season);
         return array("cards"=>$cards);
     }
@@ -795,8 +795,8 @@ class PlayerRestController extends FOSRestController
      */
     public function listCardsForGameAction($playerID, $gameID)
     {
-        $this->getService()->getOr404($playerID);
-        $this->get('event_bundle.game.service')->getOr404($gameID);
+        $this->getService()->getOr404($playerID, false);
+        $this->get('event_bundle.game.service')->getOr404($gameID, false);
 
         $cards = $this->get('action_bundle.card.service')->getPlayerCardsForGame($playerID, $gameID);
         return array("cards"=>$cards);
@@ -840,7 +840,7 @@ class PlayerRestController extends FOSRestController
      */
     public function listGoalsAction($id)
     {
-        $this->getService()->getOr404($id);
+        $this->getService()->getOr404($id, false);
         $goals = $this->get('action_bundle.goal.service')->getPlayerGoals($id);
         return array("goals"=>$goals);
     }
@@ -888,7 +888,7 @@ class PlayerRestController extends FOSRestController
      */
     public function listGoalsBySeasonAction($playerID, $season)
     {
-        $this->getService()->getOr404($playerID);
+        $this->getService()->getOr404($playerID, false);
         $goals = $this->get('action_bundle.goal.service')->getPlayerGoalsForSeason($playerID, $season);
         return array("goals"=>$goals);
     }
@@ -937,8 +937,8 @@ class PlayerRestController extends FOSRestController
      */
     public function listGoalsForGameAction($playerID, $gameID)
     {
-        $this->getService()->getOr404($playerID);
-        $this->get('event_bundle.game.service')->getOr404($gameID);
+        $this->getService()->getOr404($playerID, false);
+        $this->get('event_bundle.game.service')->getOr404($gameID, false);
 
         $goals = $this->get('action_bundle.goal.service')->getPlayerGoalsForGame($playerID, $gameID);
         return array("goals"=>$goals);
@@ -982,7 +982,7 @@ class PlayerRestController extends FOSRestController
      */
     public function listInjuriesAction($id)
     {
-        $this->getService()->getOr404($id);
+        $this->getService()->getOr404($id, false);
         $injuries = $this->get('action_bundle.injury.service')->getPlayerInjuries($id);
         return array("injuries"=>$injuries);
     }
@@ -1030,7 +1030,7 @@ class PlayerRestController extends FOSRestController
      */
     public function listInjuriesBySeasonAction($playerID, $season)
     {
-        $this->getService()->getOr404($playerID);
+        $this->getService()->getOr404($playerID, false);
         $injuries = $this->get('action_bundle.injury.service')->getPlayerInjuriesForSeason($playerID, $season);
         return array("injuries"=>$injuries);
     }
@@ -1079,7 +1079,7 @@ class PlayerRestController extends FOSRestController
      */
     public function listInjuriesForGameAction($playerID, $gameID)
     {
-        $this->getService()->getOr404($playerID);
+        $this->getService()->getOr404($playerID, false);
         $this->get('event_bundle.game.service')->getOr404($gameID);
 
         $injuries = $this->get('action_bundle.injury.service')->getPlayerInjuriesForGame($playerID, $gameID);
@@ -1124,7 +1124,7 @@ class PlayerRestController extends FOSRestController
      */
     public function listPlayTimesAction($id)
     {
-        $this->getService()->getOr404($id);
+        $this->getService()->getOr404($id, false);
         $playtimes = $this->get('action_bundle.play_time.service')->getPlayerPlayTimes($id);
         return array("play_times"=>$playtimes);
     }
@@ -1172,7 +1172,7 @@ class PlayerRestController extends FOSRestController
      */
     public function listPlayTimesBySeasonAction($playerID, $season)
     {
-        $this->getService()->getOr404($playerID);
+        $this->getService()->getOr404($playerID, false);
         $playtimes = $this->get('action_bundle.play_time.service')->getPlayerPlayTimesForSeason($playerID, $season);
         return array("play_times"=>$playtimes);
     }
@@ -1221,8 +1221,8 @@ class PlayerRestController extends FOSRestController
      */
     public function listPlayTimesForGameAction($playerID, $gameID)
     {
-        $this->getService()->getOr404($playerID);
-        $this->get('event_bundle.game.service')->getOr404($gameID);
+        $this->getService()->getOr404($playerID, false);
+        $this->get('event_bundle.game.service')->getOr404($gameID, false);
 
         $playtimes = $this->get('action_bundle.play_time.service')->getPlayerPlayTimesForGame($playerID, $gameID);
         return array("play_times"=>$playtimes);
