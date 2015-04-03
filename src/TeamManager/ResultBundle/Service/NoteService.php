@@ -29,25 +29,25 @@ class NoteService extends EntityRestService
 
     /**
      * {@inheritdoc}
-     * In the case of a card, the player has to be in the related game to allow card to be valid.
-     * Impossible to add a card for a player that is not in the passed game.
+     * In the case of a note, the player has to be in the related game to allow note to be set.
+     * Impossible to add a note to a player that is not in the passed event.
      *
      * @param FormInterface $form
      */
-    /*protected function isFormValid(Form $form)
+    protected function isFormValid(Form $form)
     {
         if(!$form->isValid()) return false;
 
         $entity = $form->getData();
-        $game = $entity->getGame();
-        $player = $entity->getPlayer();
-        if($game->getExpectedPlayers()->contains($player)){
+        $event = $entity->getEvent();
+        $receiver = $entity->getPlayerReceiver();
+        if($event->getExpectedPlayers()->contains($receiver)){
             return true;
         } else {
-            $form->get('player')->addError(new FormError("card.form.player.incorrect.game"));
+            $form->get('player_receiver')->addError(new FormError("comment.form.player_receiver.incorrect.game"));
         }
         return false;
-    }*/
+    }
 
 
     /**

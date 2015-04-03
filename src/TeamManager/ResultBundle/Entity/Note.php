@@ -38,8 +38,8 @@ class Note
      * @var integer
      * @ORM\Column(name="content", type="integer")
      *
-     * @Assert\GreaterThan(message="form.note.content.invalid", value=0)
-     * @Assert\LessThan(message="form.note.content.invalid", value=20)
+     * @Assert\GreaterThan(message="form.note.content.invalid", value=-1)
+     * @Assert\LessThan(message="form.note.content.invalid", value=21)
      *
      * @Expose
      * @Groups({"NoteSender", "NoteReceiver", "NoteGame", "NoteSpecific"})
