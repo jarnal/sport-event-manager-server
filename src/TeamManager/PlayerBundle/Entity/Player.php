@@ -37,7 +37,7 @@ class Player implements PlayerInterface, UserInterface, \Serializable
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @Groups({"PlayerGlobal","PlayerDetails"})
+     * @Groups({"PlayerAPIKey", "PlayerGlobal","PlayerDetails"})
      * @Expose
      */
     private $id;
@@ -135,6 +135,9 @@ class Player implements PlayerInterface, UserInterface, \Serializable
      *
      * @var integer
      * @ORM\Column(name="api_key", type="string", nullable=true)
+     *
+     * @Expose
+     * @Groups({"PlayerAPIKey"})
      */
     private $api_key;
 

@@ -18,6 +18,7 @@
             <argument>%player_bundle.player.class%</argument>
             <argument>%player_bundle.player.form.class%</argument>
             <argument>%player_bundle.player.form.exception.class%</argument>
+            <argument type="service" id="security.encoder_factory"></argument>
         </service>
     </services>
 

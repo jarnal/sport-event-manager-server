@@ -81,6 +81,8 @@ class LoadGameData extends AbstractFixture implements OrderedFixtureInterface
         $game->setSubscriptionType("Game ".$id);
         $game->setTeam($team);
         $game->setSeason($season);
+        $game->setTeamScore(2);
+        $game->setOpponentScore(1);
         return $game;
     }
 }

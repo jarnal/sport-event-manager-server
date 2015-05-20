@@ -54,4 +54,16 @@ class TeamRepository extends EntityRepository
         return $query->getQuery()->getResult();
     }
 
+    /**
+     * @param $id
+     */
+    public function findTeamsByPlayer($id)
+    {
+        $query = $this->createQueryBuilder('team');
+        $query->leftJoin('team.players', 'players')
+            ->where('players.id = :playerID')
+            ->setParameter('playerID', $id);
+        return $query->getQuery()->getResult();
+    }
+
 }

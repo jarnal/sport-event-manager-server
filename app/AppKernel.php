@@ -26,7 +26,8 @@ class AppKernel extends Kernel
             new TeamManager\ActionBundle\TeamManagerActionBundle(),
             new TeamManager\SecurityBundle\TeamManagerSecurityBundle(),
             new TeamManager\CommonBundle\TeamManagerCommonBundle(),
-            new Nelmio\ApiDocBundle\NelmioApiDocBundle()
+            new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
+            new Nelmio\CorsBundle\NelmioCorsBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

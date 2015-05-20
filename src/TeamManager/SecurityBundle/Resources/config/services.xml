@@ -7,6 +7,9 @@
     <parameters>
         <parameter key="platform.entity.user.class">TeamManager\PlayerBundle\Entity\Player</parameter>
         <parameter key="platform.user.provider.class">TeamManager\SecurityBundle\Provider\PlayerProvider</parameter>
+
+        <parameter key="security_bundle.security.service.class">TeamManager\SecurityBundle\Service\SecurityService</parameter>
+        <parameter key="player_bundle.player.class">TeamManager\PlayerBundle\Entity\Player</parameter>
     </parameters>
 
     <services>
@@ -28,6 +31,11 @@
         <service id="platform.grant_type.api_key" class="TeamManager\SecurityBundle\OAuth\ApiKeyGrantExtension">
             <tag name="fos_oauth_server.grant_extension" uri="http://www.teammanager.com/web/app_dev.php/grants/api_key" />
             <argument type="service" id="platform.user.repository"/>
+        </service>
+
+        <service id="security_bundle.security.service" class="%security_bundle.security.service.class%">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument>%player_bundle.player.class%</argument>
         </service>
 
     </services>

@@ -4,8 +4,8 @@ security:
     # http://symfony.com/doc/current/book/security.html#encoding-the-user-s-password
     encoders:
         TeamManager\PlayerBundle\Entity\Player:
-            algorithm:        sha1
-            encode_as_base64: false
+            algorithm:        sha512
+            encode_as_base64: true
             iterations:       1
 
     # http://symfony.com/doc/current/book/security.html#hierarchical-roles

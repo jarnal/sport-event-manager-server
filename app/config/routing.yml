@@ -40,3 +40,8 @@ tm_team:
     resource: "@TeamManagerTeamBundle/Resources/config/routing_rest.yml"
     type:     rest
     prefix:   /api/team/
+
+tm_security:
+    resource: "@TeamManagerSecurityBundle/Resources/config/routing_rest.yml"
+    type:     rest
+    prefix:   /api/

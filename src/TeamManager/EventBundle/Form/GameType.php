@@ -22,6 +22,8 @@ class GameType extends EventType
                 'choices' => array(Event::GAME => 'event.type.game', Event::GAME_FRIENDLY => 'event.type.game_friendly'),
                 'preferred_choices' => array('game'),
             ))
+            ->add('team_score')
+            ->add('opponent_score')
         ;
     }
 

@@ -79,6 +79,8 @@ class LoadGameFriendlyData extends AbstractFixture implements OrderedFixtureInte
         $game->setSubscriptionType("FriendlyGame ".$id);
         $game->setTeam($team);
         $game->setSeason($season);
+        $game->setTeamScore(2);
+        $game->setOpponentScore(1);
         return $game;
     }
 }

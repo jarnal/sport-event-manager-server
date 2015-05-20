@@ -78,7 +78,7 @@ class GameRestControllerTest extends EntityRestControllerTest {
             array(),
             array(),
             array('CONTENT_TYPE' => 'application/json'),
-            '{"game":{"name":"TheGame","location":1,"type":"game","team":'.$team->getId().',"opponent":"test","date":'.$this->getJSONDate().',"season":"2014-2015"}}'
+            '{"game":{"name":"TheGame","location":1,"type":"game","team":'.$team->getId().',"opponent":"test","date":'.$this->getJSONDate().',"season":"2014-2015", "opponent_score":1, "team_score":2}}'
         );
         $response = $this->client->getResponse();
 
@@ -160,7 +160,7 @@ class GameRestControllerTest extends EntityRestControllerTest {
             array(),
             array(),
             array('CONTENT_TYPE' => 'application/json'),
-            '{"game":{"name":"TheGame","location":1,"type":"game","team":'.$team->getId().',"opponent":"test","date":'.$this->getJSONDate().',"season":"2014-2015"}}'
+            '{"game":{"name":"TheGame","location":1,"type":"game","team":'.$team->getId().',"opponent":"test","date":'.$this->getJSONDate().',"season":"2014-2015", "opponent_score":1, "team_score":2}}'
         );
 
         $this->assertJsonResponse($this->client->getResponse(), 201, false);

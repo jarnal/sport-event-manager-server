@@ -47,6 +47,30 @@ class Game extends Event
     protected $opponent;
 
     /**
+     * Score of the opponent.
+     *
+     * @var int
+     * @ORM\Column(name="opponent_score", type="string", nullable=false)
+     * @Assert\NotBlank(message="form.event.opponent_score.blank")
+     *
+     * @Groups({"EventMinimal", "EventPlayer", "EventTeam", "EventDetails"})
+     * @Expose
+     */
+    protected $opponent_score = 0;
+
+    /**
+     * Score of the team.
+     *
+     * @var int
+     * @ORM\Column(name="team_score", type="string", nullable=false)
+     * @Assert\NotBlank(message="form.event.team_score.blank")
+     *
+     * @Groups({"EventMinimal", "EventPlayer", "EventTeam", "EventDetails"})
+     * @Expose
+     */
+    protected $team_score = 0;
+
+    /**
      * Goals scored during the game.
      *
      * @var ArrayCollection
@@ -97,11 +121,55 @@ class Game extends Event
      * Existing only for a game and and friendly game.
      *
      * @param string $pOpponent
-     * @return Event
+     * @return Game
      */
     public function setOpponent($pOpponent)
     {
         $this->opponent = $pOpponent;
+        return $this;
+    }
+
+    /**
+     * Get opponent score.
+     *
+     * @return int
+     */
+    public function getOpponentScore()
+    {
+        return $this->opponent_score;
+    }
+
+    /**
+     * Set opponent score.
+     *
+     * @param int $opponent_score
+     * @return Game
+     */
+    public function setOpponentScore($opponent_score)
+    {
+        $this->opponent_score = $opponent_score;
+        return $this;
+    }
+
+    /**
+     * Get opponent score.
+     *
+     * @return int
+     */
+    public function getTeamScore()
+    {
+        return $this->team_score;
+    }
+
+    /**
+     * Set opponent score.
+     *
+     * @param int $opponent_score
+     * @return Game
+     */
+    public function setTeamScore($team_score)
+    {
+        $this->team_score = $team_score;
         return $this;
     }
 

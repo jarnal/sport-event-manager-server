@@ -19,6 +19,7 @@ use FOS\RestBundle\Controller\Annotations\Unlink;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Acl\Exception\Exception;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use TeamManager\CommonBundle\Service\EntityServiceInterface;
 use TeamManager\EventBundle\Entity\Game;
 use TeamManager\PlayerBundle\Entity\Player;
@@ -168,7 +169,7 @@ class PlayerRestController extends FOSRestController
     public function newAction()
     {
         return $this->createForm(new PlayerType(), null, array(
-            "action" => $this->generateUrl('api_player_post'),
+            "action" => $this->generateUrl('api_player_post', array("access_token"=>$_GET["access_token"])),
             "method" => "POST"
         ));
     }
@@ -294,6 +295,54 @@ class PlayerRestController extends FOSRestController
         if ( isset($player) ) {
             return $service->delete( $player );
         }
+    }
+
+    /**
+     * Returns all teams for a given player.
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  section="Player API",
+     *  requirements={
+     *      {
+     *          "name"="id",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="Player id"
+     *      }
+     *  },
+     *  output={
+     *      "class"="\TeamManager\TeamBundle\Entity\Team",
+     *      "collection"=true,
+     *      "collectionName" = "events",
+     *      "parsers" = {
+     *          "Nelmio\ApiDocBundle\Parser\JmsMetadataParser",
+     *          "Nelmio\ApiDocBundle\Parser\CollectionParser"
+     *      },
+     *      "groups"={"EventPlayer", "TeamGlobal", "LocationGlobal"}
+     *  },
+     *  statusCodes = {
+     *     200 = "Returned when player exists",
+     *     404 = "Returned when the player is not found"
+     *   }
+     * )
+     *
+     * @View( serializerGroups={"EventPlayer", "TeamGlobal", "LocationGlobal"} )
+     *
+     * @Get("/{id}/teams", name="teams", options={"method_prefix" = false}, requirements={"id"="\d+"})
+     *
+     * @return array
+     */
+    public function listTeamsAction($id=null)
+    {
+        $user = $this->getUser();
+        if($user->getId() != $id && $user->getRole()->getName() != "ROLE_MANAGER"){
+            throw new AccessDeniedException("You have no access to this resource.");
+        }
+
+        $this->getService()->getOr404($id, false);
+        $teams = $this->get('team_bundle.team.service')->getPlayerTeams($id);
+        return array("teams"=>$teams);
     }
 
     /**

@@ -18,7 +18,9 @@ class GameFriendlyType extends EventType
         $builder
             ->add('team', 'hidden_entity', array(
                 "class" => "TeamManager\\TeamBundle\\Entity\\Team"
-            ));
+            ))
+            ->add('team_score')
+            ->add('opponent_score')
         ;
     }
 

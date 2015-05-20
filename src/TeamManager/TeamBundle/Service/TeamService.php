@@ -21,4 +21,15 @@ class TeamService extends EntityRestService
         parent::__construct($pEntityManager, $pFormFactory, $pEntityClass, $pFormTypeClass, $pFormExceptionClass);
     }
 
+    /**
+     * Returns the teams related to a given players.
+     *
+     * @param $playerID
+     * @return array
+     */
+    public function getPlayerTeams($playerID)
+    {
+        return $this->repository->findTeamsByPlayer($playerID);
+    }
+
 }
