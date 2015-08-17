@@ -29,7 +29,7 @@ class TeamRepository extends EntityRepository
     /**
      * @param $id
      */
-    public function findOneById($id, $fullObject=true)
+    public function findOneById($id, $fullObject=false)
     {
         $query = $this->createQueryBuilder('team');
         $query->where('team.id = :teamID')

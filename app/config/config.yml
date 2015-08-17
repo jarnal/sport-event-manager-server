@@ -95,7 +95,8 @@ fos_oauth_server:
 
 
 # NelmioApiDoc Configuration
-nelmio_api_doc: ~
+nelmio_api_doc:
+    exclude_sections: ["Security API"]
 
 # NelmioCors
 nelmio_cors:

@@ -19,6 +19,8 @@ use TeamManager\EventBundle\Entity\GameFriendly;
 use TeamManager\EventBundle\Entity\Training;
 use TeamManager\PlayerBundle\Entity\Player;
 
+use Symfony\Component\Debug\Exception;
+
 /**
  * Team
  *
@@ -60,7 +62,7 @@ class Team
      * @ORM\Column(name="description", type="string", nullable=true)
      *
      * @Expose
-     * @Groups({"TeamSpecific"})
+     * @Groups({"TeamGlobal", "TeamSpecific"})
      */
     private $description;
 
@@ -335,7 +337,7 @@ class Team
         $criteria->where(Criteria::expr()->eq("type", "game"));
         $match = $games->matching($criteria);
 
-        return $match;
+        return array_merge([], $match->toArray());
     }
 
     /**
@@ -354,7 +356,7 @@ class Team
         $criteria->where(Criteria::expr()->eq("type", "game_friendly"));
         $match = $games->matching($criteria);
 
-        return $match;
+        return array_merge([], $match->toArray());
     }
 
     /**
@@ -373,7 +375,7 @@ class Team
         $criteria->where(Criteria::expr()->eq("type", "training"));
         $match = $training->matching($criteria);
 
-        return $match;
+        return array_merge([], $match->toArray());
     }
 
     /**

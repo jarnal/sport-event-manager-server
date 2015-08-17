@@ -29,10 +29,7 @@ use TeamManager\PlayerBundle\Form\PlayerType;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
-/**
- * Class SecurityController
- * @package TeamManager\SecurityBundle\Controller
- */
+
 class SecurityRestController extends FOSRestController
 {
 
@@ -41,27 +38,14 @@ class SecurityRestController extends FOSRestController
      * This methods returns, if the user credentials are right, the unique api_key for this user.
      * This way is more secure than passing an id, because it's easier to guess an id than a long string like this one.
      *
-     * @Route("/api/private/credentials")
-     */
-
-    /**
-     * Adds a new player.
-     *
      * @ApiDoc(
-     *  resource = true,
-     *  section="Security API",
-     *  statusCodes = {
-     *      200 = "Returned when the player has been created",
-     *      400 = "Returned when the player form has errors"
-     *  }
+     *  resource=true,
+     *  section="Security API"
      * )
      *
-     * @View( serializerGroups={"PlayerAPIKey"} )
+     * @View( serializerGroups={ "PlayerGlobal" } )
      *
-     * @Post("/security/" , name="post", options={ "method_prefix" = false })
-     *
-     * @return|View
-     *
+     * @Get("/", name="credentials", options={ "method_prefix" = false })
      */
     public function credentialsAction( Request $request )
     {
@@ -69,6 +53,7 @@ class SecurityRestController extends FOSRestController
         $user_pwd = $request->request->get('user_p');
 
         //RETURN API
+        //return array( "user_login"=> $user_login );
         return $this->getService()->getByLoginPasswordOr404($user_login, $user_pwd);
 
         /*$em = $this->getDoctrine()->getManager();

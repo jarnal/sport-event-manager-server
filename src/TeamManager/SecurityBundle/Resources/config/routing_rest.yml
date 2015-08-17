@@ -1,4 +1,4 @@
-tm_player_player_rest:
+tm_security_security_rest:
     type: rest
     resource: "TeamManagerSecurityBundle:SecurityRest"
     name_prefix: api_security_
