@@ -8,7 +8,6 @@ use TeamManager\PlayerBundle\Entity\Player;
 
 class LoadPlayerData extends AbstractFixture implements OrderedFixtureInterface
 {
-    static public $players;
 
     /**
      * {@inheritDoc}
@@ -17,7 +16,6 @@ class LoadPlayerData extends AbstractFixture implements OrderedFixtureInterface
     {
         $manager->clear();
 
-        static::$players = array();
         for($i=1; $i<=30; $i++)
         {
             $player = $this->buildUser($i);
@@ -25,8 +23,6 @@ class LoadPlayerData extends AbstractFixture implements OrderedFixtureInterface
             $manager->flush();
 
             $this->addReference('player-'.$i, $player);
-
-            static::$players[] = $player;
         }
     }
 

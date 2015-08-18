@@ -11,7 +11,6 @@ use TeamManager\TeamBundle\Entity\Team;
 
 class LoadGameData extends AbstractFixture implements OrderedFixtureInterface
 {
-    static public $games;
 
     /**
      * {@inheritDoc}
@@ -26,7 +25,6 @@ class LoadGameData extends AbstractFixture implements OrderedFixtureInterface
         $season1 = "2013-2014";
         $season2 = "2014-2015";
 
-        static::$games = array();
         for($i=1; $i<=15; $i++)
         {
             $team = ($i%2>0||$i==0||$i==3)? $team1 : $team2;
@@ -35,8 +33,6 @@ class LoadGameData extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($game);
 
             $this->addReference('game-'.$i, $game);
-
-            static::$games[] = $game;
         }
 
         $manager->persist($team1);

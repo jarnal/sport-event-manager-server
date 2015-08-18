@@ -234,7 +234,8 @@ class GameRestControllerTest extends EntityRestControllerTest {
             'TeamManager\TeamBundle\DataFixtures\ORM\LoadTeamData',
             'TeamManager\EventBundle\DataFixtures\ORM\LoadGameData'
         );
-        $this->loadFixtures($fixtures);
+        return $fixtures;
+        //$this->loadFixtures($fixtures);
     }
 
     /**
@@ -262,7 +263,7 @@ class GameRestControllerTest extends EntityRestControllerTest {
      */
     protected function getGame()
     {
-        return array_pop(LoadGameData::$games);
+        return $this->fixtures->getReference('game-1');
     }
 
     /**
@@ -272,7 +273,7 @@ class GameRestControllerTest extends EntityRestControllerTest {
      */
     protected function getTeam()
     {
-        return array_pop(LoadTeamData::$teams);
+        return $this->fixtures->getReference('team-1');
     }
 
 }

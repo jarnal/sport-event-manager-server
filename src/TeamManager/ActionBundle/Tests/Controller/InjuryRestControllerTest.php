@@ -117,7 +117,7 @@ class InjuryRestControllerTest extends EntityRestControllerTest {
     {
         $access_token = $this->initializeTest();
 
-        $player = LoadPlayerData::$players[20];
+        $player = $this->fixtures->getReference('player-20');
 
         $route = $this->buildPostRoute($access_token);
         $this->client->request(
@@ -261,7 +261,7 @@ class InjuryRestControllerTest extends EntityRestControllerTest {
             'TeamManager\EventBundle\DataFixtures\ORM\LoadGameData',
             'TeamManager\ActionBundle\DataFixtures\ORM\LoadInjuryData'
         );
-        $this->loadFixtures($fixtures);
+        return $fixtures;
     }
 
     /**
@@ -271,7 +271,7 @@ class InjuryRestControllerTest extends EntityRestControllerTest {
      */
     protected function getInjury()
     {
-        return LoadInjuryData::$injuries[0];
+        return $this->fixtures->getReference('injury-1');
     }
 
     /**
@@ -281,7 +281,7 @@ class InjuryRestControllerTest extends EntityRestControllerTest {
      */
     protected function getPlayer()
     {
-        return LoadPlayerData::$players[0];
+        return $this->fixtures->getReference('player-1');
     }
 
     /**
@@ -291,7 +291,7 @@ class InjuryRestControllerTest extends EntityRestControllerTest {
      */
     protected function getGame()
     {
-        return LoadGameData::$games[0];
+        return $this->fixtures->getReference('game-1');
     }
 
 }

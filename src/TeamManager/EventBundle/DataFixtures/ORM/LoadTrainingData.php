@@ -13,7 +13,6 @@ use TeamManager\TeamBundle\Entity\Team;
 
 class LoadTrainingData extends AbstractFixture implements OrderedFixtureInterface
 {
-    static public $trainings;
 
     /**
      * {@inheritDoc}
@@ -28,7 +27,6 @@ class LoadTrainingData extends AbstractFixture implements OrderedFixtureInterfac
         $season1 = "2013-2014";
         $season2 = "2014-2015";
 
-        static::$trainings = array();
         for($i=1; $i<=10; $i++)
         {
             $team = ($i%2>0||$i==0||$i==3)? $team1 : $team2;
@@ -38,8 +36,6 @@ class LoadTrainingData extends AbstractFixture implements OrderedFixtureInterfac
             $manager->flush();
 
             $this->addReference('training-'.$i, $training);
-
-            static::$trainings[] = $training;
         }
     }
 

@@ -12,7 +12,6 @@ use TeamManager\TeamBundle\Entity\Team;
 
 class LoadGameFriendlyData extends AbstractFixture implements OrderedFixtureInterface
 {
-    static public $games;
 
     /**
      * {@inheritDoc}
@@ -27,7 +26,6 @@ class LoadGameFriendlyData extends AbstractFixture implements OrderedFixtureInte
         $season1 = "2013-2014";
         $season2 = "2014-2015";
 
-        static::$games = array();
         for($i=1; $i<=15; $i++)
         {
             $team = ($i%2>0||$i==0||$i==3)? $team1 : $team2;
@@ -37,8 +35,6 @@ class LoadGameFriendlyData extends AbstractFixture implements OrderedFixtureInte
             $manager->flush();
 
             $this->addReference('friendlygame-'.$i, $game);
-
-            static::$games[] = $game;
         }
     }
 

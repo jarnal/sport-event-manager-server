@@ -117,7 +117,7 @@ class PlayTimeRestControllerTest extends EntityRestControllerTest {
     {
         $access_token = $this->initializeTest();
 
-        $player = LoadPlayerData::$players[20];
+        $player = $this->fixtures->getReference('player-20');
 
         $route = $this->buildPostRoute($access_token);
         $this->client->request(
@@ -260,7 +260,7 @@ class PlayTimeRestControllerTest extends EntityRestControllerTest {
             'TeamManager\EventBundle\DataFixtures\ORM\LoadGameData',
             'TeamManager\ActionBundle\DataFixtures\ORM\LoadPlayTimeData'
         );
-        $this->loadFixtures($fixtures);
+        return $fixtures;
     }
 
     /**
@@ -270,7 +270,7 @@ class PlayTimeRestControllerTest extends EntityRestControllerTest {
      */
     protected function getPlayTime()
     {
-        return LoadPlayTimeData::$playTimes[0];
+        return $this->fixtures->getReference('playTime-1');
     }
 
     /**
@@ -280,7 +280,7 @@ class PlayTimeRestControllerTest extends EntityRestControllerTest {
      */
     protected function getPlayer()
     {
-        return LoadPlayerData::$players[0];
+        return $this->fixtures->getReference('player-1');
     }
 
     /**
@@ -290,7 +290,7 @@ class PlayTimeRestControllerTest extends EntityRestControllerTest {
      */
     protected function getGame()
     {
-        return LoadGameData::$games[0];
+        return $this->fixtures->getReference('game-1');
     }
 
 }

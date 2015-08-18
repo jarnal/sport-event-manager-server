@@ -24,4 +24,4 @@ doctrine:
                 path:     %kernel.cache_dir%/test.db
 
 liip_functional_test:
-    cache_sqlite_db: false
+    cache_sqlite_db: true

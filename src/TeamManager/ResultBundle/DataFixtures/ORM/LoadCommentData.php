@@ -36,8 +36,6 @@ class LoadCommentData extends AbstractFixture implements OrderedFixtureInterface
 
         $this->addReference('comment-1', $comment1);
         $this->addReference('comment-2', $comment2);
-
-        static::$comments = array($comment1, $comment2);
     }
 
     /**

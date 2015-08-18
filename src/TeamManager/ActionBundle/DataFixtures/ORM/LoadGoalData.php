@@ -33,8 +33,6 @@ class LoadGoalData extends AbstractFixture implements OrderedFixtureInterface
 
         $this->addReference('goal-1', $goal1);
         $this->addReference('goal-2', $goal2);
-
-        static::$goals = array($goal1, $goal2);
     }
 
     /**

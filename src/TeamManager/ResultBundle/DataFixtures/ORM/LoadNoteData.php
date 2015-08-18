@@ -36,8 +36,6 @@ class LoadNoteData extends AbstractFixture implements OrderedFixtureInterface
 
         $this->addReference('note-1', $note1);
         $this->addReference('note-2', $note2);
-
-        static::$notes = array($note1, $note2);
     }
 
     /**

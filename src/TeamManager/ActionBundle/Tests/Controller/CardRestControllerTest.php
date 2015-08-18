@@ -116,7 +116,7 @@ class CardRestControllerTest extends EntityRestControllerTest {
     {
         $access_token = $this->initializeTest();
 
-        $player = LoadPlayerData::$players[20];
+        $player = $this->fixtures->getReference('player-20');
 
         $route = $this->buildPostRoute($access_token);
         $this->client->request(
@@ -260,7 +260,7 @@ class CardRestControllerTest extends EntityRestControllerTest {
             'TeamManager\EventBundle\DataFixtures\ORM\LoadGameData',
             'TeamManager\ActionBundle\DataFixtures\ORM\LoadCardData'
         );
-        $this->loadFixtures($fixtures);
+        return $fixtures;
     }
 
     /**
@@ -270,7 +270,7 @@ class CardRestControllerTest extends EntityRestControllerTest {
      */
     protected function getCard()
     {
-        return LoadCardData::$cards[0];
+        return $this->fixtures->getReference('card-1');
     }
 
     /**
@@ -280,7 +280,7 @@ class CardRestControllerTest extends EntityRestControllerTest {
      */
     protected function getPlayer()
     {
-        return LoadPlayerData::$players[0];
+        return $this->fixtures->getReference('player-1');
     }
 
     /**
@@ -290,7 +290,7 @@ class CardRestControllerTest extends EntityRestControllerTest {
      */
     protected function getGame()
     {
-        return LoadGameData::$games[0];
+        return $this->fixtures->getReference('game-1');
     }
 
 }

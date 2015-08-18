@@ -117,7 +117,7 @@ class CommentRestControllerTest extends EntityRestControllerTest {
     {
         $access_token = $this->initializeTest();
 
-        $player = LoadPlayerData::$players[20];
+        $player = $this->fixtures->getReference('player-20');
 
         $route = $this->buildPostRoute($access_token);
         $this->client->request(
@@ -262,7 +262,7 @@ class CommentRestControllerTest extends EntityRestControllerTest {
             'TeamManager\EventBundle\DataFixtures\ORM\LoadGameData',
             'TeamManager\ResultBundle\DataFixtures\ORM\LoadCommentData'
         );
-        $this->loadFixtures($fixtures);
+        return $fixtures;
     }
 
     /**
@@ -272,7 +272,7 @@ class CommentRestControllerTest extends EntityRestControllerTest {
      */
     protected function getComment()
     {
-        return LoadCommentData::$comments[0];
+        return $this->fixtures->getReference('comment-1');
     }
 
     /**
@@ -282,7 +282,7 @@ class CommentRestControllerTest extends EntityRestControllerTest {
      */
     protected function getPlayer()
     {
-        return LoadPlayerData::$players[0];
+        return $this->fixtures->getReference('player-1');
     }
 
     /**
@@ -292,7 +292,7 @@ class CommentRestControllerTest extends EntityRestControllerTest {
      */
     protected function getGame()
     {
-        return LoadGameData::$games[0];
+        return $this->fixtures->getReference('game-1');
     }
 
 }

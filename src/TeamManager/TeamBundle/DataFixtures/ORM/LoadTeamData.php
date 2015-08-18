@@ -9,7 +9,6 @@ use TeamManager\TeamBundle\Entity\Team;
 
 class LoadTeamData extends AbstractFixture implements OrderedFixtureInterface
 {
-    static public $teams;
 
     /**
      * {@inheritDoc}
@@ -39,7 +38,6 @@ class LoadTeamData extends AbstractFixture implements OrderedFixtureInterface
             $arrPlayers2[] = $this->getReference('player-'.$i);
         }
 
-        static::$teams = array();
         for($i=1; $i<=2; $i++)
         {
             $arrPlayers = ($i%2>0)? $arrPlayers1 : $arrPlayers2;
@@ -48,8 +46,6 @@ class LoadTeamData extends AbstractFixture implements OrderedFixtureInterface
             $manager->flush();
 
             $this->addReference('team-'.$i, $team);
-
-            static::$teams[] = $team;
         }
     }
 

@@ -38,8 +38,6 @@ class LoadCardData extends AbstractFixture implements OrderedFixtureInterface
 
         $this->addReference('card-1', $card1);
         $this->addReference('card-2', $card2);
-
-        static::$cards = array($card1, $card2);
     }
 
     /**

@@ -581,7 +581,7 @@ class TeamRestControllerTest extends EntityRestControllerTest {
     {
         $accessToken = $this->initializeTest();
         $team = $this->getTeam();
-        $game = LoadGameData::$games[1];
+        $game = $this->fixtures->getReference('game-1');
 
         $route = $this->buildGetRoute($team->getId(), $accessToken);
         $this->client->request(
@@ -692,7 +692,7 @@ class TeamRestControllerTest extends EntityRestControllerTest {
     {
         $accessToken = $this->initializeTest();
         $team = $this->getTeam();
-        $game = LoadGameData::$games[0];
+        $game = $this->fixtures->getReference('game-1');
 
         $route = $this->buildGetRoute($team->getId(), $accessToken);
         $this->client->request(
@@ -804,7 +804,7 @@ class TeamRestControllerTest extends EntityRestControllerTest {
     {
         $accessToken = $this->initializeTest();
         $team = $this->getTeam();
-        $game = LoadGameData::$games[0];
+        $game = $this->fixtures->getReference('game-1');
 
         $route = $this->buildGetRoute($team->getId(), $accessToken);
         $this->client->request(
@@ -916,7 +916,7 @@ class TeamRestControllerTest extends EntityRestControllerTest {
     {
         $accessToken = $this->initializeTest();
         $team = $this->getTeam();
-        $game = LoadGameData::$games[0];
+        $game = $this->fixtures->getReference('game-1');
 
         $route = $this->buildGetRoute($team->getId(), $accessToken);
         $this->client->request(
@@ -963,7 +963,7 @@ class TeamRestControllerTest extends EntityRestControllerTest {
             'TeamManager\ActionBundle\DataFixtures\ORM\LoadInjuryData',
             'TeamManager\ActionBundle\DataFixtures\ORM\LoadPlayTimeData'
         );
-        $this->loadFixtures($fixtures);
+        return $fixtures;
     }
 
     /**
@@ -973,7 +973,7 @@ class TeamRestControllerTest extends EntityRestControllerTest {
      */
     protected function getTeam()
     {
-        return LoadTeamData::$teams[0];
+        return $this->fixtures->getReference('team-1');
     }
 
 }

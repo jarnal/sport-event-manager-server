@@ -38,8 +38,6 @@ class LoadInjuryData extends AbstractFixture implements OrderedFixtureInterface
 
         $this->addReference('injury-1', $injury1);
         $this->addReference('injury-2', $injury2);
-
-        static::$injuries = array($injury1, $injury2);
     }
 
     /**

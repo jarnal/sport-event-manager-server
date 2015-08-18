@@ -594,7 +594,7 @@ class PlayerRestControllerTest extends EntityRestControllerTest {
     {
         $accessToken = $this->initializeTest();
         $player = $this->getPlayer();
-        $game = LoadGameData::$games[0];
+        $game = $this->fixtures->getReference('game-1');
 
         $route = $this->buildGetRoute($player->getId(), $accessToken);
         $this->client->request(
@@ -706,7 +706,7 @@ class PlayerRestControllerTest extends EntityRestControllerTest {
     {
         $accessToken = $this->initializeTest();
         $player = $this->getPlayer();
-        $game = LoadGameData::$games[0];
+        $game = $this->fixtures->getReference('game-1');
 
         $route = $this->buildGetRoute($player->getId(), $accessToken);
         $this->client->request(
@@ -818,7 +818,7 @@ class PlayerRestControllerTest extends EntityRestControllerTest {
     {
         $accessToken = $this->initializeTest();
         $player = $this->getPlayer();
-        $game = LoadGameData::$games[0];
+        $game = $this->fixtures->getReference('game-1');
 
         $route = $this->buildGetRoute($player->getId(), $accessToken);
         $this->client->request(
@@ -930,7 +930,7 @@ class PlayerRestControllerTest extends EntityRestControllerTest {
     {
         $accessToken = $this->initializeTest();
         $player = $this->getPlayer();
-        $game = LoadGameData::$games[0];
+        $game = $this->fixtures->getReference('game-1');
 
         $route = $this->buildGetRoute($player->getId(), $accessToken);
         $this->client->request(
@@ -977,7 +977,7 @@ class PlayerRestControllerTest extends EntityRestControllerTest {
             'TeamManager\ActionBundle\DataFixtures\ORM\LoadInjuryData',
             'TeamManager\ActionBundle\DataFixtures\ORM\LoadPlayTimeData',
         );
-        $this->loadFixtures($fixtures);
+        return $fixtures;
     }
 
 }

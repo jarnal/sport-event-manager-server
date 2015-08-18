@@ -116,7 +116,7 @@ class NoteRestControllerTest extends EntityRestControllerTest {
     {
         $access_token = $this->initializeTest();
 
-        $player = LoadPlayerData::$players[20];
+        $player = $this->fixtures->getReference('player-20');
 
         $route = $this->buildPostRoute($access_token);
         $this->client->request(
@@ -261,7 +261,7 @@ class NoteRestControllerTest extends EntityRestControllerTest {
             'TeamManager\EventBundle\DataFixtures\ORM\LoadGameData',
             'TeamManager\ResultBundle\DataFixtures\ORM\LoadNoteData'
         );
-        $this->loadFixtures($fixtures);
+        return $fixtures;
     }
 
     /**
@@ -271,7 +271,7 @@ class NoteRestControllerTest extends EntityRestControllerTest {
      */
     protected function getNote()
     {
-        return LoadNoteData::$notes[0];
+        return $this->fixtures->getReference('note-1');
     }
 
     /**
@@ -281,7 +281,7 @@ class NoteRestControllerTest extends EntityRestControllerTest {
      */
     protected function getPlayer()
     {
-        return LoadPlayerData::$players[0];
+        return $this->fixtures->getReference('player-1');
     }
 
     /**
@@ -291,7 +291,7 @@ class NoteRestControllerTest extends EntityRestControllerTest {
      */
     protected function getGame()
     {
-        return LoadGameData::$games[0];
+        return $this->fixtures->getReference('game-1');
     }
 
 }

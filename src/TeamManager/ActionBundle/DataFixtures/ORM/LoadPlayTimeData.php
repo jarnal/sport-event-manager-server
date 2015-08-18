@@ -38,8 +38,6 @@ class LoadPlayTimeData extends AbstractFixture implements OrderedFixtureInterfac
 
         $this->addReference('playTime-1', $playTime1);
         $this->addReference('playTime-2', $playTime2);
-
-        static::$playTimes = array($playTime1, $playTime2);
     }
 
     /**

@@ -10,6 +10,7 @@ use FOS\OAuthServerBundle\Entity\ClientManager;
 
 class EntityRestControllerTest extends WebTestCase {
 
+    protected $fixtures;
     protected $entityName;
 
     /**
@@ -34,7 +35,9 @@ class EntityRestControllerTest extends WebTestCase {
      */
     protected function initializeTest()
     {
-        $this->loadDataFixtures();
+        $fixturesList = $this->loadDataFixtures();
+        $this->fixtures = $this->loadFixtures($fixturesList)->getReferenceRepository();
+
         $player = $this->getPlayer();
         $access_token = $this->getAccessTokenPlayer($player->getApiKey());
 
@@ -150,7 +153,7 @@ class EntityRestControllerTest extends WebTestCase {
      */
     protected function getPlayer()
     {
-        return LoadPlayerData::$players[0];
+        return $this->fixtures->getReference('player-1');
     }
 
     /**
