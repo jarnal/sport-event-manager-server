@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/jarnal/sport-event-manager-server.svg?branch=master)](https://travis-ci.org/jarnal/sport-event-manager-server)
+
 Symfony Standard Edition
 ========================
 
